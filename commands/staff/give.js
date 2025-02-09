@@ -46,7 +46,7 @@ module.exports = {
             await targetUser.roles.add(role);
 
             const successEmbed = new EmbedBuilder()
-                .setTitle('Role nadana')
+                .setTitle('Rola nadana')
                 .setDescription(`**• Dodałeś rolę:** ${role}\n**• Użytkownikowi:** ${targetUser}\n**• Komendy użył:** ${interaction.user}`)
                 .setColor(embedOptions.defaultColor);
 

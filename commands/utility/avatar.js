@@ -16,9 +16,9 @@ module.exports = {
         const user = interaction.options.getUser('użytkownik') || interaction.user;
 
         const embed = new EmbedBuilder()
-            .setAuthor({ name: user.tag, iconURL: user.displayAvatarURL({ size: 256 }) })
+            .setAuthor({ name: user.tag, iconURL: user.displayAvatarURL() })
             .setTitle('❯ Avatar')
-            .setImage(user.displayAvatarURL({ size: 2048, dynamic: true }))
+            .setImage(user.displayAvatarURL({ size: 2048 }))
             .setColor(embedOptions.defaultColor);
 
         return await interaction.reply({ embeds: [embed] });

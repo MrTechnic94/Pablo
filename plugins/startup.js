@@ -16,7 +16,7 @@ function checkEnvVariables(variables) {
 function checkNodeVersion() {
     const version = Number(process.versions.node.split('.')[0]);
 
-    if (version < 22.12) {
+    if (version < 22) {
         logger.error('Outdated Node.js version. Update to a newer version.');
         process.exit(1);
     }

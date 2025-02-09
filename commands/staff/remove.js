@@ -46,8 +46,8 @@ module.exports = {
             await targetUser.roles.remove(role);
 
             const successEmbed = new EmbedBuilder()
-                .setTitle('Role zabrana')
-                .setDescription(`**Zabrałeś rolę:** ${role}\n**Użytkownikowi:** ${targetUser}\n**Komendy użył:** ${interaction.user}`)
+                .setTitle('Rola zabrana')
+                .setDescription(`**• Zabrałeś rolę:** ${role}\n**• Użytkownikowi:** ${targetUser}\n**• Komendy użył:** ${interaction.user}`)
                 .setColor(embedOptions.defaultColor);
 
             return await interaction.reply({ embeds: [successEmbed] });

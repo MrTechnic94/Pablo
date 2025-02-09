@@ -75,7 +75,6 @@ function formatTime(timeString) {
                 break;
         }
     });
-
     return formattedTime;
 }
 

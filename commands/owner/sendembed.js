@@ -43,7 +43,7 @@ module.exports = {
 
                 const row = new ActionRowBuilder().addComponents(button_verify);
 
-                await interaction.reply({ embeds: [verify_embed], components: [row] });
+                await interaction.channel.send({ embeds: [verify_embed], components: [row] });
                 break;
             }
             case 'auto-role-dodatkowe': {
@@ -66,7 +66,7 @@ module.exports = {
                     new ButtonBuilder().setCustomId('additional_phone').setLabel('📱').setStyle(ButtonStyle.Primary)
                 );
 
-                await interaction.reply({ embeds: [additional_embed], components: [buttons_additional] });
+                await interaction.channel.send({ embeds: [additional_embed], components: [buttons_additional] });
                 break;
             }
             case 'auto-role-kolory': {
@@ -89,7 +89,7 @@ module.exports = {
                     new ButtonBuilder().setCustomId('colors_green').setLabel('💚').setStyle(ButtonStyle.Primary)
                 );
 
-                await interaction.reply({ embeds: [colors_embed], components: [buttons_colors] });
+                await interaction.channel.send({ embeds: [colors_embed], components: [buttons_colors] });
                 break;
             }
             case 'pomoc': {
