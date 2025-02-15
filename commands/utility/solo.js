@@ -1,6 +1,6 @@
 'use strict';
 
-const { MessageFlags, SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags, EmbedBuilder } = require('discord.js');
 const { emojisConfig, embedOptions } = require('../../config/default');
 
 module.exports = {

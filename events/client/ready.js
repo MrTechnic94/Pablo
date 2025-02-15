@@ -12,7 +12,7 @@ module.exports = {
 
         // Wyswietlenie informacji, jezeli bot dziala w trybie developera
         if (global.isDev) {
-            logger.info('[Client] Running in Dev Mode.');
+            logger.info('[Client] Running in Developer Mode.');
         }
     }
 };

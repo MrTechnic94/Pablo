@@ -1,8 +1,8 @@
 'use strict';
 
 const logger = require('../../plugins/logger');
-const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const { parseTime, formatTime } = require('../../plugins/paseTime');
+const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
+const { parseTimeString } = require('../../plugins/parseTime');
 const { embedOptions } = require('../../config/default');
 
 module.exports = {
@@ -37,38 +37,36 @@ module.exports = {
         const rawTime = interaction.options.getString('czas');
         const reason = interaction.options.getString('powód') || 'Brak.';
 
-        const timeoutDuration = parseTime(rawTime);
+        const timeInfo = parseTimeString(rawTime);
 
-        if (!timeoutDuration) {
+        if (!timeInfo) {
             return await interaction.reply({ content: '❌ Nieprawidłowy format czasu. Użyj np. 1h, 30m, 1d.', flags: MessageFlags.Ephemeral });
         }
-
-        const formattedTime = formatTime(rawTime);
 
         try {
             const member = await interaction.guild.members.fetch(targetUser.id);
 
-            // Sprawdzenie, czy uzytkownik jest juz wyciszony
+            // Sprawdzenie, czy użytkownik jest już wyciszony
             if (member.isCommunicationDisabled()) {
                 return await interaction.reply({ content: '❌ Ten użytkownik jest już wyciszony.', flags: MessageFlags.Ephemeral });
             }
 
-            // Wysylanie wiadomosci prywatnej do wyciszonego uzytkownika
+            // Wysyłanie wiadomości prywatnej do wyciszonego użytkownika
             await targetUser.send({
                 embeds: [
                     new EmbedBuilder()
                         .setTitle('Zostałeś wyciszony!')
-                        .setDescription(`\`👤\` **Serwer:** ${interaction.guild.name}\n\`🕒\` **Czas wyciszenia:** ${formattedTime}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`)
+                        .setDescription(`\`👤\` **Serwer:** ${interaction.guild.name}\n\`🕒\` **Czas wyciszenia:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`)
                         .setColor(embedOptions.defaultColor)
                 ]
-            }).catch(() => logger.warn(`[Cmd - timeout] Failed to send DM to ${targetUser.user.tag}`));
+            }).catch(() => logger.warn(`[Cmd - timeout] Nie udało się wysłać DM do ${targetUser.tag}`));
 
-            // Nalozenie wyciszenia na uzytkownika
-            await member.timeout(timeoutDuration * 1000, reason);
+            // Nałożenie wyciszenia na użytkownika (przekazujemy czas w milisekundach)
+            await member.timeout(timeInfo.seconds * 1000, reason);
 
             const successEmbed = new EmbedBuilder()
                 .setTitle('Użytkownik został wyciszony')
-                .setDescription(`\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🕒\` **Czas wyciszenia:** ${formattedTime}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`)
+                .setDescription(`\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🕒\` **Czas wyciszenia:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`)
                 .setColor(embedOptions.defaultColor);
 
             return await interaction.reply({ embeds: [successEmbed] });

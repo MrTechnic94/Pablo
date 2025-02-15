@@ -10,9 +10,6 @@ module.exports = {
     async execute(interaction) {
         const guild = interaction.guild;
 
-        // Pobieranie ikony serwera
-        const iconURL = guild.iconURL() || null;
-
         // Pobieranie wlasciciela serwera
         const owner = await guild.fetchOwner();
 
@@ -36,8 +33,8 @@ module.exports = {
         }
 
         const serverEmbed = new EmbedBuilder()
-            .setAuthor({ name: guild.name, iconURL })
-            .setThumbnail(iconURL)
+            .setAuthor({ name: guild.name, iconURL: guild.iconURL() })
+            .setThumbnail(guild.iconURL())
             .addFields(
                 { name: '❯ Poziom weryfikacji', value: verificationLevels[guild.verificationLevel], inline: false },
                 { name: '❯ Użytkownicy', value: `**• Łącznie:** ${guild.memberCount}\n**• Online:** ${onlineMembers}`, inline: false },

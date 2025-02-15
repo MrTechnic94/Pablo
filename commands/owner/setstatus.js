@@ -1,7 +1,7 @@
 'use strict';
 
 const logger = require('../../plugins/logger');
-const { SlashCommandBuilder, EmbedBuilder, ActivityType, PresenceUpdateStatus, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, ActivityType, PresenceUpdateStatus, EmbedBuilder, MessageFlags } = require('discord.js');
 const { embedOptions } = require('../../config/default');
 
 module.exports = {
