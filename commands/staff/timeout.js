@@ -46,12 +46,12 @@ module.exports = {
         try {
             const member = await interaction.guild.members.fetch(targetUser.id);
 
-            // Sprawdzenie, czy użytkownik jest już wyciszony
+            // Sprawdzenie, czy uzytkownik jest juz wyciszony
             if (member.isCommunicationDisabled()) {
                 return await interaction.reply({ content: '❌ Ten użytkownik jest już wyciszony.', flags: MessageFlags.Ephemeral });
             }
 
-            // Wysyłanie wiadomości prywatnej do wyciszonego użytkownika
+            // Wysylanie wiadomosci prywatnej do wyciszonego uzytkownika
             await targetUser.send({
                 embeds: [
                     new EmbedBuilder()
@@ -61,7 +61,7 @@ module.exports = {
                 ]
             }).catch(() => logger.warn(`[Cmd - timeout] Nie udało się wysłać DM do ${targetUser.tag}`));
 
-            // Nałożenie wyciszenia na użytkownika (przekazujemy czas w milisekundach)
+            // Nalozenie wyciszenia na uzytkownika
             await member.timeout(timeInfo.seconds * 1000, reason);
 
             const successEmbed = new EmbedBuilder()
