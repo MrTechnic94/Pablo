@@ -1,7 +1,7 @@
 'use strict';
 
 const chokidar = require('chokidar');
-const redis = require('../plugins/redis');
+// const redis = require('../plugins/redis');
 const logger = require('../plugins/logger');
 const { readdirSync } = require('node:fs');
 const { join } = require('node:path');
@@ -32,9 +32,9 @@ module.exports = (client) => {
                     process.on(eventName, eventHandler);
                     break;
 
-                case 'redis':
-                    redis.on(eventName, eventHandler);
-                    break;
+                // case 'redis':
+                //     redis.on(eventName, eventHandler);
+                //     break;
 
                 case 'chokidar':
                     watcher.on(eventName, eventHandler);

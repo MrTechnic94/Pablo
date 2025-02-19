@@ -31,7 +31,7 @@ module.exports = async (client) => {
                     process.exit(1);
                 }
             } catch (err) {
-                logger.error(`[Handler] Error loading command at ${filePath}: ${err.message}`);
+                logger.error(`[Handler] Error loading command at ${filePath}:\n${err}`);
                 process.exit(1);
             }
         }
@@ -48,6 +48,6 @@ module.exports = async (client) => {
         );
         logger.info('[Handler] Successfully registered slash commands.');
     } catch (err) {
-        logger.error(`[Handler] Error during command registration: ${err.message}`);
+        logger.error(`[Handler] Error during command registration:\n${err}`);
     }
 };

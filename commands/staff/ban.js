@@ -1,7 +1,7 @@
 'use strict';
 
 const logger = require('../../plugins/logger');
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
 const { embedOptions } = require('../../config/default');
 
 module.exports = {
@@ -31,7 +31,8 @@ module.exports = {
                     { name: '3 dni', value: 259200 },
                     { name: '7 dni', value: 604800 }
                 )
-        ),
+        )
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         if (!interaction.member.permissions.has(PermissionFlagsBits.BanMembers)) {
             return await interaction.reply({ content: '❌ Nie masz uprawnień do banowania użytkowników.', flags: MessageFlags.Ephemeral });
@@ -88,5 +89,5 @@ module.exports = {
             logger.error(`[Cmd - ban] ${err}`);
             return await interaction.reply({ content: '❌ Wystąpił błąd podczas banowania użytkownika.', flags: MessageFlags.Ephemeral });
         }
-    }
+    },
 };

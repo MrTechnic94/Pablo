@@ -1,12 +1,13 @@
 'use strict';
 
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder } = require('discord.js');
 const { embedOptions } = require('../../config/default');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('dlc')
-        .setDescription('Poradnik dotyczący instalacji DLC dla ETS2.'),
+        .setDescription('Poradnik dotyczący instalacji DLC dla ETS2.')
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         const embed = new EmbedBuilder()
             .setTitle('PORADNIK INSTALACJI DLC DO ETS2')
@@ -14,5 +15,5 @@ module.exports = {
             .setColor(embedOptions.defaultColor);
 
         return await interaction.reply({ embeds: [embed] });
-    }
+    },
 };

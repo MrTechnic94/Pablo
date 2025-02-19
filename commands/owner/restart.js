@@ -1,12 +1,13 @@
 'use strict';
 
 const logger = require('../../plugins/logger');
-const { SlashCommandBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('restart')
-        .setDescription('Restart bota.'),
+        .setDescription('Restart bota.')
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         // Sprawdza czy uzytkownik ktory wykonal komende, jest wlascicielem bota
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {

@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, EmbedBuilder, MessageFlags, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, MessageFlags, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { embedOptions, emojisConfig, guildRoles } = require('../../config/default');
 
 module.exports = {
@@ -17,7 +17,8 @@ module.exports = {
                     { name: 'Auto role kolory', value: 'auto-role-kolory' },
                     { name: 'Pomoc', value: 'pomoc' }
                 )
-        ),
+        )
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         // Sprawdza czy uzytkownik ktory wykonal komende, jest wlascicielem bota
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
@@ -138,5 +139,5 @@ module.exports = {
             default:
                 await interaction.reply({ content: 'Nieznany parametr.', flags: MessageFlags.Ephemeral });
         }
-    }
+    },
 };

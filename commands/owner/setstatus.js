@@ -1,7 +1,7 @@
 'use strict';
 
 const logger = require('../../plugins/logger');
-const { SlashCommandBuilder, ActivityType, PresenceUpdateStatus, EmbedBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, ActivityType, PresenceUpdateStatus, EmbedBuilder, MessageFlags } = require('discord.js');
 const { embedOptions } = require('../../config/default');
 
 module.exports = {
@@ -36,7 +36,8 @@ module.exports = {
                     { name: 'Invisible', value: 'Invisible' },
                     { name: 'Offline', value: 'Offline' }
                 )
-        ),
+        )
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         // Sprawdza czy uzytkownik ktory wykonal komende, jest wlascicielem bota
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {

@@ -1,7 +1,7 @@
 'use strict';
 
 const logger = require('../../plugins/logger');
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
 const { parseTimeString } = require('../../plugins/parseTime');
 const { embedOptions } = require('../../config/default');
 
@@ -23,7 +23,8 @@ module.exports = {
             option.setName('powód')
                 .setDescription('Powód nałożenia wyciszenia.')
                 .setRequired(false)
-        ),
+        )
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         if (!interaction.member.permissions.has(PermissionFlagsBits.ModerateMembers) && interaction.user.id !== process.env.BOT_OWNER_ID) {
             return await interaction.reply({ content: '❌ Nie masz uprawnień do wyciszenia użytkowników.', flags: MessageFlags.Ephemeral });
@@ -74,5 +75,5 @@ module.exports = {
             logger.error(`[Cmd - timeout] ${err}`);
             return await interaction.reply({ content: '❌ Wystąpił błąd podczas nakładania wyciszenia na użytkownika.', flags: MessageFlags.Ephemeral });
         }
-    }
+    },
 };

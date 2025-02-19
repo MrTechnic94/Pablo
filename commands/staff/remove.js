@@ -1,7 +1,7 @@
 'use strict';
 
 const logger = require('../../plugins/logger');
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
 const { guildRoles, embedOptions } = require('../../config/default');
 
 module.exports = {
@@ -17,7 +17,8 @@ module.exports = {
             option.setName('rola')
                 .setDescription('Rola, którą chcesz zabrać użytkownikowi.')
                 .setRequired(true)
-        ),
+        )
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         // Sprawdza czy uzytkownik posiada role administratora lub wlasciciela
         if (!interaction.member.roles.cache.has(guildRoles.admin) && !interaction.member.roles.cache.has(guildRoles.owner) && interaction.user.id !== process.env.BOT_OWNER_ID) {
@@ -55,5 +56,5 @@ module.exports = {
             logger.error(`[Cmd - remove] ${err}`);
             return await interaction.reply({ content: '❌ Nie udało się zabrać roli.', flags: MessageFlags.Ephemeral });
         }
-    }
+    },
 };

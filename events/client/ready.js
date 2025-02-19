@@ -14,5 +14,5 @@ module.exports = {
         if (global.isDev) {
             logger.info('[Client] Running in Developer Mode.');
         }
-    }
+    },
 };

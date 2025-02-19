@@ -15,7 +15,7 @@ module.exports = {
                     flags: MessageFlags.Ephemeral
                 });
             } catch (interactionError) {
-                logger.error(`[Client] Error replying to interaction: ${interactionError}`);
+                logger.error(`[Client] Error replying to interaction:\n${interactionError}`);
             }
         }
     },

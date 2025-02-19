@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, MessageFlags, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, MessageFlags, EmbedBuilder } = require('discord.js');
 const { emojisConfig, embedOptions } = require('../../config/default');
 
 module.exports = {
@@ -11,7 +11,8 @@ module.exports = {
             option.setName('przeciwnik')
                 .setDescription('Wybierz użytkownika do walki')
                 .setRequired(true)
-        ),
+        )
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         const player1 = interaction.user;
         const player2 = interaction.options.getUser('przeciwnik');
@@ -86,5 +87,5 @@ module.exports = {
             .setColor(embedOptions.defaultColor);
 
         await message.edit({ embeds: [finalEmbed] });
-    }
+    },
 };

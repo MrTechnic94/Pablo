@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder } = require('discord.js');
 const { embedOptions } = require('../../config/default');
 
 module.exports = {
@@ -11,7 +11,8 @@ module.exports = {
             option.setName('kanał')
                 .setDescription('Kanał, o którym chcesz uzyskać informacje.')
                 .setRequired(false)
-        ),
+        )
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         const channel = interaction.options.getChannel('kanał') || interaction.channel;
 
@@ -51,5 +52,5 @@ module.exports = {
             .setColor(embedOptions.defaultColor)
 
         return await interaction.reply({ embeds: [channelEmbed] });
-    }
+    },
 };

@@ -7,7 +7,7 @@ const { channelsConfig } = require('../../config/default');
 module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
-        if (message.author.bot || !message.guild) return;
+        if (message.author.bot) return;
 
         // Auto reakcje dla kanalu z memami
         if (message.channel.id === channelsConfig.memy) {

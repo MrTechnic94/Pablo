@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder } = require('discord.js');
 const { embedOptions } = require('../../config/default');
 
 module.exports = {
@@ -11,7 +11,8 @@ module.exports = {
             option.setName('użytkownik')
                 .setDescription('Użytkownik, o którym chcesz zobaczyć informacje.')
                 .setRequired(false)
-        ),
+        )
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         const targetUser = interaction.options.getMember('użytkownik') || interaction.member;
 
@@ -42,5 +43,5 @@ module.exports = {
             .setColor(embedOptions.defaultColor);
 
         return await interaction.reply({ embeds: [embed] });
-    }
+    },
 };

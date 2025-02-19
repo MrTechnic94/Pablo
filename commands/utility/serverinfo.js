@@ -1,12 +1,13 @@
 'use strict';
 
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder } = require('discord.js');
 const { embedOptions } = require('../../config/default');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('serverinfo')
-        .setDescription('Wyświetla informacje o serwerze.'),
+        .setDescription('Wyświetla informacje o serwerze.')
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         const guild = interaction.guild;
 
@@ -46,5 +47,5 @@ module.exports = {
             .setColor(embedOptions.defaultColor);
 
         return await interaction.reply({ embeds: [serverEmbed] });
-    }
+    },
 };

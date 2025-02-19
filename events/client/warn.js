@@ -7,5 +7,5 @@ module.exports = {
     name: Events.Warn,
     execute(info) {
         logger.warn(`[Client] Warn found:\n${info}`);
-    }
+    },
 };

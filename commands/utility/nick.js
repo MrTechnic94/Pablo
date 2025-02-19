@@ -1,7 +1,7 @@
 'use strict';
 
 const logger = require('../../plugins/logger');
-const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, MessageFlags } = require('discord.js');
 const { guildRoles, embedOptions } = require('../../config/default');
 
 module.exports = {
@@ -13,7 +13,8 @@ module.exports = {
                 .setDescription('Nowy pseudonim. Maksymalnie 32 znaki.')
                 .setMaxLength(32)
                 .setRequired(false)
-        ),
+        )
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         if (!interaction.member.roles.cache.has(guildRoles.admin) && !interaction.member.roles.cache.has(guildRoles.changeNickname) && interaction.user.id !== process.env.BOT_OWNER_ID) {
             return await interaction.reply({ content: '❌ Nie masz wymaganej roli.', flags: MessageFlags.Ephemeral });
@@ -34,5 +35,5 @@ module.exports = {
             logger.error(`[Cmd - nick] ${err}`);
             return await interaction.reply({ content: '❌ Nie udało się zmienić Twojego nicku!', flags: MessageFlags.Ephemeral });
         }
-    }
+    },
 };

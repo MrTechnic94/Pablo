@@ -1,13 +1,13 @@
 'use strict';
 
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('randomcolor')
-        .setDescription('Generuje losowy kolor.'),
+        .setDescription('Generuje losowy kolor.')
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
-        // Generowanie losowego koloru
         const dec = Math.floor(Math.random() * 16777216);
         const hex = dec.toString(16).padStart(6, '0').toUpperCase();
 
@@ -18,5 +18,5 @@ module.exports = {
             .setColor(dec);
 
         return await interaction.reply({ embeds: [embed] });
-    }
+    },
 };
