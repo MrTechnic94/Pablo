@@ -16,7 +16,7 @@
             "GuildPresences",
             "MessageContent"
         ],
-        "repliedUser": true
+        "repliedUser": false
     },
     "guildRoles": {
         "changeNickname": "1118157654204874772",

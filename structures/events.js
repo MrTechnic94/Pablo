@@ -1,7 +1,6 @@
 'use strict';
 
 const chokidar = require('chokidar');
-// const redis = require('../plugins/redis');
 const logger = require('../plugins/logger');
 const { readdirSync } = require('node:fs');
 const { join } = require('node:path');
@@ -10,7 +9,7 @@ module.exports = (client) => {
     const eventsDir = join(__dirname, '../events');
 
     const watcher = chokidar.watch('./', {
-        ignored: /node_modules|\.git|structures|package\.json|pnpm-lock\.yaml|\.env|\.env\.example|\.gitignore/,
+        ignored: /node_modules|\.git|structures|package\.json|pnpm-lock\.yaml|\.env|\.env\.example|\.gitignore|config/,
         persistent: true
     });
 
@@ -31,10 +30,6 @@ module.exports = (client) => {
                 case 'process':
                     process.on(eventName, eventHandler);
                     break;
-
-                // case 'redis':
-                //     redis.on(eventName, eventHandler);
-                //     break;
 
                 case 'chokidar':
                     watcher.on(eventName, eventHandler);

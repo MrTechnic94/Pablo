@@ -24,75 +24,61 @@ module.exports = {
                 }
             }
         } else if (interaction.isButton()) {
+            async function toggleRole(roleId) {
+                if (interaction.member.roles.cache.has(roleId)) {
+                    await interaction.member.roles.remove(roleId);
+                    await interaction.reply({
+                        content: `Rola <@&${roleId}> została usunięta.`,
+                        flags: MessageFlags.Ephemeral,
+                    });
+                } else {
+                    await interaction.member.roles.add(roleId);
+                    await interaction.reply({
+                        content: `Rola <@&${roleId}> została dodana.`,
+                        flags: MessageFlags.Ephemeral,
+                    });
+                }
+            };
+
             switch (interaction.customId) {
                 case 'accept_rules': {
                     if (interaction.member.roles.cache.has(guildRoles.user)) {
-                        return await interaction.reply({ content: 'Już zaakceptowałeś regulamin.', flags: MessageFlags.Ephemeral });
+                        return await interaction.reply({
+                            content: 'Już zaakceptowałeś regulamin.',
+                            flags: MessageFlags.Ephemeral,
+                        });
                     }
-
                     try {
                         await interaction.member.roles.add(guildRoles.user);
-                        await interaction.reply({ content: 'Dziękujemy za akceptację regulaminu!', flags: MessageFlags.Ephemeral });
-                    } catch (error) {
-                        logger.error(`[Client] Error while adding role:\n${error}`);
-                        await interaction.reply({ content: '❌ Wystąpił błąd podczas nadawania roli.', flags: MessageFlags.Ephemeral });
+                        await interaction.reply({
+                            content: 'Dziękujemy za akceptację regulaminu!',
+                            flags: MessageFlags.Ephemeral,
+                        });
+                    } catch (err) {
+                        logger.error(`[Client] Error while adding role:\n${err}`);
+                        await interaction.reply({
+                            content: '❌ Wystąpił błąd podczas nadawania roli.',
+                            flags: MessageFlags.Ephemeral,
+                        });
                     }
                     break;
                 }
 
                 // Auto role dodatkowe
-                case 'additional_gamer': {
-                    if (interaction.member.roles.cache.has(guildRoles.gamer)) {
-                        await interaction.member.roles.remove(guildRoles.gamer);
-                        await interaction.reply({ content: `Rola <@&${guildRoles.gamer}> została usunięta`, flags: MessageFlags.Ephemeral });
-                    } else {
-                        await interaction.member.roles.add(guildRoles.gamer);
-                        await interaction.reply({ content: `Rola <@&${guildRoles.gamer}> została dodana`, flags: MessageFlags.Ephemeral });
-                    }
-                    break;
-                }
-
-                case 'additional_xbox': {
-                    if (interaction.member.roles.cache.has(guildRoles.xbox)) {
-                        await interaction.member.roles.remove(guildRoles.xbox);
-                        await interaction.reply({ content: `Rola <@&${guildRoles.xbox}> została usunięta`, flags: MessageFlags.Ephemeral });
-                    } else {
-                        await interaction.member.roles.add(guildRoles.xbox);
-                        await interaction.reply({ content: `Rola <@&${guildRoles.xbox}> została dodana`, flags: MessageFlags.Ephemeral });
-                    }
-                    break;
-                }
-
-                case 'additional_playstation': {
-                    if (interaction.member.roles.cache.has(guildRoles.playstation)) {
-                        await interaction.member.roles.remove(guildRoles.playstation);
-                        await interaction.reply({ content: `Rola <@&${guildRoles.playstation}> została usunięta`, flags: MessageFlags.Ephemeral });
-                    } else {
-                        await interaction.member.roles.add(guildRoles.playstation);
-                        await interaction.reply({ content: `Rola <@&${guildRoles.playstation}> została dodana`, flags: MessageFlags.Ephemeral });
-                    }
-                    break;
-                }
-
-                case 'additional_pc': {
-                    if (interaction.member.roles.cache.has(guildRoles.pc)) {
-                        await interaction.member.roles.remove(guildRoles.pc);
-                        await interaction.reply({ content: `Rola <@&${guildRoles.pc}> została usunięta`, flags: MessageFlags.Ephemeral });
-                    } else {
-                        await interaction.member.roles.add(guildRoles.pc);
-                        await interaction.reply({ content: `Rola <@&${guildRoles.pc}> została dodana`, flags: MessageFlags.Ephemeral });
-                    }
-                    break;
-                }
-
+                case 'additional_gamer':
+                case 'additional_xbox':
+                case 'additional_playstation':
+                case 'additional_pc':
                 case 'additional_phone': {
-                    if (interaction.member.roles.cache.has(guildRoles.phone)) {
-                        await interaction.member.roles.remove(guildRoles.phone);
-                        await interaction.reply({ content: `Rola <@&${guildRoles.phone}> została usunięta`, flags: MessageFlags.Ephemeral });
-                    } else {
-                        await interaction.member.roles.add(guildRoles.phone);
-                        await interaction.reply({ content: `Rola <@&${guildRoles.phone}> została dodana`, flags: MessageFlags.Ephemeral });
-                    }
+                    const roleMapping = {
+                        additional_gamer: guildRoles.gamer,
+                        additional_xbox: guildRoles.xbox,
+                        additional_playstation: guildRoles.playstation,
+                        additional_pc: guildRoles.pc,
+                        additional_phone: guildRoles.phone,
+                    };
+                    const roleId = roleMapping[interaction.customId];
+                    await toggleRole(roleId);
                     break;
                 }
 
