@@ -4,7 +4,7 @@ function parseTimeString(timeString) {
     const regex = /(\d+)(h|m|s|d|godzin|godziny|minut|minuty|sekund|sekundy|dni|dzień)/gi;
     const matches = [...timeString.matchAll(regex)];
 
-    if (matches.length === 0) return null;
+    if (!matches.length) return null;
 
     let totalSeconds = 0;
     let formattedTime = '';

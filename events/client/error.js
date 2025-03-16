@@ -14,8 +14,8 @@ module.exports = {
                     content: '❌ Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.',
                     flags: MessageFlags.Ephemeral
                 });
-            } catch (interactionError) {
-                logger.error(`[Client] Error replying to interaction:\n${interactionError}`);
+            } catch (err) {
+                logger.error(`[Client] Error replying to interaction:\n${err}`);
             }
         }
     },

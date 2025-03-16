@@ -9,7 +9,7 @@ module.exports = (client) => {
     const eventsDir = join(__dirname, '../events');
 
     const watcher = chokidar.watch('./', {
-        ignored: /node_modules|\.git|structures|package\.json|pnpm-lock\.yaml|\.env|\.env\.example|\.gitignore|config/,
+        ignored: /node_modules|\.git|structures|package\.json|pnpm-lock\.yaml|\.gitignore|config/,
         persistent: true
     });
 

@@ -31,10 +31,10 @@ module.exports = {
             case 'weryfikacja': {
                 const verify_embed = new EmbedBuilder()
                     .setDescription(
-                        '**• Informacje ogólne**\n\n1. Nie pinguj\n2. Staraj się nie pisać caps lockiem\n3. Rasizm/homofobia = ban\n4. Nie wysyłamy treści niezwiązanych z tematem kanału\n5. Nadmierny spam = mute (20 min)\n\n' +
-                        '**• Ważne informacje**\n\n1. Reklamowanie się = ban\n2. Nieznajomość regulaminu nie zwalnia cię z jego przestrzegania\n3. Nie spoileruj, jeśli ktoś nie chce\n4. Administracja ma zawsze rację'
+                        '**• Informacje ogólne**\n\n1. Nie pinguj.\n2. Staraj się nie pisać caps lockiem.\n3. Rasizm/homofobia = ban.\n4. Nie wysyłamy treści niezwiązanych z tematem kanału.\n5. Nadmierny spam = mute (20 min).\n\n' +
+                        '**• Ważne informacje**\n\n1. Reklamowanie się = ban.\n2. Nieznajomość regulaminu nie zwalnia cię z jego przestrzegania.\n3. Nie spoileruj, jeśli ktoś nie chce.\n4. Administracja ma zawsze rację.'
                     )
-                    .setFooter({ text: '❗ Regulamin to jakiś farmazon' })
+                    .setFooter({ text: '❗ Regulamin to jakiś farmazon.' })
                     .setColor(embedOptions.defaultColor);
 
                 const button_verify = new ButtonBuilder()
@@ -96,7 +96,7 @@ module.exports = {
             case 'pomoc': {
                 const funEmbed = new EmbedBuilder()
                     .setTitle(`${emojisConfig.ball} 4Fun`)
-                    .setDescription('`/solo [użytkownik]`\nStocz bitwę z wybraną osobą.')
+                    .setDescription('`/solo <użytkownik>`\nStocz bitwę z wybraną osobą.')
                     .setColor(embedOptions.defaultColor);
 
                 const musicEmbed = new EmbedBuilder()

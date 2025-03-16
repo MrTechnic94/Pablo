@@ -43,7 +43,6 @@ module.exports = async (client) => {
         logger.info(`[Handler] Registering ${commands.length} slash commands...`);
         await rest.put(
             Routes.applicationCommands(global.isDev ? process.env.DEV_BOT_ID : process.env.BOT_ID),
-            // Routes.applicationGuildCommands(process.env.BOT_ID, '720710829346914306'),
             { body: commands }
         );
         logger.info('[Handler] Successfully registered slash commands.');
