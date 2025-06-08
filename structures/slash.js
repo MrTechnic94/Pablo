@@ -27,11 +27,11 @@ module.exports = async (client) => {
                     commands.push(command.data.toJSON());
                     client.commands.set(command.data.name, command);
                 } else {
-                    logger.warn(`[Handler] Command at ${filePath} is missing "data" or "execute".`);
+                    logger.warn(`[Slash] Command at ${filePath} is missing "data" or "execute".`);
                     process.exit(1);
                 }
             } catch (err) {
-                logger.error(`[Handler] Error loading command at ${filePath}:\n${err}`);
+                logger.error(`[Slash] Error loading command at ${filePath}:\n${err}`);
                 process.exit(1);
             }
         }
@@ -40,13 +40,13 @@ module.exports = async (client) => {
     const rest = new REST().setToken(global.isDev ? process.env.DEV_BOT_TOKEN : process.env.BOT_TOKEN);
 
     try {
-        logger.info(`[Handler] Registering ${commands.length} slash commands...`);
+        logger.info(`[Slash] Registering ${commands.length} slash commands...`);
         await rest.put(
             Routes.applicationCommands(global.isDev ? process.env.DEV_BOT_ID : process.env.BOT_ID),
             { body: commands }
         );
-        logger.info('[Handler] Successfully registered slash commands.');
+        logger.info('[Slash] Successfully registered slash commands.');
     } catch (err) {
-        logger.error(`[Handler] Error during command registration:\n${err}`);
+        logger.error(`[Slash] Error during command registration:\n${err}`);
     }
 };

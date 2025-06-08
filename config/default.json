@@ -1,7 +1,11 @@
 {
     "botOptions": {
-        "activityName": "✞ Jesus Forever",
-        "activityType": "Listening"
+        "defaultActivityName": "✞ Jesus Forever",
+        "defaultActivityType": "Listening",
+        "defaultActivityPresence": "Online",
+        "changedActivityName": "",
+        "changedActivityType": "",
+        "changedActivityPresence": ""
     },
     "clientOptions": {
         "restRequestTimeout": 60000,

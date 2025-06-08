@@ -10,13 +10,13 @@ module.exports = {
         if (interaction.isChatInputCommand()) {
             const command = interaction.client.commands.get(interaction.commandName);
             if (!command) {
-                return logger.error(`[Client] Command ${interaction.commandName} not found.`);
+                return logger.error(`[InteractionCreate] Command ${interaction.commandName} not found.`);
             }
 
             try {
                 await command.execute(interaction);
             } catch (err) {
-                logger.error(`[Client] Error while executing ${interaction.commandName} command:\n${err}`);
+                logger.error(`[InteractionCreate] Error while executing ${interaction.commandName} command:\n${err}`);
                 if (interaction.replied || interaction.deferred) {
                     await interaction.followUp({ content: '❌ Wystąpił błąd podczas wykonywania komendy!', flags: MessageFlags.Ephemeral });
                 } else {

@@ -6,7 +6,7 @@ const logger = require('./logger');
 function checkEnvVariables(variables) {
     for (const variable of variables) {
         if (!process.env[variable]) {
-            logger.error(`Missing ${variable} in .env file.`);
+            logger.error(`[Startup] Missing ${variable} in .env file.`);
             process.exit(1);
         }
     }
@@ -17,7 +17,7 @@ function checkNodeVersion() {
     const version = Number(process.versions.node.split('.')[0]);
 
     if (version < 22) {
-        logger.error('Outdated Node.js version. Update to a newer version.');
+        logger.error('[Startup] Outdated Node.js version. Update to a newer version.');
         process.exit(1);
     }
 }

@@ -3,6 +3,8 @@
 const logger = require('../../plugins/logger');
 const { SlashCommandBuilder, InteractionContextType, ActivityType, PresenceUpdateStatus, EmbedBuilder, MessageFlags } = require('discord.js');
 const { embedOptions } = require('../../config/default');
+const { writeFileSync, readFileSync } = require('node:fs');
+const { resolve } = require('node:path');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,12 +29,12 @@ module.exports = {
         )
         .addStringOption(option =>
             option.setName('status')
-                .setDescription('Status bota.')
+                .setDescription('Status dostępności bota.')
                 .setRequired(true)
                 .addChoices(
                     { name: 'Online', value: 'Online' },
                     { name: 'Idle', value: 'Idle' },
-                    { name: 'Do not disturb', value: 'DoNotDisturb' },
+                    { name: 'Do Not Disturb', value: 'DoNotDisturb' },
                     { name: 'Invisible', value: 'Invisible' },
                     { name: 'Offline', value: 'Offline' }
                 )
@@ -46,20 +48,28 @@ module.exports = {
 
         const status = interaction.options.getString('nazwa');
         const type = interaction.options.getString('typ');
-        const botStatus = interaction.options.getString('status');
+        const botPresence = interaction.options.getString('status');
 
         try {
             await interaction.client.user.setPresence({
-                status: PresenceUpdateStatus[botStatus],
+                status: PresenceUpdateStatus[botPresence],
                 activities: [{
                     name: status,
                     type: ActivityType[type],
                 }],
             });
 
+            const configPath = resolve(__dirname, '../../config/default.json');
+            const config = JSON.parse(readFileSync(configPath, 'utf8'));
+            config.botOptions.changedActivityName = status;
+            config.botOptions.changedActivityType = type;
+            config.botOptions.changedActivityPresence = botPresence;
+
+            writeFileSync(configPath, JSON.stringify(config, null, 4), 'utf8');
+
             const embed = new EmbedBuilder()
                 .setTitle('Status zmieniony')
-                .setDescription(`**• Nazwa:** ${status}\n**• Typ:** ${type}\n**• Status:** ${botStatus}`)
+                .setDescription(`**• Nazwa:** ${status}\n**• Typ:** ${type}\n**• Status:** ${botPresence}`)
                 .setColor(embedOptions.defaultColor);
 
             return await interaction.reply({ embeds: [embed] });

@@ -9,7 +9,7 @@ module.exports = (client) => {
     const eventsDir = join(__dirname, '../events');
 
     const watcher = chokidar.watch('./', {
-        ignored: /node_modules|\.git|structures|package\.json|pnpm-lock\.yaml|\.gitignore|config/,
+        ignored: /node_modules|\.git|structures|package\.json|pnpm-lock\.yaml|\.gitignore|\.pm2|config/,
         persistent: true
     });
 
@@ -22,7 +22,7 @@ module.exports = (client) => {
         for (const file of eventFiles) {
             const eventName = file.slice(0, file.lastIndexOf('.'));
             const event = require(join(eventsDir, directory.name, file));
-            logger.info(`[Handler] Event ${eventName} has been loaded.`);
+            logger.info(`[Event] Event ${eventName} has been loaded.`);
 
             const eventHandler = (...args) => event.execute(...args);
 

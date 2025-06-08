@@ -25,7 +25,7 @@ module.exports = {
                     await message.react('👍');
                     await message.react('👎');
                 } catch (err) {
-                    logger.error(`[Client] Failed to add reaction:\n${err}`);
+                    logger.error(`[MessageCreate] Failed to add reaction:\n${err}`);
                 }
             }
         }
