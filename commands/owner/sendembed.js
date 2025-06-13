@@ -137,7 +137,7 @@ module.exports = {
                 break;
             }
             default:
-                await interaction.reply({ content: 'Nieznany parametr.', flags: MessageFlags.Ephemeral });
+                await interaction.reply({ content: '❌ Nieznany parametr.', flags: MessageFlags.Ephemeral });
         }
     },
 };

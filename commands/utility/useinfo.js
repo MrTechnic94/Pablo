@@ -16,7 +16,7 @@ module.exports = {
     async execute(interaction) {
         const targetUser = interaction.options.getMember('użytkownik') || interaction.member;
 
-        // Pobranie roli użytkownika
+        // Pobranie roli uzytkownika
         const roles = targetUser.roles.cache
             .filter(role => role.id !== interaction.guild.id)
             .map(role => role.toString())

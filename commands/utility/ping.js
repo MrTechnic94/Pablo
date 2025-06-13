@@ -1,6 +1,5 @@
 'use strict';
 
-const logger = require('../../plugins/logger');
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
 
 module.exports = {
@@ -8,7 +7,7 @@ module.exports = {
         .setName('ping')
         .setDescription('Sprawdza opóźnienie bota.')
         .setContexts(InteractionContextType.Guild),
-    async execute(interaction) {
+    async execute(interaction, logger) {
         try {
             await interaction.reply({ content: 'Pinging...' });
 

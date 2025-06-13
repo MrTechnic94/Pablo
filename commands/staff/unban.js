@@ -1,6 +1,5 @@
 'use strict';
 
-const logger = require('../../plugins/logger');
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
 const { embedOptions } = require('../../config/default');
 
@@ -19,7 +18,7 @@ module.exports = {
                 .setRequired(false)
         )
         .setContexts(InteractionContextType.Guild),
-    async execute(interaction) {
+    async execute(interaction, logger) {
         if (!interaction.member.permissions.has(PermissionFlagsBits.BanMembers) && interaction.user.id !== process.env.BOT_OWNER_ID) {
             return await interaction.reply({ content: '❌ Nie masz uprawnień do odbanowywania użytkowników.', flags: MessageFlags.Ephemeral });
         }

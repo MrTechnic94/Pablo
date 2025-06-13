@@ -18,7 +18,7 @@ module.exports = {
         const player2 = interaction.options.getUser('przeciwnik');
 
         if (player1.id === player2.id) {
-            return await interaction.reply({ content: 'Nie możesz walczyć sam ze sobą!', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '❌ Nie możesz walczyć sam ze sobą.', flags: MessageFlags.Ephemeral });
         }
 
         let players = [

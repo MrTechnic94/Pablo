@@ -1,6 +1,5 @@
 'use strict';
 
-const logger = require('../../plugins/logger');
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
 const { guildRoles, embedOptions } = require('../../config/default');
 
@@ -19,7 +18,7 @@ module.exports = {
                 .setRequired(true)
         )
         .setContexts(InteractionContextType.Guild),
-    async execute(interaction) {
+    async execute(interaction, logger) {
         // Sprawdza czy uzytkownik posiada role administratora lub wlasciciela
         if (!interaction.member.roles.cache.has(guildRoles.admin) && !interaction.member.roles.cache.has(guildRoles.owner) && interaction.user.id !== process.env.BOT_OWNER_ID) {
             return await interaction.reply({ content: '❌ Nie masz wymaganej roli.', flags: MessageFlags.Ephemeral });

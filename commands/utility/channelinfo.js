@@ -30,7 +30,7 @@ module.exports = {
             13: 'Scena',
             14: 'Katalog',
             15: 'Forum',
-            16: 'Media',
+            16: 'Media'
         };
 
         // Sprawdzamy, czy kanal jest NSFW

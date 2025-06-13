@@ -10,10 +10,29 @@ module.exports = {
 
         try {
             delete require.cache[require.resolve(resolvedPath)];
-            require(resolvedPath);
-            logger.info(`[Chokidar] The ${filePath} has been reloaded.`);
+            const updatedModule = require(resolvedPath);
+
+            // Hot reload komend
+            if (filePath.includes('/commands/')) {
+                const name = updatedModule?.data?.name;
+                if (name && client.commands?.has(name)) {
+                    client.commands.set(name, updatedModule);
+                    logger.info(`[HotReload] Slash command '${name}' reloaded.`);
+                }
+            }
+
+            // Hot reload eventów
+            if (filePath.includes('/events/')) {
+                const eventName = filePath.split('/').pop().split('.')[0];
+
+                // Usuwanie poprzedniego listenera — UWAGA: musisz trzymać referencję (więcej poniżej)
+                // Tymczasowo nie usuwamy, ale sygnalizujemy reload
+                logger.info(`[HotReload] Event '${eventName}' reloaded (duplikaty nieusuwane).`);
+            }
+
+            logger.info(`[HotReload] ${filePath} reloaded successfully.`);
         } catch (err) {
-            logger.error(`[Chokidar] Error while reloading ${resolvedPath}:\n${err}`);
+            logger.error(`[HotReload] Failed to reload ${filePath}:\n${err}`);
         }
     },
 };

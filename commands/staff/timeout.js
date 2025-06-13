@@ -1,6 +1,5 @@
 'use strict';
 
-const logger = require('../../plugins/logger');
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
 const { parseTimeString } = require('../../plugins/parseTime');
 const { embedOptions } = require('../../config/default');
@@ -25,7 +24,7 @@ module.exports = {
                 .setRequired(false)
         )
         .setContexts(InteractionContextType.Guild),
-    async execute(interaction) {
+    async execute(interaction, logger) {
         if (!interaction.member.permissions.has(PermissionFlagsBits.ModerateMembers) && interaction.user.id !== process.env.BOT_OWNER_ID) {
             return await interaction.reply({ content: '❌ Nie masz uprawnień do wyciszenia użytkowników.', flags: MessageFlags.Ephemeral });
         }
@@ -60,7 +59,7 @@ module.exports = {
                         .setDescription(`\`👤\` **Serwer:** ${interaction.guild.name}\n\`🕒\` **Czas wyciszenia:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`)
                         .setColor(embedOptions.defaultColor)
                 ]
-            }).catch(() => logger.warn(`[Cmd - timeout] Nie udało się wysłać DM do ${targetUser.tag}`));
+            }).catch(() => logger.warn(`[Cmd - timeout] Failed to send DM to ${targetUser.tag}`));
 
             // Nalozenie wyciszenia na uzytkownika
             await member.timeout(timeInfo.seconds * 1000, reason);

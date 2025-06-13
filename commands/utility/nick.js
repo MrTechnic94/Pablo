@@ -1,6 +1,5 @@
 'use strict';
 
-const logger = require('../../plugins/logger');
 const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, MessageFlags } = require('discord.js');
 const { guildRoles, embedOptions } = require('../../config/default');
 
@@ -15,7 +14,7 @@ module.exports = {
                 .setRequired(false)
         )
         .setContexts(InteractionContextType.Guild),
-    async execute(interaction) {
+    async execute(interaction, logger) {
         if (!interaction.member.roles.cache.has(guildRoles.admin) && !interaction.member.roles.cache.has(guildRoles.changeNickname) && interaction.user.id !== process.env.BOT_OWNER_ID) {
             return await interaction.reply({ content: '❌ Nie masz wymaganej roli.', flags: MessageFlags.Ephemeral });
         }
@@ -33,7 +32,7 @@ module.exports = {
             return await interaction.reply({ embeds: [embed] });
         } catch (err) {
             logger.error(`[Cmd - nick] ${err}`);
-            return await interaction.reply({ content: '❌ Nie udało się zmienić Twojego nicku!', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '❌ Nie udało się zmienić Twojego nicku.', flags: MessageFlags.Ephemeral });
         }
     },
 };

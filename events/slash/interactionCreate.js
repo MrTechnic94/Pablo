@@ -1,12 +1,11 @@
 'use strict';
 
-const logger = require('../../plugins/logger');
 const { Events, MessageFlags } = require('discord.js');
 const { guildRoles } = require('../../config/default');
 
 module.exports = {
     name: Events.InteractionCreate,
-    async execute(interaction) {
+    async execute(interaction, logger) {
         if (interaction.isChatInputCommand()) {
             const command = interaction.client.commands.get(interaction.commandName);
             if (!command) {
@@ -14,13 +13,13 @@ module.exports = {
             }
 
             try {
-                await command.execute(interaction);
+                await command.execute(interaction, logger);
             } catch (err) {
                 logger.error(`[InteractionCreate] Error while executing ${interaction.commandName} command:\n${err}`);
                 if (interaction.replied || interaction.deferred) {
-                    await interaction.followUp({ content: '❌ Wystąpił błąd podczas wykonywania komendy!', flags: MessageFlags.Ephemeral });
+                    await interaction.followUp({ content: '❌ Wystąpił błąd podczas wykonywania komendy.', flags: MessageFlags.Ephemeral });
                 } else {
-                    await interaction.reply({ content: '❌ Wystąpił błąd podczas wykonywania komendy!', flags: MessageFlags.Ephemeral });
+                    await interaction.reply({ content: '❌ Wystąpił błąd podczas wykonywania komendy.', flags: MessageFlags.Ephemeral });
                 }
             }
         } else if (interaction.isButton()) {

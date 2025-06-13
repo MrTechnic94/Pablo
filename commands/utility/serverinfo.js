@@ -14,7 +14,7 @@ module.exports = {
         // Pobieranie wlasciciela serwera
         const owner = await guild.fetchOwner();
 
-        // Pobieranie liczby użytkowników online
+        // Pobieranie liczby użytkownikow online
         const onlineMembers = guild.members.cache.filter(member => member.presence?.status && ['online', 'idle', 'dnd'].includes(member.presence.status)).size;
 
         // Mapowanie poziomow weryfikacji na opisy

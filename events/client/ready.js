@@ -1,12 +1,11 @@
 'use strict';
 
-const logger = require('../../plugins/logger');
 const { Events } = require('discord.js');
 
 module.exports = {
     name: Events.ClientReady,
     once: true,
-    execute(client) {
+    execute(client, logger) {
         // Zalogowanie sie bota do Discord
         logger.info(`[Client] ${client.user.tag} is ready.`);
 

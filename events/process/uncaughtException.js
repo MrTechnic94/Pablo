@@ -1,10 +1,8 @@
 'use strict';
 
-const logger = require('../../plugins/logger');
-
 module.exports = {
     name: 'uncaughtException',
-    execute(err) {
+    execute(err, logger) {
         logger.error(`[UncaughtException] Uncaught exception found:\n${err}`);
     },
 };
