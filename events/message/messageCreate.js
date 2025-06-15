@@ -18,7 +18,7 @@ module.exports = {
                 const warningMessage = await message.channel.send('\`❌\` Możesz wysyłać tutaj tylko memy.');
                 setTimeout(() => {
                     warningMessage.delete().catch(() => null);
-                }, 2000);
+                }, 5000);
             } else {
                 try {
                     await message.react('👍');
