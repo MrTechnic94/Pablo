@@ -10,12 +10,13 @@
 'use strict';
 
 require('dotenv').config({ path: './config/.env' });
-const { startup } = require('./plugins/startup');
-startup();
-const { PabloClient } = require('./plugins/pabloClient');
 
 global.isDev = process.env.DEV_MODE === 'true';
 
+const { startup } = require('./plugins/startup');
+startup();
+
+const { PabloClient } = require('./plugins/pabloClient');
 const client = new PabloClient();
 
 client.login(global.isDev ? process.env.DEV_BOT_TOKEN : process.env.BOT_TOKEN);

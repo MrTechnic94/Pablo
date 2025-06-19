@@ -9,7 +9,7 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         try {
-            await interaction.reply({ content: 'Pinging...' });
+            await interaction.reply({ content: 'Pingowanie...' });
 
             const sent = await interaction.fetchReply();
             const latency = sent.createdTimestamp - interaction.createdTimestamp;

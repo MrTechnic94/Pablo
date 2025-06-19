@@ -1,7 +1,8 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, EmbedBuilder } = require('discord.js');
-const { embedOptions } = require('../../config/default');
+const { formatDuration } = require('../../plugins/parseTime');
+const { embedOptions } = require('../../config/default.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,13 +12,10 @@ module.exports = {
     async execute(interaction) {
         const guild = interaction.guild;
 
-        // Pobieranie wlasciciela serwera
         const owner = await guild.fetchOwner();
 
-        // Pobieranie liczby użytkownikow online
         const onlineMembers = guild.members.cache.filter(member => member.presence?.status && ['online', 'idle', 'dnd'].includes(member.presence.status)).size;
 
-        // Mapowanie poziomow weryfikacji na opisy
         const verificationLevels = [
             '**• Brak:** Bez ograniczeń.',
             '**• Niski:** Wymaga potwierdzenia adresu e-mail konta Discord.',
@@ -26,26 +24,24 @@ module.exports = {
             '**• Bardzo wysoki:** Wymaga potwierdzenia numeru telefonu.'
         ];
 
-        // Pobieranie informacji o kanale AFK
-        let afkInfo = 'Brak';
-        if (guild.afkChannel) {
-            const afkMinutes = guild.afkTimeout / 60;
-            afkInfo = `**• Kanał:** ${guild.afkChannel}\n**• Limit czasu:** ${afkMinutes} minut`;
-        }
+        const afkChannelName = guild.afkChannel ? `${guild.afkChannel}` : 'Brak.';
+        const afkTimeout = guild.afkTimeout ? formatDuration(guild.afkTimeout * 1000, { fullWords: true }) : 'Brak';
+        const afkInfo = `**• Kanał:** ${afkChannelName}\n**• Limit czasu:** ${afkTimeout}`;
 
-        const serverEmbed = new EmbedBuilder()
-            .setAuthor({ name: guild.name, iconURL: guild.iconURL() })
+        const successEmbed = new EmbedBuilder()
+            // .setAuthor({ name: guild.name, iconURL: guild.iconURL() })
+            .setTitle('Podgląd serwera')
             .setThumbnail(guild.iconURL())
             .addFields(
-                { name: '❯ Poziom weryfikacji', value: verificationLevels[guild.verificationLevel], inline: false },
-                { name: '❯ Użytkownicy', value: `**• Łącznie:** ${guild.memberCount}\n**• Online:** ${onlineMembers}`, inline: false },
-                { name: '❯ Role', value: `**• Łącznie:** ${guild.roles.cache.size - 1}`, inline: false },
-                { name: '❯ Właściciel', value: `<@${owner.id}>`, inline: false },
-                { name: '❯ AFK', value: afkInfo, inline: false },
-                { name: '❯ Inne', value: `**• Widget:** ${guild.widgetEnabled ? 'włączony' : 'wyłączony'}\n**• ID:** ${guild.id}`, inline: false }
+                { name: '\`🛡️\` Poziom weryfikacji', value: verificationLevels[guild.verificationLevel], inline: false },
+                { name: '\`👥\` Użytkownicy', value: `**• Łącznie:** ${guild.memberCount}\n**• Online:** ${onlineMembers}`, inline: false },
+                { name: '\`🎭\` Role', value: `**• Łącznie:** ${guild.roles.cache.size - 1}`, inline: false },
+                { name: '\`👑\` Właściciel', value: `<@${owner.id}>`, inline: false },
+                { name: '\`🌙\` AFK', value: afkInfo, inline: false },
+                { name: '\`❓\` Inne', value: `**• Nazwa:** ${guild.name}\n**• Widget:** ${guild.widgetEnabled ? 'włączony' : 'wyłączony'}\n**• ID:** ${guild.id}`, inline: false }
             )
             .setColor(embedOptions.defaultColor);
 
-        return await interaction.reply({ embeds: [serverEmbed] });
+        return await interaction.reply({ embeds: [successEmbed] });
     },
 };

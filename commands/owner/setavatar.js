@@ -1,6 +1,8 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { writeFileSync, readFileSync } = require('fs');
+const { resolve } = require('path');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -18,9 +20,15 @@ module.exports = {
             return await interaction.reply({ content: '❌ Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }
 
-        const attachment = interaction.options.getAttachment('plik');
-
         try {
+            const configPath = resolve(__dirname, '../../config/default.json');
+            const config = JSON.parse(readFileSync(configPath, 'utf8'));
+            config.botOptions.changedAvatar = true;
+
+            writeFileSync(configPath, JSON.stringify(config, null, 4), 'utf8');
+
+            const attachment = interaction.options.getAttachment('plik');
+
             // Ustawienie avatara bota z pliku
             await interaction.client.user.setAvatar(attachment.url);
 

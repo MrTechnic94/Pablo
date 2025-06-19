@@ -1,11 +1,11 @@
 'use strict';
 
+const { channelsConfig } = require('../../config/default.json');
 const { Events } = require('discord.js');
-const { channelsConfig } = require('../../config/default');
 
 module.exports = {
     name: Events.MessageCreate,
-    async execute(message, logger) {
+    async execute(logger, message) {
         if (message.author.bot) return;
 
         // Auto reakcje dla kanalu

@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags, EmbedBuilder } = require('discord.js');
-const { emojisConfig, embedOptions } = require('../../config/default');
+const { emojisConfig, embedOptions } = require('../../config/default.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -49,19 +49,19 @@ module.exports = {
             let attacker = players[round % 2];
             let defender = players[(round + 1) % 2];
 
-            let damage = Math.floor(Math.random() * (45 - 5 + 1) + 5);
+            let damage = Math.floor(Math.random() * (35 - 5 + 1) + 5);
             if (damage > defender.hp) damage = defender.hp;
             defender.hp -= damage;
 
-            let attackMessage = `${emojis[round % 2]} **${attacker.user.username}** uderzył **${defender.user.username}**, zabierając mu __${damage}__ zdrowia!`;
+            let attackMessage = `${emojis[round % 2]} **${attacker.user.username}** uderzył **${defender.user.username}**, zabierając mu __${damage}__ zdrowia.`;
             battleLog.push(attackMessage);
 
             const battleEmbed = new EmbedBuilder()
                 .setTitle('💢 SOLÓWA ! 💢')
                 .setDescription(battleLog.join('\n'))
                 .addFields(
-                    { name: `${players[0].user.username}`, value: `${players[0].hp}/100 HP`, inline: true },
-                    { name: `${players[1].user.username}`, value: `${players[1].hp}/100 HP`, inline: true }
+                    { name: `\`👤\` ${players[0].user.username}`, value: `${players[0].hp}/100 HP`, inline: true },
+                    { name: `\`👤\` ${players[1].user.username}`, value: `${players[1].hp}/100 HP`, inline: true }
                 )
                 .setColor(embedOptions.defaultColor);
 
@@ -81,8 +81,8 @@ module.exports = {
             .setTitle('💢 SOLÓWA ! 💢')
             .setDescription(battleLog.join('\n'))
             .addFields(
-                { name: `${players[0].user.username}`, value: `${players[0].hp}/100 HP`, inline: true },
-                { name: `${players[1].user.username}`, value: `${players[1].hp}/100 HP`, inline: true }
+                { name: `\`👤\` ${players[0].user.username}`, value: `${players[0].hp}/100 HP`, inline: true },
+                { name: `\`👤\` ${players[1].user.username}`, value: `${players[1].hp}/100 HP`, inline: true }
             )
             .setColor(embedOptions.defaultColor);
 

@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
-const { guildRoles, embedOptions } = require('../../config/default');
+const { guildRoles, embedOptions } = require('../../config/default.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -47,7 +47,7 @@ module.exports = {
 
             const successEmbed = new EmbedBuilder()
                 .setTitle('Rola zabrana')
-                .setDescription(`**• Zabrałeś rolę:** ${role}\n**• Użytkownikowi:** ${targetUser}\n**• Komendy użył:** ${interaction.user}`)
+                .setDescription(`\`🎭\` **Zabrałeś rolę:** ${role}\n\`👤\` **Użytkownikowi:** ${targetUser}\n\`📛\` **Polecenia użył:** ${interaction.user}`)
                 .setColor(embedOptions.defaultColor);
 
             return await interaction.reply({ embeds: [successEmbed] });

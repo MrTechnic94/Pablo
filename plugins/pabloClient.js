@@ -1,7 +1,7 @@
 'use strict';
 
 const { Client, GatewayIntentBits, PresenceUpdateStatus, ActivityType } = require('discord.js');
-const { clientOptions, botOptions } = require('../config/default');
+const { clientOptions, botOptions } = require('../config/default.json');
 
 class PabloClient extends Client {
     constructor() {

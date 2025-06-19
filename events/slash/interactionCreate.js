@@ -1,13 +1,15 @@
 'use strict';
 
 const { Events, MessageFlags } = require('discord.js');
-const { guildRoles } = require('../../config/default');
+const { toggleRoles } = require('../../plugins/toggleRoles');
+const { guildRoles } = require('../../config/default.json');
 
 module.exports = {
     name: Events.InteractionCreate,
-    async execute(interaction, logger) {
+    async execute(logger, interaction) {
         if (interaction.isChatInputCommand()) {
             const command = interaction.client.commands.get(interaction.commandName);
+
             if (!command) {
                 return logger.error(`[InteractionCreate] Command ${interaction.commandName} not found.`);
             }
@@ -23,22 +25,6 @@ module.exports = {
                 }
             }
         } else if (interaction.isButton()) {
-            async function toggleRole(roleId) {
-                if (interaction.member.roles.cache.has(roleId)) {
-                    await interaction.member.roles.remove(roleId);
-                    await interaction.reply({
-                        content: `Rola <@&${roleId}> została usunięta.`,
-                        flags: MessageFlags.Ephemeral,
-                    });
-                } else {
-                    await interaction.member.roles.add(roleId);
-                    await interaction.reply({
-                        content: `Rola <@&${roleId}> została dodana.`,
-                        flags: MessageFlags.Ephemeral,
-                    });
-                }
-            };
-
             switch (interaction.customId) {
                 case 'accept_rules': {
                     if (interaction.member.roles.cache.has(guildRoles.user)) {
@@ -54,7 +40,7 @@ module.exports = {
                             flags: MessageFlags.Ephemeral,
                         });
                     } catch (err) {
-                        logger.error(`[Client] Error while adding role:\n${err}`);
+                        logger.error(`[InteractionCreate] Error while adding role:\n${err}`);
                         await interaction.reply({
                             content: '❌ Wystąpił błąd podczas nadawania roli.',
                             flags: MessageFlags.Ephemeral,
@@ -77,7 +63,7 @@ module.exports = {
                         additional_phone: guildRoles.phone,
                     };
                     const roleId = roleMapping[interaction.customId];
-                    await toggleRole(roleId);
+                    await toggleRoles(interaction, roleId);
                     break;
                 }
 
