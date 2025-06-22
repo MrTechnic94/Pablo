@@ -1,13 +1,14 @@
 'use strict';
 
 const { Events, MessageFlags } = require('discord.js');
+// const logger = require('../../plugins/logger');
 
 module.exports = {
     name: Events.Error,
-    async execute(err, interaction, logger) {
+    async execute(logger, err, interaction) {
         logger.error(`[Client] Error occurred:\n${err}`);
 
-        if (interaction && interaction.isCommand()) {
+        if (interaction?.isCommand()) {
             try {
                 await interaction.reply({
                     content: '❌ Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.',

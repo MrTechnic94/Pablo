@@ -11,12 +11,12 @@ module.exports = {
         const dec = Math.floor(Math.random() * 16777216);
         const hex = dec.toString(16).padStart(6, '0').toUpperCase();
 
-        const embed = new EmbedBuilder()
-            .setTitle('❯ Losowy kolor')
-            .setDescription(`**• Decimal:** ${dec}\n**• Hex:** #${hex}`)
+        const successEmbed = new EmbedBuilder()
+            .setTitle('Losowy kolor')
+            .setDescription(`\`📟\` **Decimal:** ${dec}\n\`🎨\` **Hex:** #${hex}`)
             .setThumbnail(`https://dummyimage.com/400x400/${hex}/${hex}`)
             .setColor(dec);
 
-        return await interaction.reply({ embeds: [embed] });
+        return await interaction.reply({ embeds: [successEmbed] });
     },
 };

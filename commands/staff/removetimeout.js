@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
-const { embedOptions } = require('../../config/default');
+const { embedOptions } = require('../../config/default.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -46,9 +46,8 @@ module.exports = {
                         .setDescription(`\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`)
                         .setColor(embedOptions.defaultColor)
                 ]
-            }).catch(() => logger.warn(`[Cmd - removetimeout] Failed to send DM to ${targetUser.user.tag}`));
+            }).catch(() => logger.warn(`[Cmd - removetimeout] Failed to send DM to ${targetUser.user.tag}.`));
 
-            // Odciszenie uzytkownika
             await member.timeout(null, reason);
 
             const successEmbed = new EmbedBuilder()

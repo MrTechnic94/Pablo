@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, ActivityType, PresenceUpdateStatus, EmbedBuilder, MessageFlags } = require('discord.js');
-const { embedOptions } = require('../../config/default');
+const { embedOptions } = require('../../config/default.json');
 const { writeFileSync, readFileSync } = require('node:fs');
 const { resolve } = require('node:path');
 
@@ -15,8 +15,8 @@ module.exports = {
                 .setRequired(true)
         )
         .addStringOption(option =>
-            option.setName('typ')
-                .setDescription('Typ aktywności bota.')
+            option.setName('rodzaj')
+                .setDescription('Rodzaj aktywności bota.')
                 .setRequired(true)
                 .addChoices(
                     { name: 'Playing', value: 'Playing' },
@@ -46,8 +46,14 @@ module.exports = {
         }
 
         const status = interaction.options.getString('nazwa');
-        const type = interaction.options.getString('typ');
+        const type = interaction.options.getString('rodzaj');
         const botPresence = interaction.options.getString('status');
+
+        if (interaction.client.user.presence?.activities?.[0]?.name === status &&
+            interaction.client.user.presence?.activities?.[0]?.type === ActivityType[type] &&
+            interaction.client.user.presence?.status === PresenceUpdateStatus[botPresence]) {
+            return await interaction.reply({ content: '❌ Nie możesz ustawić takiego samego statusu.', flags: MessageFlags.Ephemeral });
+        }
 
         try {
             await interaction.client.user.setPresence({
@@ -66,12 +72,22 @@ module.exports = {
 
             writeFileSync(configPath, JSON.stringify(config, null, 4), 'utf8');
 
-            const embed = new EmbedBuilder()
+            const presenceEmojis = {
+                Online: '🟢',
+                Offline: '🎱',
+                Idle: '🌙',
+                DoNotDisturb: '⛔',
+                Invisible: '🎱'
+            };
+
+            const presenceEmoji = presenceEmojis[config.botOptions.changedActivityPresence] || '❓';
+
+            const successEmbed = new EmbedBuilder()
                 .setTitle('Status zmieniony')
-                .setDescription(`**• Nazwa:** ${status}\n**• Typ:** ${type}\n**• Status:** ${botPresence}`)
+                .setDescription(`\`💬\` **Nazwa:** ${status}\n\`🔎\` **Rodzaj:** ${type}\n\`${presenceEmoji}\` **Status:** ${botPresence === 'DoNotDisturb' ? 'Do Not Disturb' : botPresence}`)
                 .setColor(embedOptions.defaultColor);
 
-            return await interaction.reply({ embeds: [embed] });
+            return await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - setstatus] ${err}`);
             return await interaction.reply({

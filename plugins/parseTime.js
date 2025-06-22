@@ -42,19 +42,43 @@ function parseTimeString(timeString) {
     return { seconds: totalSeconds, formatted: formattedTime.trim() };
 }
 
-function formatDuration(milliseconds) {
+function formatDuration(milliseconds, options = {}) {
     const days = Math.floor(milliseconds / 86400000);
     const hours = Math.floor((milliseconds % 86400000) / 3600000);
     const minutes = Math.floor((milliseconds % 3600000) / 60000);
     const seconds = Math.floor((milliseconds % 60000) / 1000);
 
     const parts = [];
-    if (days) parts.push(`${days}d`);
-    if (hours) parts.push(`${hours}h`);
-    if (minutes) parts.push(`${minutes}m`);
-    if (seconds) parts.push(`${seconds}s`);
 
-    return parts.length ? parts.join(' ') : '0s';
+    const full = options.fullWords;
+
+    const plural = (value, one, few, many) => {
+        if (value === 1) return one;
+        if (value >= 2 && value <= 4) return few;
+        return many;
+    };
+
+    if (days) parts.push(full ? `${days} ${plural(days, 'dzień', 'dni', 'dni')}` : `${days}d`);
+    if (hours) parts.push(full ? `${hours} ${plural(hours, 'godzina', 'godziny', 'godzin')}` : `${hours}h`);
+    if (minutes) parts.push(full ? `${minutes} ${plural(minutes, 'minuta', 'minuty', 'minut')}` : `${minutes}m`);
+    if (seconds) parts.push(full ? `${seconds} ${plural(seconds, 'sekunda', 'sekundy', 'sekund')}` : `${seconds}s`);
+
+    return parts.length ? parts.join(full ? ' ' : ' ') : full ? '0 sekund' : '0s';
 }
+
+// function formatDuration(milliseconds) {
+//     const days = Math.floor(milliseconds / 86400000);
+//     const hours = Math.floor((milliseconds % 86400000) / 3600000);
+//     const minutes = Math.floor((milliseconds % 3600000) / 60000);
+//     const seconds = Math.floor((milliseconds % 60000) / 1000);
+
+//     const parts = [];
+//     if (days) parts.push(`${days}d`);
+//     if (hours) parts.push(`${hours}h`);
+//     if (minutes) parts.push(`${minutes}m`);
+//     if (seconds) parts.push(`${seconds}s`);
+
+//     return parts.length ? parts.join(' ') : '0s';
+// }
 
 module.exports = { parseTimeString, formatDuration };

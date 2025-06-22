@@ -1,11 +1,11 @@
 'use strict';
 
+const { channelsConfig } = require('../../config/default.json');
 const { Events } = require('discord.js');
-const { channelsConfig } = require('../../config/default');
 
 module.exports = {
     name: Events.MessageCreate,
-    async execute(message, logger) {
+    async execute(logger, message) {
         if (message.author.bot) return;
 
         // Auto reakcje dla kanalu
@@ -15,7 +15,7 @@ module.exports = {
 
             if (!message.attachments.size && !allowedExtensions.test(message.content) && !urlRegex.test(message.content)) {
                 await message.delete().catch(() => null);
-                const warningMessage = await message.channel.send('\`❌\` Możesz wysyłać tutaj tylko memy.');
+                const warningMessage = await message.channel.send('❌ Możesz wysyłać tutaj tylko memy.');
                 setTimeout(() => {
                     warningMessage.delete().catch(() => null);
                 }, 5000);

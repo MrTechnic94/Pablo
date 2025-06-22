@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, MessageFlags } = require('discord.js');
-const { guildRoles, embedOptions } = require('../../config/default');
+const { guildRoles, embedOptions } = require('../../config/default.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,17 +19,27 @@ module.exports = {
             return await interaction.reply({ content: '❌ Nie masz wymaganej roli.', flags: MessageFlags.Ephemeral });
         }
 
-        const newNick = interaction.options.getString('nowy') || '';
+        const oldNick = interaction.member.nickname;
+
+        const newNick = interaction.options.getString('nowy');
+
+        if (newNick === null && !oldNick) {
+            return await interaction.reply({ content: '❌ Nie masz ustawionego pseudonimu.', flags: MessageFlags.Ephemeral });
+        }
+
+        if (oldNick === newNick) {
+            return await interaction.reply({ content: '❌ Nie możesz ustawić takiego samego pseudonimu.', flags: MessageFlags.Ephemeral });
+        }
 
         try {
             await interaction.member.setNickname(newNick);
 
-            const embed = new EmbedBuilder()
+            const successEmbed = new EmbedBuilder()
                 .setTitle('Zmiana udana')
-                .setDescription(newNick ? `Twój nick został zmieniony na: **${newNick}**` : 'Twój nick został usunięty.')
+                .setDescription(`\`✏️\` **Stary pseudonim:** ${oldNick ?? interaction.user.username}\n\`⭐\` **Nowy pseudonim:** ${newNick ?? interaction.user.username}`)
                 .setColor(embedOptions.defaultColor);
 
-            return await interaction.reply({ embeds: [embed] });
+            return await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - nick] ${err}`);
             return await interaction.reply({ content: '❌ Nie udało się zmienić Twojego nicku.', flags: MessageFlags.Ephemeral });

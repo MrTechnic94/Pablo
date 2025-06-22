@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, MessageFlags, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { embedOptions, emojisConfig, guildRoles } = require('../../config/default');
+const { embedOptions, emojisConfig, guildRoles } = require('../../config/default.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -29,7 +29,7 @@ module.exports = {
 
         switch (type) {
             case 'weryfikacja': {
-                const verify_embed = new EmbedBuilder()
+                const verifyEmbed = new EmbedBuilder()
                     .setDescription(
                         '**• Informacje ogólne**\n\n1. Nie pinguj.\n2. Staraj się nie pisać caps lockiem.\n3. Rasizm/homofobia = ban.\n4. Nie wysyłamy treści niezwiązanych z tematem kanału.\n5. Nadmierny spam = mute (20 min).\n\n' +
                         '**• Ważne informacje**\n\n1. Reklamowanie się = ban.\n2. Nieznajomość regulaminu nie zwalnia cię z jego przestrzegania.\n3. Nie spoileruj, jeśli ktoś nie chce.\n4. Administracja ma zawsze rację.'
@@ -37,18 +37,18 @@ module.exports = {
                     .setFooter({ text: '❗ Regulamin to jakiś farmazon.' })
                     .setColor(embedOptions.defaultColor);
 
-                const button_verify = new ButtonBuilder()
+                const buttonVerify = new ButtonBuilder()
                     .setCustomId('accept_rules')
                     .setLabel('Akceptuję')
                     .setStyle(ButtonStyle.Primary);
 
-                const row = new ActionRowBuilder().addComponents(button_verify);
+                const row = new ActionRowBuilder().addComponents(buttonVerify);
 
-                await interaction.channel.send({ embeds: [verify_embed], components: [row] });
+                await interaction.channel.send({ embeds: [verifyEmbed], components: [row] });
                 break;
             }
             case 'auto-role-dodatkowe': {
-                const additional_embed = new EmbedBuilder()
+                const additionalEmbed = new EmbedBuilder()
                     .setDescription(
                         '```ansi\n[2;34mRangi dodatkowe[0m\n```\n``➖ ➖ ➖ ➖ ➖``\n' +
                         `<@&${guildRoles.gamer}> - 🎮\n` +
@@ -67,11 +67,11 @@ module.exports = {
                     new ButtonBuilder().setCustomId('additional_phone').setLabel('📱').setStyle(ButtonStyle.Primary)
                 );
 
-                await interaction.channel.send({ embeds: [additional_embed], components: [buttons_additional] });
+                await interaction.channel.send({ embeds: [additionalEmbed], components: [buttons_additional] });
                 break;
             }
             case 'auto-role-kolory': {
-                const colors_embed = new EmbedBuilder()
+                const colorsEmbed = new EmbedBuilder()
                     .setDescription(
                         '```ansi\n[2;34mRangi kolorów[0m\n```\n``➖ ➖ ➖ ➖ ➖``\n' +
                         `<@&1060992591627296921> - 🖤\n` +
@@ -90,7 +90,7 @@ module.exports = {
                     new ButtonBuilder().setCustomId('colors_green').setLabel('💚').setStyle(ButtonStyle.Primary)
                 );
 
-                await interaction.channel.send({ embeds: [colors_embed], components: [buttons_colors] });
+                await interaction.channel.send({ embeds: [colorsEmbed], components: [buttons_colors] });
                 break;
             }
             case 'pomoc': {

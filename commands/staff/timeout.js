@@ -2,7 +2,7 @@
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
 const { parseTimeString } = require('../../plugins/parseTime');
-const { embedOptions } = require('../../config/default');
+const { embedOptions } = require('../../config/default.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -59,7 +59,7 @@ module.exports = {
                         .setDescription(`\`👤\` **Serwer:** ${interaction.guild.name}\n\`🕒\` **Czas wyciszenia:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`)
                         .setColor(embedOptions.defaultColor)
                 ]
-            }).catch(() => logger.warn(`[Cmd - timeout] Failed to send DM to ${targetUser.tag}`));
+            }).catch(() => logger.warn(`[Cmd - timeout] Failed to send DM to ${targetUser.tag}.`));
 
             // Nalozenie wyciszenia na uzytkownika
             await member.timeout(timeInfo.seconds * 1000, reason);

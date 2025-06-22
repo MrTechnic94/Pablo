@@ -18,11 +18,11 @@ module.exports = (client) => {
             const event = require(join(eventsDir, directory.name, file));
             logger.info(`[Event] Event ${eventName} has been loaded.`);
 
-            const eventHandler = (...args) => event.execute(...args, logger);
+            const eventHandler = (...args) => event.execute(logger, ...args);
 
             switch (directory.name) {
                 case 'process':
-                    process.on(eventName, eventHandler);
+                    process[event.once ? 'once' : 'on'](eventName, eventHandler);
                     break;
 
                 default:

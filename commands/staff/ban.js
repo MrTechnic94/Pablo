@@ -1,7 +1,8 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
-const { embedOptions } = require('../../config/default');
+const { formatDuration } = require('../../plugins/parseTime');
+const { embedOptions } = require('../../config/default.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -57,15 +58,14 @@ module.exports = {
             return await interaction.reply({ content: '❌ Nie mogę zbanować tego użytkownika.', flags: MessageFlags.Ephemeral });
         }
 
-        // Funckja konwertujaca czas
-        const formatHours = (seconds) => {
-            if (seconds === 0) return 'Nie usuwaj';
-            const hours = seconds / 3600;
-            return hours === 1 ? '1 godzina' : `${hours} godzin`;
-        };
+        // // Funckja konwertujaca czas
+        // function formatHours(seconds) {
+        //     if (seconds === 0) return 'Nie usuwaj';
+        //     const hours = seconds / 3600;
+        //     return hours === 1 ? '1 godzina' : `${hours} godzin`;
+        // };
 
         try {
-            // Wysylanie wiadomosci prywatnej do zbanowanego uzytkownika
             await targetUser.send({
                 embeds: [
                     new EmbedBuilder()
@@ -73,14 +73,13 @@ module.exports = {
                         .setDescription(`\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`)
                         .setColor(embedOptions.defaultColor)
                 ]
-            }).catch(() => logger.warn(`[Cmd - ban] Failed to send DM to ${targetUser.user.tag}`));
+            }).catch(() => logger.warn(`[Cmd - ban] Failed to send DM to ${targetUser.user.tag}.`));
 
             await targetUser.ban({ reason, deleteMessageSeconds: deleteMessageDuration });
 
-            // Tworzenie embed dla kanalu, w ktorym komenda zostala uzyta
             const successEmbed = new EmbedBuilder()
                 .setTitle('Użytkownik zbanowany')
-                .setDescription(`\`👤\` **Wyrzucono:** ${targetUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}\n\`🗑️\` **Usunięcie wiadomości:** ${formatHours(deleteMessageDuration)}`)
+                .setDescription(`\`👤\` **Wyrzucono:** ${targetUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}\n\`🗑️\` **Usunięcie wiadomości:** ${deleteMessageDuration ? formatDuration(deleteMessageDuration * 1000, { fullWords: true }) : 'Nie usuwaj'}`)
                 .setColor(embedOptions.defaultColor);
 
             return await interaction.reply({ embeds: [successEmbed] });

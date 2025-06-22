@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
-const { embedOptions } = require('../../config/default');
+const { embedOptions } = require('../../config/default.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -39,9 +39,7 @@ module.exports = {
 
         const fetchedMessages = await interaction.channel.messages.fetch({ limit: amount });
 
-        const messagesToDelete = removePinned
-            ? fetchedMessages
-            : fetchedMessages.filter(msg => !msg.pinned);
+        const messagesToDelete = removePinned ? fetchedMessages : fetchedMessages.filter(msg => !msg.pinned);
 
         if (!messagesToDelete.size) {
             return await interaction.reply({ content: '❌ Nie znaleziono wiadomości do usunięcia z podanymi opcjami.', flags: MessageFlags.Ephemeral });

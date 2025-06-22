@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, ActivityType, PresenceUpdateStatus, EmbedBuilder, MessageFlags } = require('discord.js');
-const { botOptions, embedOptions } = require('../../config/default');
+const { botOptions, embedOptions } = require('../../config/default.json');
 const { writeFileSync, readFileSync } = require('node:fs');
 const { resolve } = require('node:path');
 
@@ -16,6 +16,7 @@ module.exports = {
                 .addChoices(
                     { name: 'Bot', value: 'Bot' },
                     { name: 'Status', value: 'Status' },
+                    { name: 'Avatar', value: 'Avatar' }
                 )
         )
         .setContexts(InteractionContextType.Guild),
@@ -39,7 +40,14 @@ module.exports = {
                 }
                 break;
             }
+
             case 'Status': {
+                if (interaction.client.user.presence?.activities?.[0]?.name === botOptions.defaultActivityName &&
+                    interaction.client.user.presence?.activities?.[0]?.type === ActivityType[botOptions.defaultActivityType] &&
+                    interaction.client.user.presence?.status === PresenceUpdateStatus[botOptions.defaultActivityPresence]) {
+                    return await interaction.reply({ content: '❌ Status jest już zrestartowany.', flags: MessageFlags.Ephemeral });
+                }
+
                 try {
                     await interaction.client.user.setPresence({
                         status: PresenceUpdateStatus[botOptions.defaultActivityPresence],
@@ -51,22 +59,65 @@ module.exports = {
 
                     const configPath = resolve(__dirname, '../../config/default.json');
                     const config = JSON.parse(readFileSync(configPath, 'utf8'));
+
                     config.botOptions.changedActivityName = "";
                     config.botOptions.changedActivityType = "";
                     config.botOptions.changedActivityPresence = "";
 
                     writeFileSync(configPath, JSON.stringify(config, null, 4), 'utf8');
 
-                    const embed = new EmbedBuilder()
+                    const presenceEmojis = {
+                        Online: '🟢',
+                        Offline: '🎱',
+                        Idle: '🌙',
+                        DoNotDisturb: '⛔',
+                        Invisible: '🎱'
+                    };
+
+                    const presenceEmoji = presenceEmojis[config.botOptions.changedActivityPresence] || presenceEmojis[config.botOptions.defaultActivityPresence];
+
+                    const successEmbed = new EmbedBuilder()
                         .setTitle('Status zmieniony')
-                        .setDescription(`**• Nazwa:** ${botOptions.defaultActivityName}\n**• Typ:** ${botOptions.defaultActivityType}\n**• Status:** ${botOptions.defaultActivityPresence}`)
+                        .setDescription(`\`💬\` **Nazwa:** ${botOptions.defaultActivityName}\n\`🔎\` **Rodzaj:** ${botOptions.defaultActivityType}\n\`${presenceEmoji}\` **Status:** ${botOptions.defaultActivityPresence === 'DoNotDisturb' ? 'Do Not Disturb' : botOptions.defaultActivityPresence}`)
                         .setColor(embedOptions.defaultColor);
 
-                    await interaction.reply({ embeds: [embed] });
+                    await interaction.reply({ embeds: [successEmbed] });
                 } catch (err) {
-                    logger.error(`[Cmd - setstatus] ${err}`);
+                    logger.error(`[Cmd - restart] ${err}`);
                     await interaction.reply({
-                        content: '❌ Wystąpił problem podczas zmiany statusu bota.',
+                        content: '❌ Wystąpił problem podczas restartu statusu bota.',
+                        flags: MessageFlags.Ephemeral
+                    });
+                }
+                break;
+            }
+
+            case 'Avatar': {
+                const configPath = resolve(__dirname, '../../config/default.json');
+                const config = JSON.parse(readFileSync(configPath, 'utf8'));
+
+                if (!config.botOptions.changedAvatar) {
+                    return await interaction.reply({ content: '❌ Avatar nie został zmieniony.', flags: MessageFlags.Ephemeral });
+                }
+
+                try {
+                    config.botOptions.changedAvatar = false;
+
+                    writeFileSync(configPath, JSON.stringify(config, null, 4), 'utf8');
+
+                    await interaction.client.user.setAvatar(botOptions.currentAvatar === 'default' ? botOptions.avatarDefaultPath : botOptions.avatarChrismasPath);
+
+                    const successEmbed = new EmbedBuilder()
+                        .setTitle('Avatar zrestartowany')
+                        .setDescription(`\`🖼️\`**Obraz:** [KLIKNIJ🡭](${interaction.client.user.displayAvatarURL()})\n\`🔎\` **Rodzaj:** ${botOptions.currentAvatar === 'default' ? 'Domyślny' : 'Świąteczny'}`)
+                        .setImage(interaction.client.user.displayAvatarURL())
+                        .setColor(embedOptions.defaultColor);
+
+                    await interaction.reply({ embeds: [successEmbed] })
+                } catch (err) {
+                    logger.error(`[Cmd - restart] ${err}`);
+                    await interaction.reply({
+                        content: '❌ Wystąpił problem podczas restart avataru bota.',
                         flags: MessageFlags.Ephemeral
                     });
                 }
