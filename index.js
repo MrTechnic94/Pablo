@@ -4,7 +4,7 @@
  * ✞ Jesus Forever
  *
  * Znajdziesz mnie i moje projekty tutaj: https://github.com/MrTechnic94/
- * Korzystaj dowoli, kopiuj, edytuj pod swoje potrzeby
+ * Korzystaj dowoli - kopiuj, edytuj, używaj gdzie chcesz
  */
 
 'use strict';
