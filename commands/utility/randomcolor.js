@@ -1,6 +1,7 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
+const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,11 +12,12 @@ module.exports = {
         const dec = Math.floor(Math.random() * 16777216);
         const hex = dec.toString(16).padStart(6, '0').toUpperCase();
 
-        const successEmbed = new EmbedBuilder()
-            .setTitle('Losowy kolor')
-            .setDescription(`\`📟\` **Decimal:** ${dec}\n\`🎨\` **Hex:** #${hex}`)
-            .setThumbnail(`https://dummyimage.com/400x400/${hex}/${hex}`)
-            .setColor(dec);
+        const successEmbed = createEmbed({
+            title: 'Losowy kolor',
+            description: `\`📟\` **Decimal:** ${dec}\n\`🎨\` **Hex:** #${hex}`,
+            thumbnail: `https://dummyimage.com/400x400/${hex}/${hex}`,
+            color: dec
+        });
 
         return await interaction.reply({ embeds: [successEmbed] });
     },

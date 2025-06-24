@@ -1,7 +1,7 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
-const { embedOptions } = require('../../config/default.json');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, MessageFlags } = require('discord.js');
+const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -39,21 +39,19 @@ module.exports = {
             }
 
             // Wysylanie wiadomosci prywatnej do odciszonego uzytkownika
-            await targetUser.send({
-                embeds: [
-                    new EmbedBuilder()
-                        .setTitle('Zostałeś odciszony!')
-                        .setDescription(`\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`)
-                        .setColor(embedOptions.defaultColor)
-                ]
-            }).catch(() => logger.warn(`[Cmd - removetimeout] Failed to send DM to ${targetUser.user.tag}.`));
+            const embedDM = createEmbed({
+                title: 'Zostałeś odciszony',
+                description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
+            });
+
+            await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Cmd - removetimeout] Failed to send DM to ${targetUser.user.tag}.`));
 
             await member.timeout(null, reason);
 
-            const successEmbed = new EmbedBuilder()
-                .setTitle('Użytkownik został odciszony')
-                .setDescription(`\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`)
-                .setColor(embedOptions.defaultColor);
+            const successEmbed = createEmbed({
+                title: 'Użytkownik odciszony',
+                description: `\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
+            });
 
             return await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {

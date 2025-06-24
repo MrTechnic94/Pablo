@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const { formatDuration } = require('../../plugins/parseTime');
 
 module.exports = {
@@ -11,6 +11,6 @@ module.exports = {
     async execute(interaction) {
         const botUptime = formatDuration(interaction.client.uptime);
 
-        return await interaction.reply({ content: `Czas pracy: ${botUptime}`, flags: MessageFlags.Ephemeral });
+        return await interaction.reply({ content: `Czas pracy: ${botUptime}` });
     },
 };

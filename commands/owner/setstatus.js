@@ -1,8 +1,8 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, ActivityType, PresenceUpdateStatus, EmbedBuilder, MessageFlags } = require('discord.js');
-const { embedOptions } = require('../../config/default.json');
+const { SlashCommandBuilder, InteractionContextType, ActivityType, PresenceUpdateStatus, MessageFlags } = require('discord.js');
 const { writeFileSync, readFileSync } = require('node:fs');
+const { createEmbed } = require('../../plugins/createEmbed');
 const { resolve } = require('node:path');
 
 module.exports = {
@@ -82,10 +82,10 @@ module.exports = {
 
             const presenceEmoji = presenceEmojis[config.botOptions.changedActivityPresence] || '❓';
 
-            const successEmbed = new EmbedBuilder()
-                .setTitle('Status zmieniony')
-                .setDescription(`\`💬\` **Nazwa:** ${status}\n\`🔎\` **Rodzaj:** ${type}\n\`${presenceEmoji}\` **Status:** ${botPresence === 'DoNotDisturb' ? 'Do Not Disturb' : botPresence}`)
-                .setColor(embedOptions.defaultColor);
+            const successEmbed = createEmbed({
+                title: 'Status zmieniony',
+                description: `\`💬\` **Nazwa:** ${status}\n\`🔎\` **Rodzaj:** ${type}\n\`${presenceEmoji}\` **Status:** ${botPresence === 'DoNotDisturb' ? 'Do Not Disturb' : botPresence}`
+            });
 
             return await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {

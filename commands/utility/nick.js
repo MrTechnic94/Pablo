@@ -1,7 +1,8 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, MessageFlags } = require('discord.js');
-const { guildRoles, embedOptions } = require('../../config/default.json');
+const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { createEmbed } = require('../../plugins/createEmbed');
+const { guildRoles } = require('../../config/default.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -34,10 +35,10 @@ module.exports = {
         try {
             await interaction.member.setNickname(newNick);
 
-            const successEmbed = new EmbedBuilder()
-                .setTitle('Zmiana udana')
-                .setDescription(`\`✏️\` **Stary pseudonim:** ${oldNick ?? interaction.user.username}\n\`⭐\` **Nowy pseudonim:** ${newNick ?? interaction.user.username}`)
-                .setColor(embedOptions.defaultColor);
+            const successEmbed = createEmbed({
+                title: 'Zmiana udana',
+                description: `\`✏️\` **Stary pseudonim:** ${oldNick ?? interaction.user.username}\n\`⭐\` **Nowy pseudonim:** ${newNick ?? interaction.user.username}`
+            });
 
             return await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {

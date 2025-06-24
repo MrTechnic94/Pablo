@@ -1,7 +1,8 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags, EmbedBuilder } = require('discord.js');
-const { emojisConfig, embedOptions } = require('../../config/default.json');
+const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { emojisConfig } = require('../../config/default.json');
+const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -29,10 +30,10 @@ module.exports = {
         const emojis = [emojisConfig.battleForward, emojisConfig.battleBackwards];
         let battleLog = [];
 
-        const countdownEmbed = new EmbedBuilder()
-            .setTitle('💢 SOLÓWA ! 💢')
-            .setDescription('*Solo zacznie się za 3...*')
-            .setColor(embedOptions.defaultColor);
+        const countdownEmbed = createEmbed({
+            title: '💢 SOLÓWA ! 💢',
+            description: '*Solo zacznie się za 3...*'
+        });
 
         let message = await interaction.reply({ embeds: [countdownEmbed] }).then(sent => sent.fetch());
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -56,14 +57,14 @@ module.exports = {
             let attackMessage = `${emojis[round % 2]} **${attacker.user.username}** uderzył **${defender.user.username}**, zabierając mu __${damage}__ zdrowia.`;
             battleLog.push(attackMessage);
 
-            const battleEmbed = new EmbedBuilder()
-                .setTitle('💢 SOLÓWA ! 💢')
-                .setDescription(battleLog.join('\n'))
-                .addFields(
+            const battleEmbed = createEmbed({
+                title: '💢 SOLÓWA ! 💢',
+                description: battleLog.join('\n'),
+                fields: [
                     { name: `\`👤\` ${players[0].user.username}`, value: `${players[0].hp}/100 HP`, inline: true },
                     { name: `\`👤\` ${players[1].user.username}`, value: `${players[1].hp}/100 HP`, inline: true }
-                )
-                .setColor(embedOptions.defaultColor);
+                ]
+            });
 
             await message.edit({ embeds: [battleEmbed] });
 
@@ -77,14 +78,14 @@ module.exports = {
 
         battleLog.push(`\`\`\`🏆 ${winner.user.username} wygrał pojedynek! 🏆\`\`\``);
 
-        const finalEmbed = new EmbedBuilder()
-            .setTitle('💢 SOLÓWA ! 💢')
-            .setDescription(battleLog.join('\n'))
-            .addFields(
+        const finalEmbed = createEmbed({
+            title: '💢 SOLÓWA ! 💢',
+            description: battleLog.join('\n'),
+            fields: [
                 { name: `\`👤\` ${players[0].user.username}`, value: `${players[0].hp}/100 HP`, inline: true },
                 { name: `\`👤\` ${players[1].user.username}`, value: `${players[1].hp}/100 HP`, inline: true }
-            )
-            .setColor(embedOptions.defaultColor);
+            ]
+        });
 
         await message.edit({ embeds: [finalEmbed] });
     },

@@ -21,6 +21,7 @@ module.exports = {
         }
 
         try {
+            // TODO:
             const configPath = resolve(__dirname, '../../config/default.json');
             const config = JSON.parse(readFileSync(configPath, 'utf8'));
             config.botOptions.changedAvatar = true;

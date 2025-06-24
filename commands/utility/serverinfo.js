@@ -1,8 +1,8 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const { formatDuration } = require('../../plugins/parseTime');
-const { embedOptions } = require('../../config/default.json');
+const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -28,19 +28,18 @@ module.exports = {
         const afkTimeout = guild.afkTimeout ? formatDuration(guild.afkTimeout * 1000, { fullWords: true }) : 'Brak';
         const afkInfo = `**• Kanał:** ${afkChannelName}\n**• Limit czasu:** ${afkTimeout}`;
 
-        const successEmbed = new EmbedBuilder()
-            // .setAuthor({ name: guild.name, iconURL: guild.iconURL() })
-            .setTitle('Podgląd serwera')
-            .setThumbnail(guild.iconURL())
-            .addFields(
-                { name: '`🛡️` Poziom weryfikacji', value: verificationLevels[guild.verificationLevel], inline: false },
-                { name: '`👥` Użytkownicy', value: `**• Łącznie:** ${guild.memberCount}\n**• Online:** ${onlineMembers}`, inline: false },
-                { name: '`🎭` Role', value: `**• Łącznie:** ${guild.roles.cache.size - 1}`, inline: false },
-                { name: '`👑` Właściciel', value: `<@${owner.id}>`, inline: false },
-                { name: '`🌙` AFK', value: afkInfo, inline: false },
-                { name: '`❓` Inne', value: `**• Nazwa:** ${guild.name}\n**• Widget:** ${guild.widgetEnabled ? 'włączony' : 'wyłączony'}\n**• ID:** ${guild.id}`, inline: false }
-            )
-            .setColor(embedOptions.defaultColor);
+        const successEmbed = createEmbed({
+            title: 'Podgląd serwera',
+            thumbnail: guild.iconURL(),
+            fields: [
+                { name: '`🛡️` Poziom weryfikacji', value: verificationLevels[guild.verificationLevel] },
+                { name: '`👥` Użytkownicy', value: `**• Łącznie:** ${guild.memberCount}\n**• Online:** ${onlineMembers}` },
+                { name: '`🎭` Role', value: `**• Łącznie:** ${guild.roles.cache.size - 1}` },
+                { name: '`👑` Właściciel', value: `<@${owner.id}>` },
+                { name: '`🌙` AFK', value: afkInfo },
+                { name: '`❓` Inne', value: `**• Nazwa:** ${guild.name}\n**• Widget:** ${guild.widgetEnabled ? 'włączony' : 'wyłączony'}\n**• ID:** ${guild.id}` }
+            ]
+        });
 
         return await interaction.reply({ embeds: [successEmbed] });
     },

@@ -1,7 +1,7 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, EmbedBuilder } = require('discord.js');
-const { embedOptions } = require('../../config/default.json');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
+const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -18,12 +18,12 @@ module.exports = {
 
         const types = {
             0: 'Tekstowy',
-            1: 'DM',
+            1: 'Wiadomość prywatna',
             2: 'Głosowy',
-            3: 'Grupa DM',
+            3: 'Grupowa wiadomość prywatna',
             4: 'Kategoria',
             5: 'Ogłoszenie',
-            10: 'Wątek ogłoszenia',
+            10: 'Wątek ogłoszeniowy',
             11: 'Wątek publiczny',
             12: 'Wątek prywatny',
             13: 'Scena',
@@ -36,17 +36,22 @@ module.exports = {
 
         const parent = channel.parent ? channel.parent.name : 'Nie ustawiono';
 
-        const successEmbed = new EmbedBuilder()
-            .setTitle(`Podgląd kanału ${channel}`)
-            .addFields(
-                { name: '`🔑` ID', value: `**•** ${channel.id}`, inline: false },
-                { name: '`💬` Temat', value: `**•** ${channel.topic || 'Nie ustawiono'}`, inline: false },
-                { name: '`📂` Kategoria', value: `**•** ${parent}`, inline: false },
-                { name: '`🔞` NSFW', value: `**•** ${nsfw}`, inline: false },
-                { name: '`🔢` Pozycja', value: `**•** ${channel.position + 1}`, inline: false },
-                { name: '`📦` Rodzaj', value: `**•** ${types[channel.type] || 'Nieznany'}`, inline: false }
-            )
-            .setColor(embedOptions.defaultColor);
+        const topic = channel.topic || 'Nie ustawiono';
+
+        const channelType = types[channel.type] || 'Nieznany';
+
+        const successEmbed = createEmbed({
+            title: 'Podgląd kanału',
+            fields: [
+                { name: '`🔎` Kanał', value: `**•** ${channel}` },
+                { name: '`🔑` ID', value: `**•** ${channel.id}` },
+                { name: '`💬` Temat', value: `**•** ${topic}` },
+                { name: '`📂` Kategoria', value: `**•** ${parent}` },
+                { name: '`🔞` NSFW', value: `**•** ${nsfw}` },
+                { name: '`🔢` Pozycja', value: `**•** ${channel.position + 1}` },
+                { name: '`📦` Rodzaj', value: `**•** ${channelType}` }
+            ]
+        });
 
         return await interaction.reply({ embeds: [successEmbed] });
     },

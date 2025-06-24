@@ -1,7 +1,7 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags, EmbedBuilder } = require('discord.js');
-const { embedOptions } = require('../../config/default.json');
+const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -22,11 +22,11 @@ module.exports = {
             return await interaction.reply({ content: '❌ Użytkownik nie ma ustawionego baneru.', flags: MessageFlags.Ephemeral });
         }
 
-        const successEmbed = new EmbedBuilder()
-            .setTitle('Podgląd baneru')
-            .setDescription(`\`👤\` **Użytkownik:** ${user}\n\`🖼️\` **Obraz:** [KLIKNIJ🡭](${userData.bannerURL({ size: 2048 })})`)
-            .setImage(userData.bannerURL({ size: 2048 }))
-            .setColor(embedOptions.defaultColor);
+        const successEmbed = createEmbed({
+            title: 'Podgląd baneru',
+            description: `\`👤\` **Użytkownik:** ${user}\n\`🖼️\` **Obraz:** [KLIKNIJ🡭](${userData.bannerURL({ size: 2048 })})`,
+            image: userData.bannerURL({ size: 2048 })
+        });
 
         return await interaction.reply({ embeds: [successEmbed] });
     },
