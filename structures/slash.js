@@ -2,8 +2,8 @@
 
 const logger = require('../plugins/logger');
 const { REST, Routes } = require('discord.js');
-const { readdirSync } = require('node:fs');
-const { join } = require('node:path');
+const { readdirSync } = require('fs');
+const { join } = require('path');
 
 module.exports = async (client) => {
     const commandsPath = join(__dirname, '../commands');

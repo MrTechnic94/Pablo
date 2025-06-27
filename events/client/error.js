@@ -1,6 +1,7 @@
 'use strict';
 
 const { Events, MessageFlags } = require('discord.js');
+// const logger = require('../../plugins/logger');
 
 module.exports = {
     name: Events.Error,
