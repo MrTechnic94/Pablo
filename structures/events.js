@@ -1,8 +1,8 @@
 'use strict';
 
 const logger = require('../plugins/logger');
-const { readdirSync } = require('fs');
-const { join } = require('path');
+const { readdirSync } = require('node:fs');
+const { join } = require('node:path');
 
 module.exports = (client) => {
     const eventsDir = join(__dirname, '../events');
