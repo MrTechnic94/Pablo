@@ -7,7 +7,7 @@ const { guildRoles } = require('../../config/default.json');
 module.exports = {
     name: Events.InteractionCreate,
     async execute(logger, interaction) {
-        if (interaction.isChatInputCommand()) {
+        if (interaction.isChatInputCommand() || interaction.isUserContextMenuCommand()) {
             const command = interaction.client.commands.get(interaction.commandName);
 
             if (!command) {

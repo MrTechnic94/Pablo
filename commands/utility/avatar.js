@@ -1,7 +1,7 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, EmbedBuilder } = require('discord.js');
-const { embedOptions } = require('../../config/default.json');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
+const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -16,11 +16,11 @@ module.exports = {
     async execute(interaction) {
         const user = interaction.options.getUser('użytkownik') || interaction.user;
 
-        const successEmbed = new EmbedBuilder()
-            .setTitle('Podgląd avataru')
-            .setDescription(`\`👤\` **Użytkownik:** ${user}\n\`🖼️\` **Obraz:** [KLIKNIJ🡭](${user.displayAvatarURL()})`)
-            .setImage(user.displayAvatarURL({ size: 2048 }))
-            .setColor(embedOptions.defaultColor);
+        const successEmbed = createEmbed({
+            title: 'Podgląd avataru',
+            description: `\`👤\` **Użytkownik:** ${user}\n\`🖼️\` **Obraz:** [KLIKNIJ🡭](${user.displayAvatarURL({ size: 2048 })})`,
+            image: user.displayAvatarURL({ size: 2048 })
+        });
 
         return await interaction.reply({ embeds: [successEmbed] });
     },

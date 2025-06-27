@@ -3,8 +3,8 @@
  * Dla serwera Milf Zone
  * ✞ Jesus Forever
  *
- * Wszelkie prawa zastrzeżone
  * Znajdziesz mnie i moje projekty tutaj: https://github.com/MrTechnic94/
+ * Korzystaj dowoli - kopiuj, edytuj, używaj gdzie chcesz
  */
 
 'use strict';

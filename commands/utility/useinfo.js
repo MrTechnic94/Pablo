@@ -1,7 +1,7 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, EmbedBuilder } = require('discord.js');
-const { embedOptions } = require('../../config/default.json');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
+const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -26,33 +26,18 @@ module.exports = {
         const createdAt = Math.floor(targetUser.user.createdTimestamp / 1000);
         const joinedAt = Math.floor(targetUser.joinedTimestamp / 1000);
 
-        const successEmbed = new EmbedBuilder()
-            // .setAuthor({ name: `${targetUser.user.tag}`, iconURL: targetUser.user.displayAvatarURL() })
-            .setTitle('Podgląd użytkownika')
-            .setThumbnail(targetUser.user.displayAvatarURL())
-            .addFields(
-                { name: '\`👤\` Użytkownik', value: targetUser.user.tag, inline: false },
-                { name: '\`✏️\` Pseudonim', value: targetUser.nickname || 'Nie ustawiono', inline: false },
-                { name: '\`🚪\` Dołączył na serwer', value: `<t:${joinedAt}> (<t:${joinedAt}:R>)`, inline: false },
-                { name: '\`📆\` Stworzył konto', value: `<t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },
-                { name: `\`🎭\` Role (${targetUser.roles.cache.size - 1})`, value: roles, inline: false },
-                { name: '\`❓\` Inne', value: `**Bot:** ${isBot}\n**ID:** ${targetUser.user.id}`, inline: false }
-
-                // { name: '• Użytkownik', value: targetUser.user.tag, inline: false },
-                // { name: '• Pseudonim', value: targetUser.nickname || 'Nie ustawiono', inline: false },
-                // { name: '• Dołączył na serwer', value: `<t:${joinedAt}> (<t:${joinedAt}:R>)`, inline: false },
-                // { name: '• Stworzył konto', value: `<t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },
-                // { name: `• Role (${targetUser.roles.cache.size - 1})`, value: roles, inline: false },
-                // { name: '• Inne', value: `\`👤\` **Bot:** ${isBot}\n**\`🔑\` ID:** ${targetUser.user.id}`, inline: false }
-
-                //     { name: '• Użytkownik', value: `\`👤\` ${targetUser.user.tag}`, inline: false },
-                //     { name: '• Pseudonim', value: `\`✏️\` ${targetUser.nickname}` || '\`✏️\` Nie ustawiono', inline: false },
-                //     { name: '• Dołączył na serwer', value: `\`🚪\` <t:${joinedAt}> (<t:${joinedAt}:R>)`, inline: false },
-                //     { name: '• Stworzył konto', value: `\`📆\` <t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },
-                //     { name: `• Role (${targetUser.roles.cache.size - 1})`, value: `\`🎭\` ${roles}`, inline: false },
-                //     { name: '• Inne', value: `\`👤\` **Bot:** ${isBot}\n**\`🔑\` ID:** ${targetUser.user.id}`, inline: false }
-            )
-            .setColor(embedOptions.defaultColor);
+        const successEmbed = createEmbed({
+            title: 'Podgląd użytkownika',
+            thumbnail: targetUser.user.displayAvatarURL(),
+            fields: [
+                { name: '`👤` Użytkownik', value: `<@${targetUser.id}>` },
+                { name: '`✏️` Pseudonim', value: targetUser.nickname || 'Nie ustawiono' },
+                { name: '`🚪` Dołączył na serwer', value: `<t:${joinedAt}> (<t:${joinedAt}:R>)` },
+                { name: '`📆` Stworzył konto', value: `<t:${createdAt}> (<t:${createdAt}:R>)` },
+                { name: `\`🎭\` Role (${targetUser.roles.cache.size - 1})`, value: roles },
+                { name: '`❓` Inne', value: `**• Bot:** ${isBot}\n**• ID:** ${targetUser.user.id}` }
+            ]
+        });
 
         return await interaction.reply({ embeds: [successEmbed] });
     },

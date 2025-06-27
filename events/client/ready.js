@@ -2,9 +2,9 @@
 
 const cron = require('node-cron');
 const updateAvatar = require('../../plugins/updateAvatar');
-const { readFileSync } = require('fs');
+const { readFileSync } = require('node:fs');
 const { Events } = require('discord.js');
-const { join } = require('path');
+const { join } = require('node:path');
 
 module.exports = {
     name: Events.ClientReady,

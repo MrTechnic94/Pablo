@@ -1,8 +1,8 @@
 'use strict';
 
-const { readFileSync, writeFileSync } = require('fs');
+const { readFileSync, writeFileSync } = require('node:fs');
 const { botOptions } = require('../config/default.json');
-const { join } = require('path');
+const { join } = require('node:path');
 
 // Funckja ustawiajaca w konfigu jaki avatar aktualnie jest
 function updateAvatarInConfig(type) {

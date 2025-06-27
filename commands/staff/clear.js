@@ -1,7 +1,7 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
-const { embedOptions } = require('../../config/default.json');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, MessageFlags } = require('discord.js');
+const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -48,10 +48,10 @@ module.exports = {
         try {
             await interaction.channel.bulkDelete(messagesToDelete, true);
 
-            const successEmbed = new EmbedBuilder()
-                .setTitle('Akcja wykonana')
-                .setDescription(`\`💬\` **Usunięto: ** ${messagesToDelete.size > 1 ? `${messagesToDelete.size} wiadomości` : `${messagesToDelete.size} wiadomość`}\n\`📌\` **W tym przypięte:** ${removePinned ? 'Tak.' : 'Nie.'}`)
-                .setColor(embedOptions.defaultColor);
+            const successEmbed = createEmbed({
+                title: 'Akcja wykonana',
+                description: `\`💬\` **Usunięto: ** ${messagesToDelete.size > 1 ? `${messagesToDelete.size} wiadomości` : `${messagesToDelete.size} wiadomość`}\n\`📌\` **W tym przypięte:** ${removePinned ? 'Tak.' : 'Nie.'}`
+            });
 
             return await interaction.reply({ embeds: [successEmbed] });
         } catch (error) {

@@ -26,6 +26,33 @@
         ],
         "repliedUser": false
     },
+    "clientCache": {
+        "baseGuildEmojiManager": 0,
+        "guildBanManager": 0,
+        "guildEmojiManager": 0,
+        "guildInviteManager": 0,
+        "reactionManager": 0,
+        "reactionUserManager": 0,
+        "stageInstanceManager": 0,
+        "threadMemberManager": 0,
+        "voiceStateManager": 0,
+        "guildMemberManager": {
+            "maxSize": 50
+        }
+    },
+    "clientSweepers": {
+        "messages": {
+            "interval": 1800,
+            "lifetime": 3600
+        },
+        "users": {
+            "interval": 3600
+        },
+        "presences": {
+            "interval": 3600,
+            "lifetime": 7200
+        }
+    },
     "guildRoles": {
         "changeNickname": "1118157654204874772",
         "owner": "1057380110581383238",
@@ -49,7 +76,7 @@
         "playstation": "<:playstation:1336378610680070274>",
         "xbox": "<:xbox:1336378596901650483>",
         "diamond": "<a:diamond:1337491890425303111>",
-        "information": "<:information:1337466343322030211>",
+        "info": "<:info:1337466343322030211>",
         "first": "<a:first:1337491864005382154>",
         "galaxyball": "<a:galaxyball:1337491880274952256>",
         "ball": "<a:ball:1337491873043841156>"

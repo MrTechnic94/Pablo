@@ -1,7 +1,7 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
-const { embedOptions } = require('../../config/default.json');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, MessageFlags } = require('discord.js');
+const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -44,22 +44,20 @@ module.exports = {
 
         try {
             // Wysylanie wiadomosci prywatnej do wyrzuconego uzytkownika
-            await targetUser.send({
-                embeds: [
-                    new EmbedBuilder()
-                        .setTitle('Zostałeś wyrzucony!')
-                        .setDescription(`\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`)
-                        .setColor(embedOptions.defaultColor)
-                ]
-            }).catch(() => logger.warn(`[Cmd - kick] Failed to send DM to ${targetUser.user.tag}.`));
+            const embedDM = createEmbed({
+                title: 'Zostałeś wyrzucony',
+                description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
+            });
 
+            await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Cmd - kick] Failed to send DM to ${targetUser.user.tag}.`));
+
+            // Kopniecie uzytkownika z serwera
             await targetUser.kick(reason);
 
-            // Tworzenie embed dla kanalu, w ktorym komenda zostala uzyta
-            const successEmbed = new EmbedBuilder()
-                .setTitle('Użytkownik wyrzucony')
-                .setDescription(`\`👤\` **Wyrzucono:** ${targetUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`)
-                .setColor(embedOptions.defaultColor);
+            const successEmbed = createEmbed({
+                title: 'Użytkownik wyrzucony',
+                description: `\`👤\` **Wyrzucono:** ${targetUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
+            });
 
             return await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {

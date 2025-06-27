@@ -1,7 +1,8 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
-const { guildRoles, embedOptions } = require('../../config/default.json');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, MessageFlags } = require('discord.js');
+const { createEmbed } = require('../../plugins/createEmbed');
+const { guildRoles } = require('../../config/default.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -45,10 +46,10 @@ module.exports = {
         try {
             await targetUser.roles.remove(role);
 
-            const successEmbed = new EmbedBuilder()
-                .setTitle('Rola zabrana')
-                .setDescription(`\`🎭\` **Zabrałeś rolę:** ${role}\n\`👤\` **Użytkownikowi:** ${targetUser}\n\`📛\` **Polecenia użył:** ${interaction.user}`)
-                .setColor(embedOptions.defaultColor);
+            const successEmbed = createEmbed({
+                title: 'Rola zabrana',
+                description: `\`🎭\` **Zabrałeś rolę:** ${role}\n\`👤\` **Użytkownikowi:** ${targetUser}\n\`📛\` **Polecenia użył:** ${interaction.user}`
+            });
 
             return await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {

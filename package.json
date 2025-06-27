@@ -1,26 +1,26 @@
 {
   "name": "pablo",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Just a useful bot.",
   "main": "index.js",
   "scripts": {
-    "start": "bun .",
-    "start:watch": "bun --watch .",
+    "start": "node .",
     "lint": "biome lint .",
-    "pm2": "npx pm2 start bun --name pablo -- . --color",
-    "pm2:docker": "npx pm2-runtime start bun --name pablo -- . --color"
+    "nodemon": "nodemon .",
+    "pm2": "npx pm2 start . --name pablo -- --color",
+    "pm2:docker": "npx pm2-runtime start . --name pablo -- --color"
   },
   "type": "commonjs",
   "author": {
     "name": "MrTechnic",
     "url": "https://github.com/MrTechnic94/"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": true,
   "dependencies": {
-    "discord.js": "^14.20.0",
-    "dotenv": "^16.5.0",
-    "node-cron": "^4.1.0",
+    "discord.js": "^14.21.0",
+    "dotenv": "^16.6.0",
+    "node-cron": "^4.1.1",
     "pino": "^9.7.0"
   },
   "optionalDependencies": {
@@ -29,7 +29,8 @@
     "zlib-sync": "^0.1.10"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.0",
+    "@biomejs/biome": "^2.0.6",
+    "nodemon": "^3.1.10",
     "pm2": "^6.0.8"
   },
   "repository": {
@@ -42,6 +43,6 @@
   "homepage": "https://github.com/MrTechnic94/Pablo#readme",
   "engines": {
     "node": ">=20.19.2",
-    "bun": "*"
+    "pnpm": ">=9.12.0"
   }
 }

@@ -1,9 +1,10 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, ActivityType, PresenceUpdateStatus, EmbedBuilder, MessageFlags } = require('discord.js');
-const { botOptions, embedOptions } = require('../../config/default.json');
-const { writeFileSync, readFileSync } = require('fs');
-const { resolve } = require('path');
+const { SlashCommandBuilder, InteractionContextType, ActivityType, PresenceUpdateStatus, MessageFlags } = require('discord.js');
+const { createEmbed } = require('../../plugins/createEmbed');
+const { botOptions } = require('../../config/default.json');
+const { writeFileSync, readFileSync } = require('node:fs');
+const { resolve } = require('node:path');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -76,10 +77,10 @@ module.exports = {
 
                     const presenceEmoji = presenceEmojis[config.botOptions.changedActivityPresence] || presenceEmojis[config.botOptions.defaultActivityPresence];
 
-                    const successEmbed = new EmbedBuilder()
-                        .setTitle('Status zmieniony')
-                        .setDescription(`\`💬\` **Nazwa:** ${botOptions.defaultActivityName}\n\`🔎\` **Rodzaj:** ${botOptions.defaultActivityType}\n\`${presenceEmoji}\` **Status:** ${botOptions.defaultActivityPresence === 'DoNotDisturb' ? 'Do Not Disturb' : botOptions.defaultActivityPresence}`)
-                        .setColor(embedOptions.defaultColor);
+                    const successEmbed = createEmbed({
+                        title: 'Status zmieniony',
+                        description: `\`💬\` **Nazwa:** ${botOptions.defaultActivityName}\n\`🔎\` **Rodzaj:** ${botOptions.defaultActivityType}\n\`${presenceEmoji}\` **Status:** ${botOptions.defaultActivityPresence === 'DoNotDisturb' ? 'Do Not Disturb' : botOptions.defaultActivityPresence}`
+                    });
 
                     await interaction.reply({ embeds: [successEmbed] });
                 } catch (err) {
@@ -107,11 +108,11 @@ module.exports = {
 
                     await interaction.client.user.setAvatar(botOptions.currentAvatar === 'default' ? botOptions.avatarDefaultPath : botOptions.avatarChrismasPath);
 
-                    const successEmbed = new EmbedBuilder()
-                        .setTitle('Avatar zrestartowany')
-                        .setDescription(`\`🖼️\`**Obraz:** [KLIKNIJ🡭](${interaction.client.user.displayAvatarURL()})\n\`🔎\` **Rodzaj:** ${botOptions.currentAvatar === 'default' ? 'Domyślny' : 'Świąteczny'}`)
-                        .setImage(interaction.client.user.displayAvatarURL())
-                        .setColor(embedOptions.defaultColor);
+                    const successEmbed = createEmbed({
+                        title: 'Avatar zrestartowany',
+                        description: `\`🖼️\`**Obraz:** [KLIKNIJ🡭](${interaction.client.user.displayAvatarURL()})\n\`🔎\` **Rodzaj:** ${botOptions.currentAvatar === 'default' ? 'Domyślny' : 'Świąteczny'}`,
+                        image: interaction.client.user.displayAvatarURL()
+                    });
 
                     await interaction.reply({ embeds: [successEmbed] })
                 } catch (err) {

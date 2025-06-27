@@ -1,8 +1,8 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
-const { writeFileSync, readFileSync } = require('fs');
-const { resolve } = require('path');
+const { writeFileSync, readFileSync } = require('node:fs');
+const { resolve } = require('node:path');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -21,6 +21,7 @@ module.exports = {
         }
 
         try {
+            // TODO:
             const configPath = resolve(__dirname, '../../config/default.json');
             const config = JSON.parse(readFileSync(configPath, 'utf8'));
             config.botOptions.changedAvatar = true;
