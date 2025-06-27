@@ -1,10 +1,10 @@
 'use strict';
 
-const cron = require('node-cron');
 const updateAvatar = require('../../plugins/updateAvatar');
 const { readFileSync } = require('node:fs');
 const { Events } = require('discord.js');
 const { join } = require('node:path');
+const cron = require('node-cron');
 
 module.exports = {
     name: Events.ClientReady,
