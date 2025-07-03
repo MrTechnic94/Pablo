@@ -29,7 +29,7 @@ module.exports = {
                 case 'accept_rules': {
                     if (interaction.member.roles.cache.has(guildRoles.user)) {
                         return await interaction.reply({
-                            content: 'Już zaakceptowałeś regulamin.',
+                            content: '❌ Już zaakceptowałeś regulamin.',
                             flags: MessageFlags.Ephemeral,
                         });
                     }

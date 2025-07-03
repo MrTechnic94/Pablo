@@ -1,6 +1,6 @@
 /**
- * Stworzon przez MrTechnic
- * Dla serwera Milf Zone
+ * Stworzony przez MrTechnic
+ * Dla prywatnego serwera
  * ✞ Jesus Forever
  *
  * Znajdziesz mnie i moje projekty tutaj: https://github.com/MrTechnic94/

@@ -1,15 +1,14 @@
 'use strict';
 
 const updateAvatar = require('../../plugins/updateAvatar');
-const { readFileSync } = require('node:fs');
+const { getConfig } = require('../../plugins/readConfig');
 const { Events } = require('discord.js');
-const { join } = require('node:path');
 const cron = require('node-cron');
 
 module.exports = {
     name: Events.ClientReady,
     once: true,
-    execute(logger, client) {
+    async execute(logger, client) {
         // Zalogowanie sie bota do Discord
         logger.info(`[Client] ${client.user.tag} is ready.`);
 
@@ -19,12 +18,11 @@ module.exports = {
         }
 
         // Sprawdza avatar od razu po starcie
-        // await updateAvatar(client, logger);
+        await updateAvatar(client, logger);
 
         // Sprawdza codziennie o polnocy
         cron.schedule('0 0 * * *', async () => {
-            const configPath = join(__dirname, '../../config/default.json');
-            const config = JSON.parse(readFileSync(configPath, 'utf8'));
+            const config = getConfig();
 
             if (config.botOptions.changedAvatar) return;
             await updateAvatar(client, logger);

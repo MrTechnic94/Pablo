@@ -1,7 +1,7 @@
 {
     "botOptions": {
         "changedAvatar": false,
-        "currentAvatar": "christmas",
+        "currentAvatar": "Default",
         "avatarDefaultPath": "./images/pabloDefault.webp",
         "avatarChrismasPath": "./images/pabloChristmas.webp",
         "defaultActivityName": "✞ Jesus Forever",
