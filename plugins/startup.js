@@ -1,5 +1,6 @@
 'use strict';
 
+const { engines } = require('../package.json');
 const logger = require('./logger');
 
 // Sprawdza obecnosc parametrow w pliku .env
@@ -16,8 +17,8 @@ function checkEnvVariables(variables) {
 function checkNodeVersion() {
     const version = Number(process.versions.node.split('.')[0]);
 
-    if (version < 20) {
-        logger.error('[Startup] Outdated Node.js version. Required >= v20.');
+    if (version < engines.node) {
+        logger.error(`[Startup] Outdated Node.js version. Required ${engines.node}.`);
         process.exit(1);
     }
 }
