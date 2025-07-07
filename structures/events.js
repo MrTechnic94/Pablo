@@ -2,31 +2,38 @@
 
 const logger = require('../plugins/logger');
 const { readdirSync } = require('node:fs');
-const { join } = require('node:path');
+const { resolve } = require('node:path');
 
 module.exports = (client) => {
-    const eventsDir = join(__dirname, '../events');
+    const eventsDir = resolve(__dirname, '../events');
 
     readdirSync(eventsDir, { withFileTypes: true }).forEach((directory) => {
         if (!directory.isDirectory()) return;
 
-        const eventFiles = readdirSync(join(eventsDir, directory.name))
+        const eventFiles = readdirSync(resolve(eventsDir, directory.name))
             .filter((file) => file.endsWith('.js'));
 
         for (const file of eventFiles) {
             const eventName = file.slice(0, file.lastIndexOf('.'));
-            const event = require(join(eventsDir, directory.name, file));
-            logger.info(`[Event] Event ${eventName} has been loaded.`);
 
-            const eventHandler = (...args) => event.execute(logger, ...args);
+            try {
+                const event = require(resolve(eventsDir, directory.name, file));
 
-            switch (directory.name) {
-                case 'process':
-                    process[event.once ? 'once' : 'on'](eventName, eventHandler);
-                    break;
+                logger.info(`[Event] Event ${eventName} has been loaded.`);
 
-                default:
-                    client[event.once ? 'once' : 'on'](eventName, eventHandler);
+                const eventHandler = (...args) => event.execute(logger, ...args);
+
+                switch (directory.name) {
+                    case 'process':
+                        process[event.once ? 'once' : 'on'](eventName, eventHandler);
+                        break;
+
+                    default:
+                        client[event.once ? 'once' : 'on'](eventName, eventHandler);
+                }
+            } catch (err) {
+                logger.error(`[Event] Erorr while loading event ${eventName}:\n${err}`);
+                process.exit(1);
             }
         }
     });

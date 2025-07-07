@@ -59,7 +59,7 @@ class PabloClient extends Client {
         // Zaladowanie komend oraz eventow
         this.commands = new Map();
 
-        require('../structures/slash')(this);
+        require('../structures/slashs')(this);
         require('../structures/events')(this);
     }
 }

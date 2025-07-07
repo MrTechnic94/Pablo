@@ -27,7 +27,7 @@ function startup() {
     checkEnvVariables(['BOT_TOKEN', 'BOT_ID', 'BOT_OWNER_ID']);
 
     // Sprawdza czy tryb developera jest odpowiednio skonfigurowany
-    if (global.isDev) checkEnvVariables(['DEV_BOT_TOKEN']);
+    if (global.isDev) checkEnvVariables(['DEV_BOT_TOKEN', 'DEV_BOT_ID']);
 
     checkNodeVersion();
 }

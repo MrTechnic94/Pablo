@@ -8,7 +8,7 @@ const cron = require('node-cron');
 module.exports = {
     name: Events.ClientReady,
     once: true,
-    async execute(logger, client) {
+    execute(logger, client) {
         // Zalogowanie sie bota do Discord
         logger.info(`[Client] ${client.user.tag} is ready.`);
 
@@ -18,7 +18,7 @@ module.exports = {
         }
 
         // Sprawdza avatar od razu po starcie
-        await updateAvatar(client, logger);
+        // await updateAvatar(client, logger);
 
         // Sprawdza codziennie o polnocy
         cron.schedule('0 0 * * *', async () => {

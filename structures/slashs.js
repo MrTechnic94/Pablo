@@ -3,10 +3,10 @@
 const logger = require('../plugins/logger');
 const { REST, Routes } = require('discord.js');
 const { readdirSync } = require('node:fs');
-const { join } = require('node:path');
+const { resolve } = require('node:path');
 
 module.exports = async (client) => {
-    const commandsPath = join(__dirname, '../commands');
+    const commandsPath = resolve(__dirname, '../commands');
     const commandCategories = readdirSync(commandsPath, { withFileTypes: true })
         .filter(dirent => dirent.isDirectory())
         .map(dirent => dirent.name);
@@ -14,12 +14,14 @@ module.exports = async (client) => {
     const commands = [];
 
     for (const category of commandCategories) {
-        const categoryPath = join(commandsPath, category);
+        const categoryPath = resolve(commandsPath, category);
         const commandFiles = readdirSync(categoryPath)
             .filter(file => file.endsWith('.js'));
 
         for (const file of commandFiles) {
-            const filePath = join(categoryPath, file);
+            const filePath = resolve(categoryPath, file);
+            const commandName = file.slice(0, file.lastIndexOf('.'));
+
             try {
                 const command = require(filePath);
 
@@ -27,11 +29,11 @@ module.exports = async (client) => {
                     commands.push(command.data.toJSON());
                     client.commands.set(command.data.name, command);
                 } else {
-                    logger.warn(`[Slash] Command at ${filePath} is missing "data" or "execute".`);
+                    logger.error(`[Slash] The ${commandName} command is missing 'data' or 'execute'.`);
                     process.exit(1);
                 }
             } catch (err) {
-                logger.error(`[Slash] Error loading command at ${filePath}:\n${err}`);
+                logger.error(`[Slash] Error while loading command ${commandName}:\n${err}`);
                 process.exit(1);
             }
         }

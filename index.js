@@ -9,7 +9,7 @@
 
 'use strict';
 
-require('dotenv').config({ path: './config/.env' });
+require('@dotenvx/dotenvx').config({ path: './config/.env' });
 
 global.isDev = process.env.DEV_MODE === 'true';
 
