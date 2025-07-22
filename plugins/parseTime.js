@@ -39,6 +39,7 @@ function parseTimeString(timeString) {
                 formattedTime += amount === 1 ? `${amount} dzień ` : `${amount} dni `;
         }
     });
+
     return { seconds: totalSeconds, formatted: formattedTime.trim() };
 }
 

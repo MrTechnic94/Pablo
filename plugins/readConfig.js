@@ -6,11 +6,11 @@ const { resolve } = require('node:path');
 const configPath = resolve(__dirname, '../config/default.json');
 
 function getConfig() {
-    return JSON.parse(readFileSync(configPath, 'utf8'));
+    return JSON.parse(readFileSync(configPath));
 }
 
 function syncConfig(value) {
-    return writeFileSync(configPath, JSON.stringify(value, null, 4), 'utf8');
+    return writeFileSync(configPath, JSON.stringify(value, null, 4));
 }
 
 module.exports = { getConfig, syncConfig };

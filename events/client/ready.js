@@ -1,5 +1,6 @@
 'use strict';
 
+const embedUpdater = require('../../plugins/embedUpdater');
 const updateAvatar = require('../../plugins/updateAvatar');
 const { getConfig } = require('../../plugins/readConfig');
 const { Events } = require('discord.js');
@@ -19,6 +20,15 @@ module.exports = {
 
         // Sprawdza avatar od razu po starcie
         // await updateAvatar(client, logger);
+
+        // Aktualizuje embed ze statystykami od razu po starcie
+        // await embedUpdater(client, logger);
+
+        // Aktualizuje embed ze statystykami co 2 minut
+        cron.schedule('*/2 * * * *', async () => {
+            await embedUpdater(client, logger);
+            // logger.debug('[EmbedUpdater] Updating embed...');
+        });
 
         // Sprawdza codziennie o polnocy
         cron.schedule('0 0 * * *', async () => {
