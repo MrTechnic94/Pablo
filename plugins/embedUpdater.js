@@ -14,7 +14,7 @@ async function embedUpdater(client, logger) {
 
     if (!channel || !(channel.type === ChannelType.GuildText)) {
         return logger.error('[EmbedUpdater] Set ID is not a text channel.');
-    };
+    }
 
     const guild = channel.guild;
 
@@ -38,12 +38,11 @@ async function embedUpdater(client, logger) {
     const guildCreatedAt = Math.floor(guild.createdTimestamp / 1000);
 
     // Kanaly glosowe
-    const voiceStates = guild.voiceStates.cache;
-    const voiceActive = voiceStates.size;
-    const selfMuted = voiceStates.filter(vc => vc.selfMute).size;
-    const selfDeafened = voiceStates.filter(vc => vc.selfDeaf).size;
-    const serverMuted = voiceStates.filter(vc => vc.serverMute).size;
-    const serverDeafened = voiceStates.filter(vc => vc.serverDeaf).size;
+    const voiceActive = guild.voiceStates.cache.filter(vc => vc.channel !== null).size;
+    const selfMuted = guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.selfMute).size;
+    const selfDeafened = guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.selfDeaf).size;
+    const serverMuted = guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.serverMute).size;
+    const serverDeafened = guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.serverDeaf).size;
 
     // Role
     const rolesCount = guild.roles.cache.size;

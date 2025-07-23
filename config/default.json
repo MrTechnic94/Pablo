@@ -31,10 +31,7 @@
         "guildInviteManager": 0,
         "reactionManager": 0,
         "reactionUserManager": 0,
-        "threadMemberManager": 0,
-        "guildMemberManager": {
-            "maxSize": 50
-        }
+        "threadMemberManager": 0
     },
     "clientSweepers": {
         "messages": {
@@ -80,10 +77,10 @@
     },
     "channelsConfig": {
         "memy": "1057569815218376735",
-        "statystykiSerwera": "1269667422831382572"
+        "statystykiSerwera": "1397615226614054932"
     },
     "embedConfig": {
-        "defaultColor": 9055202,
-        "statisticsEmbed": "1396580308043960391"
+        "defaultColor": 6102251,
+        "statisticsEmbed": ""
     }
 }

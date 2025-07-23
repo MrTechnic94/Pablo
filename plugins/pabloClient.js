@@ -27,11 +27,7 @@ class PabloClient extends Client {
                 GuildInviteManager: clientCache.guildInviteManager,
                 ReactionManager: clientCache.reactionManager,
                 ReactionUserManager: clientCache.reactionUserManager,
-                ThreadMemberManager: clientCache.threadMemberManager,
-                GuildMemberManager: {
-                    maxSize: clientCache.guildMemberManager.maxSize,
-                    keepOverLimit: member => member.id === member.client.user.id
-                }
+                ThreadMemberManager: clientCache.threadMemberManager
             }),
             sweepers: {
                 // ...Options.DefaultSweeperSettings,

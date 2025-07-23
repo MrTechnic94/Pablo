@@ -26,8 +26,9 @@ module.exports = {
 
         // Aktualizuje embed ze statystykami co 2 minut
         cron.schedule('*/2 * * * *', async () => {
+            if (global.isDev) return;
+
             await embedUpdater(client, logger);
-            // logger.debug('[EmbedUpdater] Updating embed...');
         });
 
         // Sprawdza codziennie o polnocy
