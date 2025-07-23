@@ -1,8 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
-const { writeFileSync, readFileSync } = require('node:fs');
-const { resolve } = require('node:path');
+const { getConfig, syncConfig } = require('../../plugins/readConfig');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -21,12 +20,10 @@ module.exports = {
         }
 
         try {
-            // TODO:
-            const configPath = resolve(__dirname, '../../config/default.json');
-            const config = JSON.parse(readFileSync(configPath, 'utf8'));
+            const config = getConfig();
             config.botOptions.changedAvatar = true;
 
-            writeFileSync(configPath, JSON.stringify(config, null, 4), 'utf8');
+            syncConfig(config);
 
             const attachment = interaction.options.getAttachment('plik');
 

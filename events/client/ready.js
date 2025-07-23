@@ -1,10 +1,10 @@
 'use strict';
 
-const cron = require('node-cron');
+const embedUpdater = require('../../plugins/embedUpdater');
 const updateAvatar = require('../../plugins/updateAvatar');
-const { readFileSync } = require('node:fs');
+const { getConfig } = require('../../plugins/readConfig');
 const { Events } = require('discord.js');
-const { join } = require('node:path');
+const cron = require('node-cron');
 
 module.exports = {
     name: Events.ClientReady,
@@ -21,10 +21,19 @@ module.exports = {
         // Sprawdza avatar od razu po starcie
         // await updateAvatar(client, logger);
 
+        // Aktualizuje embed ze statystykami od razu po starcie
+        // await embedUpdater(client, logger);
+
+        // Aktualizuje embed ze statystykami co 2 minut
+        cron.schedule('*/2 * * * *', async () => {
+            if (global.isDev) return;
+
+            await embedUpdater(client, logger);
+        });
+
         // Sprawdza codziennie o polnocy
         cron.schedule('0 0 * * *', async () => {
-            const configPath = join(__dirname, '../../config/default.json');
-            const config = JSON.parse(readFileSync(configPath, 'utf8'));
+            const config = getConfig();
 
             if (config.botOptions.changedAvatar) return;
             await updateAvatar(client, logger);

@@ -1,9 +1,8 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, ActivityType, PresenceUpdateStatus, MessageFlags } = require('discord.js');
-const { writeFileSync, readFileSync } = require('node:fs');
+const { getConfig, syncConfig } = require('../../plugins/readConfig');
 const { createEmbed } = require('../../plugins/createEmbed');
-const { resolve } = require('node:path');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -64,13 +63,13 @@ module.exports = {
                 }],
             });
 
-            const configPath = resolve(__dirname, '../../config/default.json');
-            const config = JSON.parse(readFileSync(configPath, 'utf8'));
+            const config = getConfig();
+
             config.botOptions.changedActivityName = status;
             config.botOptions.changedActivityType = type;
             config.botOptions.changedActivityPresence = botPresence;
 
-            writeFileSync(configPath, JSON.stringify(config, null, 4), 'utf8');
+            syncConfig(config);
 
             const presenceEmojis = {
                 Online: '🟢',

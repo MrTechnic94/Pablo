@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, ChannelType } = require('discord.js');
 const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
@@ -17,19 +17,19 @@ module.exports = {
         const channel = interaction.options.getChannel('kanał') || interaction.channel;
 
         const types = {
-            0: 'Tekstowy',
-            1: 'Wiadomość prywatna',
-            2: 'Głosowy',
-            3: 'Grupowa wiadomość prywatna',
-            4: 'Kategoria',
-            5: 'Ogłoszenie',
-            10: 'Wątek ogłoszeniowy',
-            11: 'Wątek publiczny',
-            12: 'Wątek prywatny',
-            13: 'Scena',
-            14: 'Katalog',
-            15: 'Forum',
-            16: 'Media'
+            [ChannelType.GuildText]: 'Tekstowy',
+            [ChannelType.DM]: 'Wiadomość prywatna',
+            [ChannelType.GuildVoice]: 'Głosowy',
+            [ChannelType.GroupDM]: 'Grupowa wiadomość prywatna',
+            [ChannelType.GuildCategory]: 'Kategoria',
+            [ChannelType.GuildAnnouncement]: 'Ogłoszenie',
+            [ChannelType.AnnouncementThread]: 'Wątek ogłoszeniowy',
+            [ChannelType.PublicThread]: 'Wątek publiczny',
+            [ChannelType.PrivateThread]: 'Wątek prywatny',
+            [ChannelType.GuildStageVoice]: 'Scena',
+            [ChannelType.GuildDirectory]: 'Katalog',
+            [ChannelType.GuildForum]: 'Forum',
+            [ChannelType.GuildMedia]: 'Media'
         };
 
         const nsfw = channel.nsfw ? 'Tak' : 'Nie';

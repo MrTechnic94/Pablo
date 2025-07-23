@@ -1,10 +1,9 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, ActivityType, PresenceUpdateStatus, MessageFlags } = require('discord.js');
+const { getConfig, syncConfig } = require('../../plugins/readConfig');
 const { createEmbed } = require('../../plugins/createEmbed');
 const { botOptions } = require('../../config/default.json');
-const { writeFileSync, readFileSync } = require('node:fs');
-const { resolve } = require('node:path');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -58,14 +57,13 @@ module.exports = {
                         }],
                     });
 
-                    const configPath = resolve(__dirname, '../../config/default.json');
-                    const config = JSON.parse(readFileSync(configPath, 'utf8'));
+                    const config = getConfig();
 
                     config.botOptions.changedActivityName = "";
                     config.botOptions.changedActivityType = "";
                     config.botOptions.changedActivityPresence = "";
 
-                    writeFileSync(configPath, JSON.stringify(config, null, 4), 'utf8');
+                    syncConfig(config);
 
                     const presenceEmojis = {
                         Online: '🟢',
@@ -94,8 +92,7 @@ module.exports = {
             }
 
             case 'Avatar': {
-                const configPath = resolve(__dirname, '../../config/default.json');
-                const config = JSON.parse(readFileSync(configPath, 'utf8'));
+                const config = getConfig();
 
                 if (!config.botOptions.changedAvatar) {
                     return await interaction.reply({ content: '❌ Avatar nie został zmieniony.', flags: MessageFlags.Ephemeral });
@@ -104,7 +101,7 @@ module.exports = {
                 try {
                     config.botOptions.changedAvatar = false;
 
-                    writeFileSync(configPath, JSON.stringify(config, null, 4), 'utf8');
+                    syncConfig(config);
 
                     await interaction.client.user.setAvatar(botOptions.currentAvatar === 'default' ? botOptions.avatarDefaultPath : botOptions.avatarChrismasPath);
 

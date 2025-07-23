@@ -1,14 +1,16 @@
 {
   "name": "pablo",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Just a useful bot.",
   "main": "index.js",
   "scripts": {
-    "start": "node .",
-    "lint": "biome lint .",
-    "nodemon": "nodemon .",
-    "pm2": "npx pm2 start . --name pablo -- --color",
-    "pm2:docker": "npx pm2-runtime start . --name pablo -- --color"
+    "start": "pnpm run env:encrypt && npx dotenvx run -f ./config/.env -- node .",
+    "env:encrypt": "npx dotenvx encrypt -f ./config/.env",
+    "env:decrypt": "npx dotenvx decrypt -f ./config/.env",
+    "nodemon": "pnpm env:encrypt && npx dotenvx run -f ./config/.env -- nodemon .",
+    "pm2:docker": "npx pm2-runtime start --name pablo -- npx dotenvx run -f ./config/.env -- node . -- --color",
+    "pm2": "npx pm2 start --name pablo -- npx dotenvx run -f ./config/.env -- node . -- --color",
+    "lint": "biome lint ."
   },
   "type": "commonjs",
   "author": {
@@ -18,9 +20,9 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.48.3",
     "discord.js": "^14.21.0",
-    "dotenv": "^16.6.0",
-    "node-cron": "^4.1.1",
+    "node-cron": "^4.2.1",
     "pino": "^9.7.0"
   },
   "optionalDependencies": {
@@ -29,7 +31,7 @@
     "zlib-sync": "^0.1.10"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.6",
+    "@biomejs/biome": "^2.1.2",
     "nodemon": "^3.1.10",
     "pm2": "^6.0.8"
   },
@@ -42,7 +44,7 @@
   },
   "homepage": "https://github.com/MrTechnic94/Pablo#readme",
   "engines": {
-    "node": ">=20.19.2",
+    "node": ">=20.18.0",
     "pnpm": ">=9.12.0"
   }
 }

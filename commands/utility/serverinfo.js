@@ -14,7 +14,9 @@ module.exports = {
 
         const owner = await guild.fetchOwner();
 
-        const onlineMembers = guild.members.cache.filter(member => member.presence?.status && ['online', 'idle', 'dnd'].includes(member.presence.status)).size;
+        const onlineMembers = guild.members.cache.filter(m =>
+            ['online', 'idle', 'dnd'].includes(m.presence?.status)
+        ).size;
 
         const verificationLevels = [
             '**• Brak:** Bez ograniczeń.',
