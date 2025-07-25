@@ -106,7 +106,7 @@ module.exports = {
                 });
 
                 const musicEmbed = createEmbed({
-                    title: `${emojisConfig.galaxyball} Muzyka`,
+                    title: `${emojisConfig.galaxyBall} Muzyka`,
                     description: (
                         '`/stop`\nBot wychodzi z kanału.\n\n' +
                         '`/clear`\nUsuwa aktualną playlistę.\n\n' +

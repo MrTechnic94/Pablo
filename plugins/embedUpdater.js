@@ -45,7 +45,7 @@ async function embedUpdater(client, logger) {
     const serverDeafened = guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.serverDeaf).size;
 
     // Role
-    const rolesCount = guild.roles.cache.size;
+    const rolesCount = guild.roles.cache.size - 1;
 
     const embed = createEmbed({
         author: {

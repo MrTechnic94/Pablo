@@ -67,13 +67,13 @@
         "diamond": "<a:diamond:1337491890425303111>",
         "info": "<:info:1337466343322030211>",
         "first": "<a:first:1337491864005382154>",
-        "galaxyball": "<a:galaxyball:1337491880274952256>",
+        "galaxyBall": "<a:galaxyball:1337491880274952256>",
         "ball": "<a:ball:1337491873043841156>",
         "stage": "<:stage:1396793266367631370>",
-        "serverMute": "<:server_mute:1396793251591229520>",
-        "serverDeaf": "<:server_deaf:1396793217793527998>",
-        "selfDeaf": "<:self_deaf:1396793208658460762>",
-        "selfMute": "<:self_mute:1396793197182717994>"
+        "serverMute": "<:serverMute:1396793251591229520>",
+        "serverDeaf": "<:serverDeaf:1396793217793527998>",
+        "selfDeaf": "<:selfDeaf:1396793208658460762>",
+        "selfMute": "<:selfMute:1396793197182717994>"
     },
     "channelsConfig": {
         "memy": "1057569815218376735",

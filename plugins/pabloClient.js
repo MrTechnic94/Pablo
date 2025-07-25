@@ -34,11 +34,11 @@ class PabloClient extends Client {
                 messages: {
                     interval: clientSweepers.messages.interval,
                     lifetime: clientSweepers.messages.lifetime,
-                },
-                users: {
-                    interval: clientSweepers.users.interval,
-                    filter: () => user => user.id !== user.client.user.id
                 }
+                // users: {
+                //     interval: clientSweepers.users.interval,
+                //     filter: () => user => user.id !== user.client.user.id
+                // }
             }
         });
 
