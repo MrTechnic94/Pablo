@@ -1,6 +1,6 @@
 'use strict';
 
-const { channelsConfig } = require('../../config/default.json');
+const { channels } = require('../../config/default.json');
 const { Events } = require('discord.js');
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
         if (message.author.bot) return;
 
         // Auto reakcje dla kanalu
-        if (message.channel.id === channelsConfig.memy) {
+        if (message.channel.id === channels.memy) {
             const allowedExtensions = /\.(jpg|jpeg|png|gif|tif|webp|mp4|webm|mov)$/i;
             const urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 

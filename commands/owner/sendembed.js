@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { emojisConfig, guildRoles } = require('../../config/default.json');
+const { emojis, roles } = require('../../config/default.json');
 const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
@@ -53,11 +53,11 @@ module.exports = {
                 const additionalEmbed = createEmbed({
                     description: (
                         '```ansi\n[2;34mRangi dodatkowe[0m\n```\n``➖ ➖ ➖ ➖ ➖``\n' +
-                        `<@&${guildRoles.gamer}> - 🎮\n` +
-                        `<@&${guildRoles.xbox}> - ${emojisConfig.xbox}\n` +
-                        `<@&${guildRoles.playstation}> - ${emojisConfig.playstation}\n` +
-                        `<@&${guildRoles.pc}> - 💻\n` +
-                        `<@&${guildRoles.phone}> - 📱`
+                        `<@&${roles.gamer}> - 🎮\n` +
+                        `<@&${roles.xbox}> - ${emojis.xbox}\n` +
+                        `<@&${roles.playstation}> - ${emojis.playstation}\n` +
+                        `<@&${roles.pc}> - 💻\n` +
+                        `<@&${roles.phone}> - 📱`
                     )
                 });
 
@@ -98,7 +98,7 @@ module.exports = {
 
             case 'pomoc': {
                 const funEmbed = createEmbed({
-                    title: `${emojisConfig.ball} 4Fun`,
+                    title: `${emojis.ball} 4Fun`,
                     description: (
                         '`/solo <użytkownik>`\n' +
                         'Stocz bitwę z wybraną osobą.'
@@ -106,7 +106,7 @@ module.exports = {
                 });
 
                 const musicEmbed = createEmbed({
-                    title: `${emojisConfig.galaxyBall} Muzyka`,
+                    title: `${emojis.galaxyBall} Muzyka`,
                     description: (
                         '`/stop`\nBot wychodzi z kanału.\n\n' +
                         '`/clear`\nUsuwa aktualną playlistę.\n\n' +
@@ -132,7 +132,7 @@ module.exports = {
                 });
 
                 const levelsEmbed = createEmbed({
-                    title: `${emojisConfig.first} Poziomy`,
+                    title: `${emojis.first} Poziomy`,
                     description: (
                         '`=rank [użytkownik]`\nSprawdź swoją kartę rangi lub innej osoby.\n\n' +
                         '`=leaderboard` **/** `=lb`\nSprawdź topkę serwera.'
@@ -140,7 +140,7 @@ module.exports = {
                 });
 
                 const infoEmbed = createEmbed({
-                    title: `${emojisConfig.info} Informacje`,
+                    title: `${emojis.info} Informacje`,
                     description: (
                         '`/userinfo [użytkownik]`\nSprawdź informacje o użytkowniku lub o sobie.\n\n' +
                         '`/serverinfo`\nSprawdź informacje o serwerze.\n\n' +
@@ -152,7 +152,7 @@ module.exports = {
                 });
 
                 const vipEmbed = createEmbed({
-                    title: `${emojisConfig.diamond} V.I.P`,
+                    title: `${emojis.diamond} V.I.P`,
                     description: (
                         '`/nick [pseudonim]`\nPozwala edytować pseudonim lub go usunąć.'
                     )

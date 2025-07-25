@@ -42,7 +42,7 @@
             "interval": 3600
         }
     },
-    "guildRoles": {
+    "roles": {
         "changeNickname": "1118157654204874772",
         "owner": "1057380110581383238",
         "admin": "1098253809546969170",
@@ -59,7 +59,7 @@
         "magenta": "1060992908431474709",
         "green": "1060992608983339138"
     },
-    "emojisConfig": {
+    "emojis": {
         "battleForward": "<:battleForward:1334834236523286538>",
         "battleBackwards": "<:battleBackwards:1334834216625770506>",
         "playstation": "<:playstation:1336378610680070274>",
@@ -67,7 +67,7 @@
         "diamond": "<a:diamond:1337491890425303111>",
         "info": "<:info:1337466343322030211>",
         "first": "<a:first:1337491864005382154>",
-        "galaxyBall": "<a:galaxyball:1337491880274952256>",
+        "galaxyBall": "<a:galaxyBall:1337491880274952256>",
         "ball": "<a:ball:1337491873043841156>",
         "stage": "<:stage:1396793266367631370>",
         "serverMute": "<:serverMute:1396793251591229520>",
@@ -75,12 +75,13 @@
         "selfDeaf": "<:selfDeaf:1396793208658460762>",
         "selfMute": "<:selfMute:1396793197182717994>"
     },
-    "channelsConfig": {
+    "channels": {
         "memy": "1057569815218376735",
         "statystykiSerwera": "1397615226614054932"
     },
-    "embedConfig": {
+    "embeds": {
         "defaultColor": 6102251,
-        "statisticsEmbed": ""
+        "statisticsEmbed": "",
+        "autoEmbedUpdate": false
     }
 }

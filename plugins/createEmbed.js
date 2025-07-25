@@ -1,6 +1,6 @@
 'use strict';
 
-const { embedConfig } = require('../config/default.json');
+const { embeds } = require('../config/default.json');
 const { EmbedBuilder } = require('discord.js');
 
 function createEmbed({ title, url, author = {}, description, thumbnail, fields = {}, image, timestamp, footer = {}, color }) {
@@ -14,7 +14,7 @@ function createEmbed({ title, url, author = {}, description, thumbnail, fields =
     if (image) templateEmbed.setImage(image);
     if (timestamp) templateEmbed.setTimestamp();
     if (footer.text) templateEmbed.setFooter(footer);
-    templateEmbed.setColor(color ?? embedConfig.defaultColor);
+    templateEmbed.setColor(color ?? embeds.defaultColor);
 
     return templateEmbed;
 }

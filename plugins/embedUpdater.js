@@ -7,8 +7,8 @@ const { ChannelType } = require('discord.js');
 async function embedUpdater(client, logger) {
     const config = getConfig();
 
-    const channelId = config.channelsConfig.statystykiSerwera;
-    const messageId = config.embedConfig.statisticsEmbed;
+    const channelId = config.channels.statystykiSerwera;
+    const messageId = config.embed.statisticsEmbed;
 
     const channel = await client.channels.fetch(channelId);
 
@@ -45,6 +45,7 @@ async function embedUpdater(client, logger) {
     const serverDeafened = guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.serverDeaf).size;
 
     // Role
+    // Odjecie 1 ze wzgledu na wykluczenie 'roli' @everyone
     const rolesCount = guild.roles.cache.size - 1;
 
     const embed = createEmbed({
@@ -65,7 +66,7 @@ async function embedUpdater(client, logger) {
             },
             {
                 name: '**• Kanały głosowe**',
-                value: `${config.emojisConfig.stage} ${voiceActive}\n${config.emojisConfig.selfMute} ${selfMuted} ${config.emojisConfig.selfDeaf} ${selfDeafened}\n${config.emojisConfig.serverMute} ${serverMuted} ${config.emojisConfig.serverDeaf} ${serverDeafened}`,
+                value: `${config.emojis.stage} ${voiceActive}\n${config.emojis.selfMute} ${selfMuted} ${config.emojis.selfDeaf} ${selfDeafened}\n${config.emojis.serverMute} ${serverMuted} ${config.emojis.serverDeaf} ${serverDeafened}`,
                 inline: true,
             },
             {

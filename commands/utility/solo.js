@@ -1,8 +1,8 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
-const { emojisConfig } = require('../../config/default.json');
 const { createEmbed } = require('../../plugins/createEmbed');
+const { emojis } = require('../../config/default.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,7 +27,7 @@ module.exports = {
             { user: player2, hp: 100 }
         ];
 
-        const emojis = [emojisConfig.battleForward, emojisConfig.battleBackwards];
+        const battleEmojis = [emojis.battleForward, emojis.battleBackwards];
         let battleLog = [];
 
         const countdownEmbed = createEmbed({
@@ -54,7 +54,7 @@ module.exports = {
             if (damage > defender.hp) damage = defender.hp;
             defender.hp -= damage;
 
-            let attackMessage = `${emojis[round % 2]} **${attacker.user.username}** uderzył **${defender.user.username}**, zabierając mu __${damage}__ zdrowia.`;
+            let attackMessage = `${battleEmojis[round % 2]} **${attacker.user.username}** uderzył **${defender.user.username}**, zabierając mu __${damage}__ zdrowia.`;
             battleLog.push(attackMessage);
 
             const battleEmbed = createEmbed({

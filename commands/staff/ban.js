@@ -58,13 +58,6 @@ module.exports = {
             return await interaction.reply({ content: '❌ Nie mogę zbanować tego użytkownika.', flags: MessageFlags.Ephemeral });
         }
 
-        // // Funckja konwertujaca czas
-        // function formatHours(seconds) {
-        //     if (seconds === 0) return 'Nie usuwaj';
-        //     const hours = seconds / 3600;
-        //     return hours === 1 ? '1 godzina' : `${hours} godzin`;
-        // };
-
         try {
             const embedDM = createEmbed({
                 title: 'Zostałeś zbanowany',
