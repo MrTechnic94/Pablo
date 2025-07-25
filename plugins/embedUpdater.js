@@ -8,7 +8,7 @@ async function embedUpdater(client, logger) {
     const config = getConfig();
 
     const channelId = config.channels.statystykiSerwera;
-    const messageId = config.embed.statisticsEmbed;
+    const messageId = config.embeds.statisticsEmbed;
 
     const channel = await client.channels.fetch(channelId);
 
