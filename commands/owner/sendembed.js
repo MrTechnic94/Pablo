@@ -21,7 +21,6 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
-        // Sprawdza czy uzytkownik ktory wykonal komende, jest wlascicielem bota
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
             return await interaction.reply({ content: '❌ Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }

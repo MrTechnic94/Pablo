@@ -43,7 +43,6 @@ module.exports = {
         }
 
         try {
-            // Wysylanie wiadomosci prywatnej do wyrzuconego uzytkownika
             const embedDM = createEmbed({
                 title: 'Zostałeś wyrzucony',
                 description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
@@ -51,7 +50,6 @@ module.exports = {
 
             await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Cmd - kick] Failed to send DM to ${targetUser.user.tag}.`));
 
-            // Kopniecie uzytkownika z serwera
             await targetUser.kick(reason);
 
             const successEmbed = createEmbed({
@@ -59,10 +57,10 @@ module.exports = {
                 description: `\`👤\` **Wyrzucono:** ${targetUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
             });
 
-            return await interaction.reply({ embeds: [successEmbed] });
+            await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - kick] ${err}`);
-            return await interaction.reply({ content: '❌ Wystąpił błąd podczas wyrzucania użytkownika.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił błąd podczas wyrzucania użytkownika.', flags: MessageFlags.Ephemeral });
         }
     },
 };

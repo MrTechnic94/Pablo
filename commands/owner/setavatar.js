@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
-const { getConfig, syncConfig } = require('../../plugins/readConfig');
+const { getConfig, syncConfig } = require('../../plugins/configManipulator');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,7 +14,6 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
-        // Sprawdza czy uzytkownik ktory wykonal komende, jest wlascicielem bota
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
             return await interaction.reply({ content: '❌ Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }
@@ -27,13 +26,12 @@ module.exports = {
 
             const attachment = interaction.options.getAttachment('plik');
 
-            // Ustawienie avatara bota z pliku
             await interaction.client.user.setAvatar(attachment.url);
 
-            return await interaction.reply({ content: 'Avatar bota został pomyślnie zmieniony.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: 'Avatar bota został pomyślnie zmieniony.', flags: MessageFlags.Ephemeral });
         } catch (err) {
             logger.error(`[Cmd - setavatar] ${err}`);
-            return await interaction.reply({ content: '❌ Wystąpił błąd podczas ustawiania avatara.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił błąd podczas ustawiania avatara.', flags: MessageFlags.Ephemeral });
         }
     },
 };

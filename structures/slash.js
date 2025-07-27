@@ -50,5 +50,6 @@ module.exports = async (client) => {
         logger.info('[Slash] Successfully registered slash commands.');
     } catch (err) {
         logger.error(`[Slash] Error during command registration:\n${err}`);
+        process.exit(1);
     }
 };

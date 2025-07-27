@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, ActivityType, PresenceUpdateStatus, MessageFlags } = require('discord.js');
-const { getConfig, syncConfig } = require('../../plugins/readConfig');
+const { getConfig, syncConfig } = require('../../plugins/configManipulator');
 const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
@@ -39,7 +39,6 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
-        // Sprawdza czy uzytkownik ktory wykonal komende, jest wlascicielem bota
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
             return await interaction.reply({ content: '❌ Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }
@@ -86,10 +85,10 @@ module.exports = {
                 description: `\`💬\` **Nazwa:** ${status}\n\`🔎\` **Rodzaj:** ${type}\n\`${presenceEmoji}\` **Status:** ${botPresence === 'DoNotDisturb' ? 'Do Not Disturb' : botPresence}`
             });
 
-            return await interaction.reply({ embeds: [successEmbed] });
+            await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - setstatus] ${err}`);
-            return await interaction.reply({
+            await interaction.reply({
                 content: '❌ Wystąpił problem podczas zmiany statusu bota.',
                 flags: MessageFlags.Ephemeral
             });

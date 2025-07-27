@@ -1,7 +1,6 @@
 'use strict';
 
 const { Events, MessageFlags } = require('discord.js');
-const { roles } = require('../../config/default.json');
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -24,6 +23,8 @@ module.exports = {
                 }
             }
         } else if (interaction.isButton()) {
+            const { roles } = require('../../config/default.json');
+
             try {
                 switch (interaction.customId) {
                     // Weryfikacja
@@ -31,13 +32,13 @@ module.exports = {
                         if (interaction.member.roles.cache.has(roles.user)) {
                             return await interaction.reply({
                                 content: '❌ Już zaakceptowałeś regulamin.',
-                                flags: MessageFlags.Ephemeral,
+                                flags: MessageFlags.Ephemeral
                             });
                         }
                         await interaction.member.roles.add(roles.user);
                         await interaction.reply({
                             content: 'Dziękujemy za akceptację regulaminu!',
-                            flags: MessageFlags.Ephemeral,
+                            flags: MessageFlags.Ephemeral
                         });
                         break;
                     }
@@ -53,7 +54,7 @@ module.exports = {
                             additional_xbox: roles.xbox,
                             additional_playstation: roles.playstation,
                             additional_pc: roles.pc,
-                            additional_phone: roles.phone,
+                            additional_phone: roles.phone
                         };
                         const roleId = roleMapping[interaction.customId];
 
@@ -61,13 +62,13 @@ module.exports = {
                             await interaction.member.roles.remove(roleId);
                             await interaction.reply({
                                 content: `Rola <@&${roleId}> została usunięta.`,
-                                flags: MessageFlags.Ephemeral,
+                                flags: MessageFlags.Ephemeral
                             });
                         } else {
                             await interaction.member.roles.add(roleId);
                             await interaction.reply({
                                 content: `Rola <@&${roleId}> została dodana.`,
-                                flags: MessageFlags.Ephemeral,
+                                flags: MessageFlags.Ephemeral
                             });
                         }
                         break;
@@ -115,7 +116,6 @@ module.exports = {
                 }
             } catch (err) {
                 logger.error(`[InteractionCreate] Error while adding role:\n${err}`);
-
                 await interaction.reply({
                     content: '❌ Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.',
                     flags: MessageFlags.Ephemeral

@@ -19,6 +19,6 @@ module.exports = {
             color: dec
         });
 
-        return await interaction.reply({ embeds: [successEmbed] });
+        await interaction.reply({ embeds: [successEmbed] });
     },
 };

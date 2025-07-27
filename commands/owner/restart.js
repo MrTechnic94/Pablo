@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, ActivityType, PresenceUpdateStatus, MessageFlags } = require('discord.js');
-const { getConfig, syncConfig } = require('../../plugins/readConfig');
+const { getConfig, syncConfig } = require('../../plugins/configManipulator');
 const { createEmbed } = require('../../plugins/createEmbed');
 const { botOptions } = require('../../config/default.json');
 
@@ -21,7 +21,6 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
-        // Sprawdza czy uzytkownik ktory wykonal komende, jest wlascicielem bota
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
             return await interaction.reply({ content: '❌ Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }

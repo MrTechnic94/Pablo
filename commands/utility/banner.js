@@ -28,6 +28,6 @@ module.exports = {
             image: userData.bannerURL({ size: 2048 })
         });
 
-        return await interaction.reply({ embeds: [successEmbed] });
+        await interaction.reply({ embeds: [successEmbed] });
     },
 };

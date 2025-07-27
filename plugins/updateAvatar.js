@@ -1,8 +1,7 @@
 'use strict';
 
-const { getConfig, syncConfig } = require('./readConfig');
+const { getConfig, syncConfig } = require('./configManipulator');
 
-// Funkcja zmieniajaca avatar
 async function updateAvatar(client, logger) {
     try {
         const today = new Date();

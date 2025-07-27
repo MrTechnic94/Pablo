@@ -1,6 +1,6 @@
 'use strict';
 
-const { getConfig, syncConfig } = require('./readConfig');
+const { getConfig, syncConfig } = require('./configManipulator');
 const { createEmbed } = require('./createEmbed');
 const { ChannelType } = require('discord.js');
 
