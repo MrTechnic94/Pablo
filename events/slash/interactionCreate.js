@@ -56,6 +56,7 @@ module.exports = {
                             additional_pc: roles.pc,
                             additional_phone: roles.phone
                         };
+
                         const roleId = roleMapping[interaction.customId];
 
                         if (interaction.member.roles.cache.has(roleId)) {
@@ -91,22 +92,19 @@ module.exports = {
                         const roleId = roleMap[interaction.customId];
                         if (!roleId) break;
 
-                        const member = interaction.member;
-                        const alreadyHadRole = member.roles.cache.has(roleId);
-
                         for (const id of Object.values(roleMap)) {
-                            if (member.roles.cache.has(id)) {
-                                await member.roles.remove(id);
+                            if (interaction.member.roles.cache.has(id)) {
+                                await interaction.member.roles.remove(id);
                             }
                         }
 
-                        if (alreadyHadRole) {
+                        if (interaction.member.roles.cache.has(roleId)) {
                             await interaction.reply({
                                 content: `Rola <@&${roleId}> została usunięta.`,
                                 flags: MessageFlags.Ephemeral
                             });
                         } else {
-                            await member.roles.add(roleId);
+                            await interaction.member.roles.add(roleId);
                             await interaction.reply({
                                 content: `Rola <@&${roleId}> została dodana.`,
                                 flags: MessageFlags.Ephemeral

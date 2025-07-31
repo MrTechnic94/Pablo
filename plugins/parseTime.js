@@ -51,20 +51,18 @@ function formatDuration(milliseconds, options = {}) {
 
     const parts = [];
 
-    const full = options.fullWords;
-
     const plural = (value, one, few, many) => {
         if (value === 1) return one;
         if (value >= 2 && value <= 4) return few;
         return many;
     };
 
-    if (days) parts.push(full ? `${days} ${plural(days, 'dzień', 'dni', 'dni')}` : `${days}d`);
-    if (hours) parts.push(full ? `${hours} ${plural(hours, 'godzina', 'godziny', 'godzin')}` : `${hours}h`);
-    if (minutes) parts.push(full ? `${minutes} ${plural(minutes, 'minuta', 'minuty', 'minut')}` : `${minutes}m`);
-    if (seconds) parts.push(full ? `${seconds} ${plural(seconds, 'sekunda', 'sekundy', 'sekund')}` : `${seconds}s`);
+    if (days) parts.push(options.fullWords ? `${days} ${plural(days, 'dzień', 'dni', 'dni')}` : `${days}d`);
+    if (hours) parts.push(options.fullWords ? `${hours} ${plural(hours, 'godzina', 'godziny', 'godzin')}` : `${hours}h`);
+    if (minutes) parts.push(options.fullWords ? `${minutes} ${plural(minutes, 'minuta', 'minuty', 'minut')}` : `${minutes}m`);
+    if (seconds) parts.push(options.fullWords ? `${seconds} ${plural(seconds, 'sekunda', 'sekundy', 'sekund')}` : `${seconds}s`);
 
-    return parts.length ? parts.join(full ? ' ' : ' ') : full ? '0 sekund' : '0s';
+    return parts.length ? parts.join(options.fullWords ? ' ' : ' ') : options.fullWords ? '0 sekund' : '0s';
 }
 
 module.exports = { parseTimeString, formatDuration };

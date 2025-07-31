@@ -22,20 +22,20 @@ module.exports = {
             return await interaction.reply({ content: '❌ Nie możesz walczyć sam ze sobą.', flags: MessageFlags.Ephemeral });
         }
 
-        let players = [
+        const players = [
             { user: player1, hp: 100 },
             { user: player2, hp: 100 }
         ];
 
         const battleEmojis = [emojis.battleForward, emojis.battleBackwards];
-        let battleLog = [];
+        const battleLog = [];
 
         const countdownEmbed = createEmbed({
             title: '💢 SOLÓWA ! 💢',
             description: '*Solo zacznie się za 3...*'
         });
 
-        let message = await interaction.reply({ embeds: [countdownEmbed] }).then(sent => sent.fetch());
+        const message = await interaction.reply({ embeds: [countdownEmbed] }).then(sent => sent.fetch());
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         for (let i = 2; i > 0; i--) {
@@ -47,14 +47,14 @@ module.exports = {
         let round = 0;
 
         while (players[0].hp > 0 && players[1].hp > 0) {
-            let attacker = players[round % 2];
-            let defender = players[(round + 1) % 2];
+            const attacker = players[round % 2];
+            const defender = players[(round + 1) % 2];
 
             let damage = Math.floor(Math.random() * (35 - 5 + 1) + 5);
             if (damage > defender.hp) damage = defender.hp;
             defender.hp -= damage;
 
-            let attackMessage = `${battleEmojis[round % 2]} **${attacker.user.username}** uderzył **${defender.user.username}**, zabierając mu __${damage}__ zdrowia.`;
+            const attackMessage = `${battleEmojis[round % 2]} **${attacker.user.username}** uderzył **${defender.user.username}**, zabierając mu __${damage}__ zdrowia.`;
             battleLog.push(attackMessage);
 
             const battleEmbed = createEmbed({
@@ -74,7 +74,7 @@ module.exports = {
             await new Promise(resolve => setTimeout(resolve, 2000));
         }
 
-        let winner = players.find(p => p.hp > 0);
+        const winner = players.find(p => p.hp > 0);
 
         battleLog.push(`\`\`\`🏆 ${winner.user.username} wygrał pojedynek! 🏆\`\`\``);
 

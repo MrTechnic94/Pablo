@@ -11,7 +11,7 @@ module.exports = {
         // Auto reakcje dla kanalu
         if (message.channel.id === channels.memy) {
             const allowedExtensions = /\.(jpg|jpeg|png|gif|tif|webp|mp4|webm|mov)$/i;
-            const urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+            const urlRegex = /https?:\/\/(?:www\.)?[\w.-]{1,256}\.[a-zA-Z]{1,6}\b[\w\-@:%_+.~#?&//=]*/;
 
             if (!message.attachments.size && !allowedExtensions.test(message.content) && !urlRegex.test(message.content)) {
                 await message.delete().catch(() => null);
