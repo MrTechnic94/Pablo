@@ -1,8 +1,8 @@
 'use strict';
 
-const embedUpdater = require('../../plugins/embedUpdater');
 const updateAvatar = require('../../plugins/updateAvatar');
-const { getConfig } = require('../../plugins/readConfig');
+const embedUpdater = require('../../plugins/embedUpdater');
+const { getConfig } = require('../../plugins/configManipulator');
 const { Events } = require('discord.js');
 const cron = require('node-cron');
 
@@ -10,7 +10,7 @@ module.exports = {
     name: Events.ClientReady,
     once: true,
     execute(logger, client) {
-        // Zalogowanie sie bota do Discord
+        // Informacja o zalogowaniu sie bota do Discord
         logger.info(`[Client] ${client.user.tag} is ready.`);
 
         // Wyswietlenie informacji, jezeli bot dziala w trybie developera
@@ -26,7 +26,9 @@ module.exports = {
 
         // Aktualizuje embed ze statystykami co 2 minut
         cron.schedule('*/2 * * * *', async () => {
-            if (global.isDev) return;
+            const config = getConfig();
+
+            if (global.isDev || !config.embeds.autoEmbedUpdate) return;
 
             await embedUpdater(client, logger);
         });
@@ -36,6 +38,7 @@ module.exports = {
             const config = getConfig();
 
             if (config.botOptions.changedAvatar) return;
+
             await updateAvatar(client, logger);
         });
     },

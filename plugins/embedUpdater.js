@@ -1,14 +1,14 @@
 'use strict';
 
-const { getConfig, syncConfig } = require('./readConfig');
+const { getConfig, syncConfig } = require('./configManipulator');
 const { createEmbed } = require('./createEmbed');
 const { ChannelType } = require('discord.js');
 
 async function embedUpdater(client, logger) {
     const config = getConfig();
 
-    const channelId = config.channelsConfig.statystykiSerwera;
-    const messageId = config.embedConfig.statisticsEmbed;
+    const channelId = config.channels.statystykiSerwera;
+    const messageId = config.embeds.statisticsEmbed;
 
     const channel = await client.channels.fetch(channelId);
 
@@ -16,41 +16,40 @@ async function embedUpdater(client, logger) {
         return logger.error('[EmbedUpdater] Set ID is not a text channel.');
     }
 
-    const guild = channel.guild;
-
     // Uzytkownicy
-    const memberCount = guild.memberCount;
-    const onlineCount = guild.members.cache.filter(m =>
+    const memberCount = channel.guild.memberCount;
+    const onlineCount = channel.guild.members.cache.filter(m =>
         ['online', 'idle', 'dnd'].includes(m.presence?.status)
     ).size;
 
     // Emotki
-    const totalEmotes = guild.emojis.cache.size;
-    const staticEmotes = guild.emojis.cache.filter(e => !e.animated).size;
-    const animatedEmotes = guild.emojis.cache.filter(e => e.animated).size;
+    const totalEmotes = channel.guild.emojis.cache.size;
+    const staticEmotes = channel.guild.emojis.cache.filter(e => !e.animated).size;
+    const animatedEmotes = channel.guild.emojis.cache.filter(e => e.animated).size;
 
     // Kanaly
-    const textChannels = guild.channels.cache.filter(c => c.type === ChannelType.GuildText).size;
-    const voiceChannels = guild.channels.cache.filter(c => c.type === ChannelType.GuildVoice || c.type === ChannelType.GuildStageVoice).size;
-    const categories = guild.channels.cache.filter(c => c.type === ChannelType.GuildCategory).size;
+    const textChannels = channel.guild.channels.cache.filter(c => c.type === ChannelType.GuildText).size;
+    const voiceChannels = channel.guild.channels.cache.filter(c => c.type === ChannelType.GuildVoice || c.type === ChannelType.GuildStageVoice).size;
+    const categories = channel.guild.channels.cache.filter(c => c.type === ChannelType.GuildCategory).size;
 
     // Utworzono
-    const guildCreatedAt = Math.floor(guild.createdTimestamp / 1000);
+    const guildCreatedAt = Math.floor(channel.guild.createdTimestamp / 1000);
 
     // Kanaly glosowe
-    const voiceActive = guild.voiceStates.cache.filter(vc => vc.channel !== null).size;
-    const selfMuted = guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.selfMute).size;
-    const selfDeafened = guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.selfDeaf).size;
-    const serverMuted = guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.serverMute).size;
-    const serverDeafened = guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.serverDeaf).size;
+    const voiceActive = channel.guild.voiceStates.cache.filter(vc => vc.channel !== null).size;
+    const selfMuted = channel.guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.selfMute).size;
+    const selfDeafened = channel.guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.selfDeaf).size;
+    const serverMuted = channel.guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.serverMute).size;
+    const serverDeafened = channel.guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.serverDeaf).size;
 
     // Role
-    const rolesCount = guild.roles.cache.size;
+    // Odjecie 1 ze wzgledu na wykluczenie 'roli' @everyone
+    const rolesCount = channel.guild.roles.cache.size - 1;
 
     const embed = createEmbed({
         author: {
-            name: guild.name,
-            iconURL: guild.iconURL()
+            name: channel.guild.name,
+            iconURL: channel.guild.iconURL()
         },
         fields: [
             {
@@ -65,7 +64,7 @@ async function embedUpdater(client, logger) {
             },
             {
                 name: '**• Kanały głosowe**',
-                value: `${config.emojisConfig.stage} ${voiceActive}\n${config.emojisConfig.selfMute} ${selfMuted} ${config.emojisConfig.selfDeaf} ${selfDeafened}\n${config.emojisConfig.serverMute} ${serverMuted} ${config.emojisConfig.serverDeaf} ${serverDeafened}`,
+                value: `${config.emojis.stage} ${voiceActive}\n${config.emojis.selfMute} ${selfMuted} ${config.emojis.selfDeaf} ${selfDeafened}\n${config.emojis.serverMute} ${serverMuted} ${config.emojis.serverDeaf} ${serverDeafened}`,
                 inline: true,
             },
             {

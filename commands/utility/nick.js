@@ -2,7 +2,7 @@
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
 const { createEmbed } = require('../../plugins/createEmbed');
-const { guildRoles } = require('../../config/default.json');
+const { roles } = require('../../config/default.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -16,7 +16,7 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
-        if (!interaction.member.roles.cache.has(guildRoles.admin) && !interaction.member.roles.cache.has(guildRoles.changeNickname) && interaction.user.id !== process.env.BOT_OWNER_ID) {
+        if (!interaction.member.roles.cache.has(roles.admin) && !interaction.member.roles.cache.has(roles.changeNickname) && interaction.user.id !== process.env.BOT_OWNER_ID) {
             return await interaction.reply({ content: '❌ Nie masz wymaganej roli.', flags: MessageFlags.Ephemeral });
         }
 
@@ -40,10 +40,10 @@ module.exports = {
                 description: `\`✏️\` **Stary pseudonim:** ${oldNick ?? interaction.user.username}\n\`⭐\` **Nowy pseudonim:** ${newNick ?? interaction.user.username}`
             });
 
-            return await interaction.reply({ embeds: [successEmbed] });
+            await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - nick] ${err}`);
-            return await interaction.reply({ content: '❌ Nie udało się zmienić Twojego nicku.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Nie udało się zmienić Twojego nicku.', flags: MessageFlags.Ephemeral });
         }
     },
 };

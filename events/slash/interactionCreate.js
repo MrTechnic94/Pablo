@@ -1,8 +1,6 @@
 'use strict';
 
 const { Events, MessageFlags } = require('discord.js');
-const { toggleRoles } = require('../../plugins/toggleRoles');
-const { guildRoles } = require('../../config/default.json');
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -25,20 +23,22 @@ module.exports = {
                 }
             }
         } else if (interaction.isButton()) {
+            const { roles } = require('../../config/default.json');
+
             try {
                 switch (interaction.customId) {
                     // Weryfikacja
                     case 'accept_rules': {
-                        if (interaction.member.roles.cache.has(guildRoles.user)) {
+                        if (interaction.member.roles.cache.has(roles.user)) {
                             return await interaction.reply({
                                 content: '❌ Już zaakceptowałeś regulamin.',
-                                flags: MessageFlags.Ephemeral,
+                                flags: MessageFlags.Ephemeral
                             });
                         }
-                        await interaction.member.roles.add(guildRoles.user);
+                        await interaction.member.roles.add(roles.user);
                         await interaction.reply({
                             content: 'Dziękujemy za akceptację regulaminu!',
-                            flags: MessageFlags.Ephemeral,
+                            flags: MessageFlags.Ephemeral
                         });
                         break;
                     }
@@ -50,14 +50,28 @@ module.exports = {
                     case 'additional_pc':
                     case 'additional_phone': {
                         const roleMapping = {
-                            additional_gamer: guildRoles.gamer,
-                            additional_xbox: guildRoles.xbox,
-                            additional_playstation: guildRoles.playstation,
-                            additional_pc: guildRoles.pc,
-                            additional_phone: guildRoles.phone,
+                            additional_gamer: roles.gamer,
+                            additional_xbox: roles.xbox,
+                            additional_playstation: roles.playstation,
+                            additional_pc: roles.pc,
+                            additional_phone: roles.phone
                         };
+
                         const roleId = roleMapping[interaction.customId];
-                        await toggleRoles(interaction, roleId);
+
+                        if (interaction.member.roles.cache.has(roleId)) {
+                            await interaction.member.roles.remove(roleId);
+                            await interaction.reply({
+                                content: `Rola <@&${roleId}> została usunięta.`,
+                                flags: MessageFlags.Ephemeral
+                            });
+                        } else {
+                            await interaction.member.roles.add(roleId);
+                            await interaction.reply({
+                                content: `Rola <@&${roleId}> została dodana.`,
+                                flags: MessageFlags.Ephemeral
+                            });
+                        }
                         break;
                     }
 
@@ -68,32 +82,29 @@ module.exports = {
                     case 'colors_magenta':
                     case 'colors_green': {
                         const roleMap = {
-                            'colors_black': guildRoles.black,
-                            'colors_red': guildRoles.red,
-                            'colors_blue': guildRoles.blue,
-                            'colors_magenta': guildRoles.magenta,
-                            'colors_green': guildRoles.green
+                            'colors_black': roles.black,
+                            'colors_red': roles.red,
+                            'colors_blue': roles.blue,
+                            'colors_magenta': roles.magenta,
+                            'colors_green': roles.green
                         };
 
                         const roleId = roleMap[interaction.customId];
                         if (!roleId) break;
 
-                        const member = interaction.member;
-                        const alreadyHadRole = member.roles.cache.has(roleId);
-
                         for (const id of Object.values(roleMap)) {
-                            if (member.roles.cache.has(id)) {
-                                await member.roles.remove(id);
+                            if (interaction.member.roles.cache.has(id)) {
+                                await interaction.member.roles.remove(id);
                             }
                         }
 
-                        if (alreadyHadRole) {
+                        if (interaction.member.roles.cache.has(roleId)) {
                             await interaction.reply({
                                 content: `Rola <@&${roleId}> została usunięta.`,
                                 flags: MessageFlags.Ephemeral
                             });
                         } else {
-                            await member.roles.add(roleId);
+                            await interaction.member.roles.add(roleId);
                             await interaction.reply({
                                 content: `Rola <@&${roleId}> została dodana.`,
                                 flags: MessageFlags.Ephemeral
@@ -103,7 +114,6 @@ module.exports = {
                 }
             } catch (err) {
                 logger.error(`[InteractionCreate] Error while adding role:\n${err}`);
-
                 await interaction.reply({
                     content: '❌ Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.',
                     flags: MessageFlags.Ephemeral

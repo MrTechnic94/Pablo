@@ -1,10 +1,10 @@
 /**
+ * ✞ Jesus Forever
  * Stworzony przez MrTechnic
  * Dla prywatnego serwera
- * ✞ Jesus Forever
  *
  * Znajdziesz mnie i moje projekty tutaj: https://github.com/MrTechnic94/
- * Korzystaj dowoli - kopiuj, edytuj, używaj gdzie chcesz
+ * Jeżeli potrzebujesz pomocy, znajdziesz mnie tutaj: https://t.me/MrTechnic94/
  */
 
 'use strict';

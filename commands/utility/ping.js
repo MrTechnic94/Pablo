@@ -13,10 +13,10 @@ module.exports = {
 
             const sent = await interaction.fetchReply();
             const latency = sent.createdTimestamp - interaction.createdTimestamp;
-            return await interaction.editReply(`🏓 Pong!\nOpóźnienie: ${latency}ms\nWebsocket: ${interaction.client.ws.ping}ms`);
+            await interaction.editReply(`🏓 Pong!\nOpóźnienie: ${latency}ms\nWebsocket: ${interaction.client.ws.ping}ms`);
         } catch (err) {
             logger.error(`[Cmd - ping] ${err}`);
-            return await interaction.reply({ content: '❌ Nie udało się uzyskać informacji o bieżącym połączeniu.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Nie udało się uzyskać informacji o bieżącym połączeniu.', flags: MessageFlags.Ephemeral });
         }
     },
 };

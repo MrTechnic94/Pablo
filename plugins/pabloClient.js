@@ -30,14 +30,9 @@ class PabloClient extends Client {
                 ThreadMemberManager: clientCache.threadMemberManager
             }),
             sweepers: {
-                // ...Options.DefaultSweeperSettings,
                 messages: {
                     interval: clientSweepers.messages.interval,
                     lifetime: clientSweepers.messages.lifetime,
-                },
-                users: {
-                    interval: clientSweepers.users.interval,
-                    filter: () => user => user.id !== user.client.user.id
                 }
             }
         });

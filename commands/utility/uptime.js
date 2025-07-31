@@ -11,6 +11,6 @@ module.exports = {
     async execute(interaction) {
         const botUptime = formatDuration(interaction.client.uptime);
 
-        return await interaction.reply({ content: `Czas pracy: ${botUptime}` });
+        await interaction.reply({ content: `Czas pracy: ${botUptime}` });
     },
 };

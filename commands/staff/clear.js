@@ -53,7 +53,7 @@ module.exports = {
                 description: `\`💬\` **Usunięto: ** ${messagesToDelete.size > 1 ? `${messagesToDelete.size} wiadomości` : `${messagesToDelete.size} wiadomość`}\n\`📌\` **W tym przypięte:** ${removePinned ? 'Tak.' : 'Nie.'}`
             });
 
-            return await interaction.reply({ embeds: [successEmbed] });
+            await interaction.reply({ embeds: [successEmbed] });
         } catch (error) {
             logger.error(`[Cmd - clear] ${error}`);
             await interaction.reply({ content: '❌ Wystąpił błąd podczas usuwania wiadomości.', flags: MessageFlags.Ephemeral });

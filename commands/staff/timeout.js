@@ -46,12 +46,10 @@ module.exports = {
         try {
             const member = await interaction.guild.members.fetch(targetUser.id);
 
-            // Sprawdzenie, czy uzytkownik jest juz wyciszony
             if (member.isCommunicationDisabled()) {
                 return await interaction.reply({ content: '❌ Ten użytkownik jest już wyciszony.', flags: MessageFlags.Ephemeral });
             }
 
-            // Wysylanie wiadomosci prywatnej do wyciszonego uzytkownika
             const embedDM = createEmbed({
                 title: 'Zostałeś wyciszony',
                 description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🕒\` **Czas wyciszenia:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
@@ -59,7 +57,6 @@ module.exports = {
 
             await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Cmd - timeout] Failed to send DM to ${targetUser.tag}.`));
 
-            // Nalozenie wyciszenia na uzytkownika
             await member.timeout(timeInfo.seconds * 1000, reason);
 
             const successEmbed = createEmbed({
@@ -67,10 +64,10 @@ module.exports = {
                 description: `\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🕒\` **Czas wyciszenia:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
             });
 
-            return await interaction.reply({ embeds: [successEmbed] });
+            await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - timeout] ${err}`);
-            return await interaction.reply({ content: '❌ Wystąpił błąd podczas nakładania wyciszenia na użytkownika.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił błąd podczas nakładania wyciszenia na użytkownika.', flags: MessageFlags.Ephemeral });
         }
     },
 };

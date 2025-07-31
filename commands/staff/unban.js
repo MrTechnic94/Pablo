@@ -45,10 +45,10 @@ module.exports = {
                 description: `\`👤\` **Odbanowano:** ${bannedUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`,
             });
 
-            return await interaction.reply({ embeds: [successEmbed] });
+            await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - unban] ${err}`);
-            return await interaction.reply({ content: '❌ Wystąpił błąd podczas odbanowywania użytkownika.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił błąd podczas odbanowywania użytkownika.', flags: MessageFlags.Ephemeral });
         }
     },
 };

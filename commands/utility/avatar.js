@@ -22,6 +22,6 @@ module.exports = {
             image: user.displayAvatarURL({ size: 2048 })
         });
 
-        return await interaction.reply({ embeds: [successEmbed] });
+        await interaction.reply({ embeds: [successEmbed] });
     },
 };

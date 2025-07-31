@@ -58,13 +58,6 @@ module.exports = {
             return await interaction.reply({ content: '❌ Nie mogę zbanować tego użytkownika.', flags: MessageFlags.Ephemeral });
         }
 
-        // // Funckja konwertujaca czas
-        // function formatHours(seconds) {
-        //     if (seconds === 0) return 'Nie usuwaj';
-        //     const hours = seconds / 3600;
-        //     return hours === 1 ? '1 godzina' : `${hours} godzin`;
-        // };
-
         try {
             const embedDM = createEmbed({
                 title: 'Zostałeś zbanowany',
@@ -80,10 +73,10 @@ module.exports = {
                 description: `\`👤\` **Wyrzucono:** ${targetUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}\n\`🗑️\` **Usunięcie wiadomości:** ${deleteMessageDuration ? formatDuration(deleteMessageDuration * 1000, { fullWords: true }) : 'Nie usuwaj'}`
             });
 
-            return await interaction.reply({ embeds: [successEmbed] });
+            await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - ban] ${err}`);
-            return await interaction.reply({ content: '❌ Wystąpił błąd podczas banowania użytkownika.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił błąd podczas banowania użytkownika.', flags: MessageFlags.Ephemeral });
         }
     },
 };

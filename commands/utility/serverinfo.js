@@ -43,6 +43,6 @@ module.exports = {
             ]
         });
 
-        return await interaction.reply({ embeds: [successEmbed] });
+        await interaction.reply({ embeds: [successEmbed] });
     },
 };

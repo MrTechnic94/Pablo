@@ -33,12 +33,10 @@ module.exports = {
         try {
             const member = await interaction.guild.members.fetch(targetUser.id);
 
-            // Sprawdzenie, czy uzytkownik jest wyciszony
             if (!member.isCommunicationDisabled()) {
                 return await interaction.reply({ content: '❌ Ten użytkownik nie jest wyciszony.', flags: MessageFlags.Ephemeral });
             }
 
-            // Wysylanie wiadomosci prywatnej do odciszonego uzytkownika
             const embedDM = createEmbed({
                 title: 'Zostałeś odciszony',
                 description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
@@ -53,10 +51,10 @@ module.exports = {
                 description: `\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
             });
 
-            return await interaction.reply({ embeds: [successEmbed] });
+            await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - removetimeout] ${err}`);
-            return await interaction.reply({ content: '❌ Wystąpił błąd podczas usuwania wyciszenia użytkownikowi.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił błąd podczas usuwania wyciszenia użytkownikowi.', flags: MessageFlags.Ephemeral });
         }
     },
 };

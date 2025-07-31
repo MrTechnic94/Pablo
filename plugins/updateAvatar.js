@@ -1,15 +1,7 @@
 'use strict';
 
-const { getConfig, syncConfig } = require('./readConfig');
+const { getConfig, syncConfig } = require('./configManipulator');
 
-// // Funckja ustawiajaca w konfigu jaki avatar aktualnie jest
-// function updateAvatarInConfig(type) {
-//     const config = getConfig()
-//     config.botOptions.currentAvatar = type;
-//     syncConfig(config);
-// }
-
-// Funkcja zmieniajaca avatar
 async function updateAvatar(client, logger) {
     try {
         const today = new Date();
@@ -27,13 +19,11 @@ async function updateAvatar(client, logger) {
         if (isChristmasTime && config.botOptions.currentAvatar !== 'Christmas') {
             await client.user.setAvatar(christmasAvatar);
             logger.info('[UpdateAvatar] Avatar changed to Christmas.');
-            // updateAvatarInConfig('christmas');
             config.botOptions.currentAvatar = 'Christmas';
             syncConfig(config);
         } else if (!isChristmasTime && config.botOptions.currentAvatar !== 'Default') {
             await client.user.setAvatar(defaultAvatar);
             logger.info('[UpdateAvatar] Avatar restored to default.');
-            // updateAvatarInConfig('default');
             config.botOptions.currentAvatar = 'Default';
             syncConfig(config);
         }
