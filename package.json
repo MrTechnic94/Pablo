@@ -1,6 +1,6 @@
 {
   "name": "pablo",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Just a useful bot.",
   "main": "index.js",
   "scripts": {
