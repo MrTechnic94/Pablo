@@ -1,10 +1,12 @@
 'use strict';
 
-const { syncConfig } = require('./configManipulator');
+const { getConfig, syncConfig } = require('./configManipulator');
 const { createEmbed } = require('./createEmbed');
 const { ChannelType } = require('discord.js');
 
 async function embedUpdater(client, logger) {
+    const config = getConfig();
+
     const channelId = config.channels.statystykiSerwera;
     const messageId = config.embeds.statisticsEmbed;
 
