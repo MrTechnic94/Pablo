@@ -10,7 +10,4 @@
 'use strict';
 
 require('@dotenvx/dotenvx').config({ path: './config/.env' });
-global.isDev = process.env.DEV_MODE === 'true';
-
-const { startup } = require('./plugins/startup');
-startup();
+require('./plugins/startup').startup();

@@ -78,7 +78,7 @@
     },
     "embeds": {
         "defaultColor": 6102251,
-        "statisticsEmbed": "1397626818772598977",
-        "autoEmbedUpdate": true
+        "autoEmbedUpdate": true,
+        "statisticsEmbed": "1397626818772598977"
     }
 }
