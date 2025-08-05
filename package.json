@@ -24,7 +24,8 @@
     "@dotenvx/dotenvx": "^1.48.4",
     "discord.js": "^14.21.0",
     "node-cron": "^4.2.1",
-    "pino": "^9.7.0"
+    "pino": "^9.7.0",
+    "undici": "^7.13.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.9",
