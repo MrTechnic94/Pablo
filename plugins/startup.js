@@ -2,6 +2,9 @@
 
 const logger = require('./logger');
 
+// Utworzenie zmiennej globalnej do sprawdzania czy tryb developera jest wlaczony
+global.isDev = process.env.DEV_MODE === 'true';
+
 // Sprawdza obecnosc parametrow w pliku .env
 function checkEnvVariables(variables) {
     for (const variable of variables) {

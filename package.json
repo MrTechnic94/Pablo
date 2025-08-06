@@ -1,17 +1,18 @@
 {
   "name": "pablo",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Just a useful bot.",
   "main": "index.js",
   "scripts": {
-    "start": "pnpm run env:encrypt && npx dotenvx run -f ./config/.env -- node .",
+    "build": "pnpm install && pnpm update && pnpm lint:update && npx dotenvx encrypt -f ./config/.env",
+    "pm2:docker": "npx pm2-runtime start . --name pablo -- --color",
     "env:encrypt": "npx dotenvx encrypt -f ./config/.env",
     "env:decrypt": "npx dotenvx decrypt -f ./config/.env",
-    "nodemon": "pnpm env:encrypt && npx dotenvx run -f ./config/.env -- nodemon .",
-    "pm2:docker": "npx pm2-runtime start --name pablo -- npx dotenvx run -f ./config/.env -- node . -- --color",
-    "pm2": "npx pm2 start --name pablo -- npx dotenvx run -f ./config/.env -- node . -- --color",
+    "pm2": "npx pm2 start . --name pablo -- --color",
     "lint:update": "pnpm exec biome migrate --write",
-    "lint": "biome lint ."
+    "nodemon": "nodemon .",
+    "lint": "biome lint .",
+    "start": "node ."
   },
   "type": "commonjs",
   "author": {
@@ -24,7 +25,8 @@
     "@dotenvx/dotenvx": "^1.48.4",
     "discord.js": "^14.21.0",
     "node-cron": "^4.2.1",
-    "pino": "^9.7.0"
+    "pino": "^9.7.0",
+    "undici": "^7.13.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.9",

@@ -3,20 +3,23 @@
 const { embeds } = require('../config/default.json');
 const { EmbedBuilder } = require('discord.js');
 
-function createEmbed({ title, url, author = {}, description, thumbnail, fields = {}, image, timestamp, footer = {}, color }) {
-    const templateEmbed = new EmbedBuilder()
-    if (title) templateEmbed.setTitle(title);
-    if (url) templateEmbed.setURL(url);
-    if (author.name) templateEmbed.setAuthor(author);
-    if (description) templateEmbed.setDescription(description);
-    if (thumbnail) templateEmbed.setThumbnail(thumbnail);
-    if (fields.length || fields.name) templateEmbed.setFields(fields);
-    if (image) templateEmbed.setImage(image);
-    if (timestamp) templateEmbed.setTimestamp();
-    if (footer.text) templateEmbed.setFooter(footer);
-    templateEmbed.setColor(color ?? embeds.defaultColor);
+const defaultEmbed = new EmbedBuilder()
+    .setColor(embeds.defaultColor);
 
-    return templateEmbed;
+function createEmbed({ title, url, author = {}, description, thumbnail, fields = {}, image, timestamp, footer = {}, color }) {
+    const builtEmbed = EmbedBuilder.from(defaultEmbed);
+    if (title) builtEmbed.setTitle(title);
+    if (url) builtEmbed.setURL(url);
+    if (author?.name) builtEmbed.setAuthor(author);
+    if (description) builtEmbed.setDescription(description);
+    if (thumbnail) builtEmbed.setThumbnail(thumbnail);
+    if (fields.length || fields.name) builtEmbed.setFields(fields);
+    if (image) builtEmbed.setImage(image);
+    if (timestamp) builtEmbed.setTimestamp();
+    if (footer?.text) builtEmbed.setFooter(footer);
+    if (color) builtEmbed.setColor(color);
+
+    return builtEmbed;
 }
 
 module.exports = { createEmbed };

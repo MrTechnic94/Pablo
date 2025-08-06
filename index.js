@@ -1,16 +1,16 @@
 /**
- * ✞ Jesus Forever
- * Stworzony przez MrTechnic
- * Dla prywatnego serwera
+ * ✞ Jesus Forever.
+ * Stworzony przez MrTechnic.
+ * Dla prywatnego serwera.
  *
- * Znajdziesz mnie i moje projekty tutaj: https://github.com/MrTechnic94/
- * Jeżeli potrzebujesz pomocy, znajdziesz mnie tutaj: https://t.me/MrTechnic94/
+ * Znajdziesz mnie i moje projekty tutaj: 'https://github.com/MrTechnic94/'.
+ * Jezeli potrzebujesz pomocy, znajdziesz mnie tutaj: 'https://t.me/MrTechnic94/'.
+ *
+ * [!] Aby zaczac uzyj polecenia 'pnpm built'.
+ * [!] Reszte konfiguracji znajdziesz w pliku '.env.example'.
  */
 
 'use strict';
 
 require('@dotenvx/dotenvx').config({ path: './config/.env' });
-global.isDev = process.env.DEV_MODE === 'true';
-
-const { startup } = require('./plugins/startup');
-startup();
+require('./plugins/startup').startup();
