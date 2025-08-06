@@ -145,8 +145,7 @@ module.exports = {
                         '`/serverinfo`\nSprawdź informacje o serwerze.\n\n' +
                         '`/avatar [użytkownik]`\nWyświetl avatar swój lub innego użytkownika.\n\n' +
                         '`/channelinfo [kanał]`\nSprawdź informacje o wybranym lub aktualnym kanale.\n\n' +
-                        '`/randomcolor`\nGeneruje losowy kolor.\n\n' +
-                        '`/dlc`\nPoradnik dotyczący instalacji DLC do ETS2.'
+                        '`/randomcolor`\nGeneruje losowy kolor.\n\n'
                     )
                 });
 

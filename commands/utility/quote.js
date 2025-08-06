@@ -25,7 +25,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - quote] ${err}`);
-            await interaction.reply({ content: '❌ Wystąpił błąd podczas pobierania wersetu dnia.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił problem podczas pobierania wersetu.', flags: MessageFlags.Ephemeral });
         }
     },
 };

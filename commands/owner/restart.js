@@ -72,7 +72,7 @@ module.exports = {
                         Invisible: '🎱'
                     };
 
-                    const presenceEmoji = presenceEmojis[config.botOptions.changedActivityPresence] || presenceEmojis[config.botOptions.defaultActivityPresence];
+                    const presenceEmoji = presenceEmojis[config.botOptions.defaultActivityPresence] || '❓';
 
                     const successEmbed = createEmbed({
                         title: 'Status zmieniony',

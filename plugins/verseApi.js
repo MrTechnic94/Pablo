@@ -4,7 +4,6 @@ const { verses, Bible } = require('../config/default.json');
 const { request } = require('undici');
 const logger = require('./logger');
 
-const ApiKey = process.env.BIBLE_API_KEY;
 const verseIndex = new Date().getDate() % verses.length;
 const verseID = verses[verseIndex];
 
@@ -13,12 +12,12 @@ async function verseOfTheDay() {
         const { body, statusCode } = await request(
             `https://api.scripture.api.bible/v1/bibles/${Bible.id}/search?query=${encodeURIComponent(verseID)}`,
             {
-                headers: { 'api-key': ApiKey }
+                headers: { 'api-key': process.env.BIBLE_API_KEY }
             }
         );
 
         if (statusCode !== 200) {
-            return logger.error(`[VerseApi] API request failed:\n${statusCode}`);
+            return logger.error(`[VerseApi] API request error code: ${statusCode}`);
         }
 
         const { data } = await body.json();
