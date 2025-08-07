@@ -31,7 +31,7 @@ module.exports = {
             await interaction.reply({ content: 'Avatar bota został pomyślnie zmieniony.', flags: MessageFlags.Ephemeral });
         } catch (err) {
             logger.error(`[Cmd - setavatar] ${err}`);
-            await interaction.reply({ content: '❌ Wystąpił błąd podczas ustawiania avatara.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił problem podczas ustawiania avatara.', flags: MessageFlags.Ephemeral });
         }
     },
 };

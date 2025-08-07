@@ -25,7 +25,7 @@ module.exports = {
             await interaction.reply({ content: 'Baner bota został pomyślnie zmieniony.', flags: MessageFlags.Ephemeral });
         } catch (err) {
             logger.error(`[Cmd - setbanner] ${err}`);
-            await interaction.reply({ content: '❌ Wystąpił błąd podczas ustawiania baneru.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił problem podczas ustawiania baneru.', flags: MessageFlags.Ephemeral });
         }
     },
 };

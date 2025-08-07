@@ -60,7 +60,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - kick] ${err}`);
-            await interaction.reply({ content: '❌ Wystąpił błąd podczas wyrzucania użytkownika.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił problem podczas wyrzucania użytkownika.', flags: MessageFlags.Ephemeral });
         }
     },
 };

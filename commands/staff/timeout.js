@@ -67,7 +67,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - timeout] ${err}`);
-            await interaction.reply({ content: '❌ Wystąpił błąd podczas nakładania wyciszenia na użytkownika.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił problem podczas nakładania wyciszenia na użytkownika.', flags: MessageFlags.Ephemeral });
         }
     },
 };

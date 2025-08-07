@@ -24,8 +24,8 @@ module.exports = {
 
         const successEmbed = createEmbed({
             title: 'Podgląd baneru',
-            description: `\`👤\` **Użytkownik:** ${user}\n\`🖼️\` **Obraz:** [KLIKNIJ🡭](${userData.bannerURL({ size: 2048 })})`,
-            image: userData.bannerURL({ size: 2048 })
+            description: `\`👤\` **Użytkownik:** ${user}\n\`🖼️\` **Obraz:** [KLIKNIJ🡭](${userData.bannerURL({ size: 256 })})`,
+            image: userData.bannerURL({ size: 256 })
         });
 
         await interaction.reply({ embeds: [successEmbed] });

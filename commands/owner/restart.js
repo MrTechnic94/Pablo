@@ -35,7 +35,7 @@ module.exports = {
                     process.exit(0);
                 } catch (err) {
                     logger.error(`[Cmd - restart] ${err}`);
-                    await interaction.reply({ content: '❌ Wystąpił błąd podczas restartowania bota.', flags: MessageFlags.Ephemeral });
+                    await interaction.reply({ content: '❌ Wystąpił problem podczas restartowania bota.', flags: MessageFlags.Ephemeral });
                 }
                 break;
             }

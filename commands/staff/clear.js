@@ -56,7 +56,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (error) {
             logger.error(`[Cmd - clear] ${error}`);
-            await interaction.reply({ content: '❌ Wystąpił błąd podczas usuwania wiadomości.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił problem podczas usuwania wiadomości.', flags: MessageFlags.Ephemeral });
         }
     },
 };
