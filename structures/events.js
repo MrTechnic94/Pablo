@@ -19,6 +19,11 @@ module.exports = (client) => {
             try {
                 const event = require(resolve(eventsDir, directory.name, file));
 
+                if (typeof event.execute !== 'function') {
+                    logger.error(`[Event] Event ${eventName} is missing 'execute'.`);
+                    process.exit(1);
+                }
+
                 logger.info(`[Event] Event ${eventName} has been loaded.`);
 
                 const eventHandler = (...args) => event.execute(logger, ...args);

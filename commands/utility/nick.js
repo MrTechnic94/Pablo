@@ -24,7 +24,7 @@ module.exports = {
 
         const newNick = interaction.options.getString('nowy');
 
-        if (newNick === null && !oldNick) {
+        if (!newNick && !oldNick) {
             return await interaction.reply({ content: '❌ Nie masz ustawionego pseudonimu.', flags: MessageFlags.Ephemeral });
         }
 

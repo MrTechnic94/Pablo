@@ -9,10 +9,10 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         try {
+            const start = Date.now();
             await interaction.reply({ content: 'Pingowanie...' });
 
-            const sent = await interaction.fetchReply();
-            const latency = sent.createdTimestamp - interaction.createdTimestamp;
+            const latency = Date.now() - start;
             await interaction.editReply(`🏓 Pong!\nOpóźnienie: ${latency}ms\nWebsocket: ${interaction.client.ws.ping}ms`);
         } catch (err) {
             logger.error(`[Cmd - ping] ${err}`);
