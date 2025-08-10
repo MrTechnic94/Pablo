@@ -71,6 +71,7 @@ module.exports = {
                 await interaction.channel.send({ embeds: [additionalEmbed], components: [buttons_additional] });
                 break;
             }
+
             case 'auto-role-kolory': {
                 const colorsEmbed = createEmbed({
                     description: (
