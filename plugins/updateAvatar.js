@@ -15,16 +15,12 @@ async function updateAvatar(client, logger) {
 
         const defaultAvatar = config.botOptions.avatarDefaultPath;
         const christmasAvatar = config.botOptions.avatarChrismasPath;
+        const wantedAvatar = isChristmasTime ? 'Christmas' : 'Default';
 
-        if (isChristmasTime && config.botOptions.currentAvatar !== 'Christmas') {
-            await client.user.setAvatar(christmasAvatar);
-            logger.info('[UpdateAvatar] Avatar changed to Christmas.');
-            config.botOptions.currentAvatar = 'Christmas';
-            syncConfig(config);
-        } else if (!isChristmasTime && config.botOptions.currentAvatar !== 'Default') {
-            await client.user.setAvatar(defaultAvatar);
-            logger.info('[UpdateAvatar] Avatar restored to default.');
-            config.botOptions.currentAvatar = 'Default';
+        if (config.botOptions.currentAvatar !== wantedAvatar) {
+            await client.user.setAvatar(isChristmasTime ? christmasAvatar : defaultAvatar);
+            logger.info(`[UpdateAvatar] Avatar changed to ${wantedAvatar}.`);
+            config.botOptions.currentAvatar = wantedAvatar;
             syncConfig(config);
         }
     } catch (err) {
