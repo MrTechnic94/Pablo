@@ -8,8 +8,8 @@ module.exports = {
         .setName('setavatar')
         .setDescription('Ustawia nowy avatar bota.')
         .addAttachmentOption(option =>
-            option.setName('plik')
-                .setDescription('Obraz, który ma zostać ustawiony jako avatar bota.')
+            option.setName('obraz')
+                .setDescription('Nowy avatar.')
                 .setRequired(true)
         )
         .setContexts(InteractionContextType.Guild),
@@ -24,7 +24,7 @@ module.exports = {
 
             syncConfig(config);
 
-            const attachment = interaction.options.getAttachment('plik');
+            const attachment = interaction.options.getAttachment('obraz');
 
             await interaction.client.user.setAvatar(attachment.url);
 

@@ -9,7 +9,7 @@ module.exports = {
         .setDescription('Usuwa wybraną ilość wiadomości z kanału.')
         .addIntegerOption(option =>
             option.setName('ilość')
-                .setDescription('Ilość wiadomości do usunięcia (max 100).')
+                .setDescription('Ilość wiadomości do usunięcia.')
                 .setMinValue(1)
                 .setMaxValue(100)
                 .setRequired(true)

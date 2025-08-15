@@ -7,8 +7,8 @@ module.exports = {
         .setName('setbanner')
         .setDescription('Ustawia nowy baner bota.')
         .addAttachmentOption(option =>
-            option.setName('plik')
-                .setDescription('Obraz, który ma zostać ustawiony jako baner bota.')
+            option.setName('obraz')
+                .setDescription('Nowy baner.')
                 .setRequired(true)
         )
         .setContexts(InteractionContextType.Guild),
@@ -17,7 +17,7 @@ module.exports = {
             return await interaction.reply({ content: '❌ Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }
 
-        const attachment = interaction.options.getAttachment('plik');
+        const attachment = interaction.options.getAttachment('obraz');
 
         try {
             await interaction.client.user.setBanner(attachment.url);

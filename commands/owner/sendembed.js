@@ -10,7 +10,7 @@ module.exports = {
         .setDescription('Wyślij osadzoną wiadomość.')
         .addStringOption(option =>
             option.setName('rodzaj')
-                .setDescription('Rodzaj embeda')
+                .setDescription('Rodzaj embedu.')
                 .setRequired(true)
                 .addChoices(
                     { name: 'Weryfikacja', value: 'weryfikacja' },

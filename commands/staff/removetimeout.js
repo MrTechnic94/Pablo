@@ -9,7 +9,7 @@ module.exports = {
         .setDescription('Odcisz użytkownika.')
         .addUserOption(option =>
             option.setName('użytkownik')
-                .setDescription('Użytkownik, z którego chcesz odciszyć.')
+                .setDescription('Użytkownik do odciszenia.')
                 .setRequired(true)
         )
         .addStringOption(option =>

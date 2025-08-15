@@ -10,7 +10,7 @@ module.exports = {
         .setDescription('Zamiana pseudonimu na serwerze.')
         .addStringOption(option =>
             option.setName('nowy')
-                .setDescription('Nowy pseudonim. Maksymalnie 32 znaki.')
+                .setDescription('Nowy pseudonim.')
                 .setMaxLength(32)
                 .setRequired(false)
         )

@@ -8,7 +8,7 @@ const { botOptions } = require('../../config/default.json');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('restart')
-        .setDescription('Restart bota lub przywrócenie domyślnego statusu bota.')
+        .setDescription('Restart bota lub jego funkcji.')
         .addStringOption(option =>
             option.setName('rodzaj')
                 .setDescription('Rodzaj restartu.')
