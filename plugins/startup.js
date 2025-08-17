@@ -28,7 +28,7 @@ function checkNodeVersion() {
     }
 }
 
-// Inicjuje klienta discordjs oraz loguje bota do discord
+// Inicjuje klienta discord.js oraz loguje bota do discord
 function connectClient() {
     const { PabloClient } = require('./pabloClient');
 
