@@ -12,14 +12,14 @@ async function fetchVerse(verseID) {
         );
 
         if (statusCode !== 200) {
-            logger.error(`[VerseApi] API request error code: ${statusCode}`);
+            logger.error(`[VerseApi] API request error code '${statusCode}'.`);
             return null;
         }
 
         const { data } = await body.json();
 
         if (!data.passages || !data.passages.length) {
-            logger.error(`[VerseApi] No passages found for verseID '${verseID}'`);
+            logger.error(`[VerseApi] No passages found for verseID '${verseID}'.`);
             return null;
         }
 

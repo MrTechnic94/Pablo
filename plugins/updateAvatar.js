@@ -11,7 +11,8 @@ async function updateAvatar(client, logger) {
         // Ustawienie daty zmiany avataru na 1 grudnia, a przywrocenie domyslnego na 1 lutego
         const isChristmasTime = month === 11 || (month === 1 && day === 1);
 
-        const config = getConfig();
+        // Wymuszenie pobrania informacji bez cache
+        const config = getConfig({ force: true });
 
         const defaultAvatar = config.botOptions.avatarDefaultPath;
         const christmasAvatar = config.botOptions.avatarChrismasPath;
@@ -19,7 +20,7 @@ async function updateAvatar(client, logger) {
 
         if (config.botOptions.currentAvatar !== wantedAvatar) {
             await client.user.setAvatar(isChristmasTime ? christmasAvatar : defaultAvatar);
-            logger.info(`[UpdateAvatar] Avatar changed to ${wantedAvatar}.`);
+            logger.info(`[UpdateAvatar] Avatar changed to '${wantedAvatar}'.`);
             config.botOptions.currentAvatar = wantedAvatar;
             syncConfig(config);
         }

@@ -3,7 +3,7 @@
 const { channels } = require('../../config/default.json');
 const { Events } = require('discord.js');
 
-const allowedExtensions = /\.(jpg|jpeg|png|gif|tif|webp|mp4|webm|mov)$/i;
+const allowedExtensions = /\.(jpg|jpeg|png|gif|webp|mp4|webm|mov)$/i;
 const urlRegex = /https?:\/\/(?:www\.)?[\w.-]{1,256}\.[a-zA-Z]{1,6}\b[\w\-@:%_+.~#?&//=]*/;
 
 module.exports = {

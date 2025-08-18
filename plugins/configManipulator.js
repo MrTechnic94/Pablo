@@ -6,7 +6,7 @@ const { resolve } = require('node:path');
 let cache = null;
 const configPath = resolve(__dirname, '../config/default.json');
 
-function getConfig(force = false) {
+function getConfig({ force = false } = {}) {
     if (cache && !force) return cache;
     const data = readFileSync(configPath, 'utf8');
     cache = JSON.parse(data);

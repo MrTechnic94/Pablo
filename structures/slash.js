@@ -29,11 +29,11 @@ module.exports = async (client) => {
                     commands.push(command.data.toJSON());
                     client.commands.set(command.data.name, command);
                 } else {
-                    logger.error(`[Slash] The ${commandName} command is missing 'data' or 'execute'.`);
+                    logger.error(`[Slash] The '${commandName}' command is missing 'data' or 'execute'.`);
                     process.exit(1);
                 }
             } catch (err) {
-                logger.error(`[Slash] Error while loading command ${commandName}:\n${err}`);
+                logger.error(`[Slash] Error while loading command '${commandName}':\n${err}`);
                 process.exit(1);
             }
         }

@@ -9,7 +9,7 @@ global.isDev = process.env.DEV_MODE === 'true';
 function checkEnvVariables(variables) {
     for (const variable of variables) {
         if (!process.env[variable]) {
-            logger.error(`[Startup] Missing ${variable} in .env file.`);
+            logger.error(`[Startup] Missing '${variable}' in .env file.`);
             process.exit(1);
         }
     }

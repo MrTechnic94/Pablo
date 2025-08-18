@@ -1,6 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -17,12 +18,28 @@ module.exports = {
             return await interaction.reply({ content: '❌ Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }
 
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
         const attachment = interaction.options.getAttachment('obraz');
+        const extension = attachment.url.split('.').pop().toLowerCase().split('?')[0];
+
+        if (!allowedExtensions.includes(extension)) {
+            return await interaction.reply({ content: '❌ Możesz wgrać tylko pliki: png, jpg, jpeg, gif lub webp.', flags: MessageFlags.Ephemeral });
+        }
 
         try {
+            const oldBanner = interaction.client.user.bannerURL({ size: 256 });
+
             await interaction.client.user.setBanner(attachment.url);
 
-            await interaction.reply({ content: 'Baner bota został pomyślnie zmieniony.', flags: MessageFlags.Ephemeral });
+            const newBanner = interaction.client.user.bannerURL({ size: 256 });
+
+            const successEmbed = createEmbed({
+                title: 'Baner ustawiony',
+                description: `\`🖼️\` **Wcześniejszy:** [KLIKNIJ🡭](${oldBanner})\n\`🌟\` **Nowy:** [KLIKNIJ🡭](${newBanner})`,
+                image: newBanner
+            });
+
+            await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - setbanner] ${err}`);
             await interaction.reply({ content: '❌ Wystąpił problem podczas ustawiania baneru.', flags: MessageFlags.Ephemeral });

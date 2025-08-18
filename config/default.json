@@ -1,6 +1,6 @@
 {
     "botOptions": {
-        "changedAvatar": false,
+        "changedAvatar": true,
         "currentAvatar": "Default",
         "avatarDefaultPath": "./images/pabloDefault.webp",
         "avatarChrismasPath": "./images/pabloChristmas.webp",
