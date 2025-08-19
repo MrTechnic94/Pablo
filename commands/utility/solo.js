@@ -10,7 +10,7 @@ module.exports = {
         .setDescription('Stocz bitwę 1v1 z innym użytkownikiem.')
         .addUserOption(option =>
             option.setName('przeciwnik')
-                .setDescription('Wybierz użytkownika do walki')
+                .setDescription('Wybierz użytkownika do walki.')
                 .setRequired(true)
         )
         .setContexts(InteractionContextType.Guild),

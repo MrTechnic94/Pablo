@@ -10,7 +10,7 @@ module.exports = {
         .setDescription('Wyślij osadzoną wiadomość.')
         .addStringOption(option =>
             option.setName('rodzaj')
-                .setDescription('Rodzaj embeda')
+                .setDescription('Rodzaj embedu.')
                 .setRequired(true)
                 .addChoices(
                     { name: 'Weryfikacja', value: 'weryfikacja' },
@@ -71,6 +71,7 @@ module.exports = {
                 await interaction.channel.send({ embeds: [additionalEmbed], components: [buttons_additional] });
                 break;
             }
+
             case 'auto-role-kolory': {
                 const colorsEmbed = createEmbed({
                     description: (

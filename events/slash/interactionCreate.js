@@ -9,17 +9,17 @@ module.exports = {
             const command = interaction.client.commands.get(interaction.commandName);
 
             if (!command) {
-                return logger.error(`[InteractionCreate] Command ${interaction.commandName} not found.`);
+                return logger.error(`[InteractionCreate] Command '${interaction.commandName}' not found.`);
             }
 
             try {
                 await command.execute(interaction, logger);
             } catch (err) {
-                logger.error(`[InteractionCreate] Error while executing ${interaction.commandName} command:\n${err}`);
+                logger.error(`[InteractionCreate] Error while executing '${interaction.commandName}' command:\n${err}`);
                 if (interaction.replied || interaction.deferred) {
-                    await interaction.followUp({ content: '❌ Wystąpił błąd podczas wykonywania komendy.', flags: MessageFlags.Ephemeral });
+                    await interaction.followUp({ content: '❌ Wystąpił problem podczas wykonywania komendy.', flags: MessageFlags.Ephemeral });
                 } else {
-                    await interaction.reply({ content: '❌ Wystąpił błąd podczas wykonywania komendy.', flags: MessageFlags.Ephemeral });
+                    await interaction.reply({ content: '❌ Wystąpił problem podczas wykonywania komendy.', flags: MessageFlags.Ephemeral });
                 }
             }
         } else if (interaction.isButton()) {
@@ -115,7 +115,7 @@ module.exports = {
             } catch (err) {
                 logger.error(`[InteractionCreate] Error while adding role:\n${err}`);
                 await interaction.reply({
-                    content: '❌ Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.',
+                    content: '❌ Wystąpił nieoczekiwany problem. Spróbuj ponownie później.',
                     flags: MessageFlags.Ephemeral
                 });
             }

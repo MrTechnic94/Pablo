@@ -7,7 +7,7 @@ const { createEmbed } = require('../../plugins/createEmbed');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('setstatus')
-        .setDescription('Ustawia status bota z możliwością wyboru typu i statusu.')
+        .setDescription('Ustawia status bota.')
         .addStringOption(option =>
             option.setName('nazwa')
                 .setDescription('Nowy status bota.')

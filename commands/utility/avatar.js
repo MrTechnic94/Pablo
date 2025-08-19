@@ -18,8 +18,8 @@ module.exports = {
 
         const successEmbed = createEmbed({
             title: 'Podgląd avataru',
-            description: `\`👤\` **Użytkownik:** ${user}\n\`🖼️\` **Obraz:** [KLIKNIJ🡭](${user.displayAvatarURL({ size: 2048 })})`,
-            image: user.displayAvatarURL({ size: 2048 })
+            description: `\`👤\` **Użytkownik:** ${user}\n\`🖼️\` **Obraz:** [KLIKNIJ🡭](${user.displayAvatarURL({ size: 256 })})`,
+            image: user.displayAvatarURL({ size: 256 })
         });
 
         await interaction.reply({ embeds: [successEmbed] });

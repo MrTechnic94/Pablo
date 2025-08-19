@@ -32,7 +32,7 @@ if (isPinoPretty) {
 }
 
 if (!isPinoPretty) {
-    logger.warn('[Logger] To achieve better formatting, install the pino-pretty module.');
+    logger.warn('[Logger] To achieve better formatting, install \'pino-pretty\' module.');
 }
 
 module.exports = logger;

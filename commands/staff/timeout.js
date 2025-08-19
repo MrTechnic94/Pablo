@@ -10,17 +10,17 @@ module.exports = {
         .setDescription('Nałóż wyciszenie na użytkownika.')
         .addUserOption(option =>
             option.setName('użytkownik')
-                .setDescription('Użytkownik, który zostanie wyciszony.')
+                .setDescription('Użytkownik do wyciszenia.')
                 .setRequired(true)
         )
         .addStringOption(option =>
             option.setName('czas')
-                .setDescription('Czas trwania wyciszenia (np. 1h, 30m, 1d).')
+                .setDescription('Czas trwania wyciszenia (np. 1d, 1h, 30m).')
                 .setRequired(true)
         )
         .addStringOption(option =>
             option.setName('powód')
-                .setDescription('Powód nałożenia wyciszenia.')
+                .setDescription('Powód wyciszenia.')
                 .setRequired(false)
         )
         .setContexts(InteractionContextType.Guild),
@@ -67,7 +67,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - timeout] ${err}`);
-            await interaction.reply({ content: '❌ Wystąpił błąd podczas nakładania wyciszenia na użytkownika.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił problem podczas nakładania wyciszenia na użytkownika.', flags: MessageFlags.Ephemeral });
         }
     },
 };

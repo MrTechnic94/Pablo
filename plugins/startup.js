@@ -9,7 +9,7 @@ global.isDev = process.env.DEV_MODE === 'true';
 function checkEnvVariables(variables) {
     for (const variable of variables) {
         if (!process.env[variable]) {
-            logger.error(`[Startup] Missing ${variable} in .env file.`);
+            logger.error(`[Startup] Missing '${variable}' in .env file.`);
             process.exit(1);
         }
     }
@@ -28,7 +28,7 @@ function checkNodeVersion() {
     }
 }
 
-// Inicjuje klienta discordjs oraz loguje bota do discord
+// Inicjuje klienta discord.js oraz loguje bota do discord
 function connectClient() {
     const { PabloClient } = require('./pabloClient');
 

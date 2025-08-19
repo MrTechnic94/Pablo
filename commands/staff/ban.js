@@ -76,7 +76,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - ban] ${err}`);
-            await interaction.reply({ content: '❌ Wystąpił błąd podczas banowania użytkownika.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił problem podczas banowania użytkownika.', flags: MessageFlags.Ephemeral });
         }
     },
 };

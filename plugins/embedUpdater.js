@@ -95,7 +95,7 @@ async function embedUpdater(client, logger) {
             await message.edit({ embeds: [embed] });
         } else {
             const sent = await channel.send({ embeds: [embed] });
-            config.embedConfig.statisticsEmbed = sent.id;
+            config.embeds.statisticsEmbed = sent.id;
             syncConfig(config);
             logger.info(`[EmbedUpdater] The new embed has been sent, and its ID is: '${sent.id}'.`);
         }

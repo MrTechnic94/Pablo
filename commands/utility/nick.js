@@ -10,7 +10,7 @@ module.exports = {
         .setDescription('Zamiana pseudonimu na serwerze.')
         .addStringOption(option =>
             option.setName('nowy')
-                .setDescription('Nowy pseudonim. Maksymalnie 32 znaki.')
+                .setDescription('Nowy pseudonim.')
                 .setMaxLength(32)
                 .setRequired(false)
         )
@@ -24,7 +24,7 @@ module.exports = {
 
         const newNick = interaction.options.getString('nowy');
 
-        if (newNick === null && !oldNick) {
+        if (!newNick && !oldNick) {
             return await interaction.reply({ content: '❌ Nie masz ustawionego pseudonimu.', flags: MessageFlags.Ephemeral });
         }
 
@@ -43,7 +43,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - nick] ${err}`);
-            await interaction.reply({ content: '❌ Nie udało się zmienić Twojego nicku.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Nie udało się zmienić Twojego pseudonimu.', flags: MessageFlags.Ephemeral });
         }
     },
 };

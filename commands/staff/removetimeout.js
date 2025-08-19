@@ -9,7 +9,7 @@ module.exports = {
         .setDescription('Odcisz użytkownika.')
         .addUserOption(option =>
             option.setName('użytkownik')
-                .setDescription('Użytkownik, z którego chcesz odciszyć.')
+                .setDescription('Użytkownik do odciszenia.')
                 .setRequired(true)
         )
         .addStringOption(option =>
@@ -54,7 +54,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Cmd - removetimeout] ${err}`);
-            await interaction.reply({ content: '❌ Wystąpił błąd podczas usuwania wyciszenia użytkownikowi.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '❌ Wystąpił problem podczas usuwania wyciszenia użytkownikowi.', flags: MessageFlags.Ephemeral });
         }
     },
 };
