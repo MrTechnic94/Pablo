@@ -12,8 +12,8 @@ importers:
         specifier: ^1.49.0
         version: 1.49.0
       discord.js:
-        specifier: ^14.22.0
-        version: 14.22.0(bufferutil@4.0.9)
+        specifier: ^14.22.1
+        version: 14.22.1(bufferutil@4.0.9)
       node-cron:
         specifier: ^4.2.1
         version: 4.2.1
@@ -21,8 +21,8 @@ importers:
         specifier: ^9.9.0
         version: 9.9.0
       undici:
-        specifier: ^7.14.0
-        version: 7.14.0
+        specifier: ^7.15.0
+        version: 7.15.0
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.2.0
@@ -355,8 +355,8 @@ packages:
   discord-api-types@0.38.21:
     resolution: {integrity: sha512-E6KtXUNjZVIYP1GMjmeRdAC1xRql9xtSahRwJYpP74/hJ6Q2i2oTp6ZbFG/FUN0WqtdW2igHDsJyF2u9hV8pHQ==}
 
-  discord.js@14.22.0:
-    resolution: {integrity: sha512-IDSeDdWSEA4DoOyspekbetcFKkEonJO09cxR+kqQQlTWd5CTm/3Z48I4Te+EL8uxn52s718FZ0rI2dLxRkTpwg==}
+  discord.js@14.22.1:
+    resolution: {integrity: sha512-3k+Kisd/v570Jr68A1kNs7qVhNehDwDJAPe4DZ2Syt+/zobf9zEcuYFvsfIaAOgCa0BiHMfOOKQY4eYINl0z7w==}
     engines: {node: '>=18'}
 
   dotenv@17.2.1:
@@ -916,8 +916,8 @@ packages:
     resolution: {integrity: sha512-gBLkYIlEnSp8pFbT64yFgGE6UIB9tAkhukC23PmMDCe5Nd+cRqKxSjw5y54MK2AZMgZfJWMaNE4nYUHgi1XEOw==}
     engines: {node: '>=18.17'}
 
-  undici@7.14.0:
-    resolution: {integrity: sha512-Vqs8HTzjpQXZeXdpsfChQTlafcMQaaIwnGwLam1wudSSjlJeQ3bw1j+TLPePgrCnCpUXx7Ba5Pdpf5OBih62NQ==}
+  undici@7.15.0:
+    resolution: {integrity: sha512-7oZJCPvvMvTd0OlqWsIxTuItTpJBpU1tcbVl24FMn3xt3+VSunwUasmfPJRE57oNO1KsZ4PgA1xTdAX4hq8NyQ==}
     engines: {node: '>=20.18.1'}
 
   vizion@2.2.1:
@@ -1286,7 +1286,7 @@ snapshots:
 
   discord-api-types@0.38.21: {}
 
-  discord.js@14.22.0(bufferutil@4.0.9):
+  discord.js@14.22.1(bufferutil@4.0.9):
     dependencies:
       '@discordjs/builders': 1.11.3
       '@discordjs/collection': 1.5.3
@@ -1883,7 +1883,7 @@ snapshots:
 
   undici@6.21.3: {}
 
-  undici@7.14.0: {}
+  undici@7.15.0: {}
 
   vizion@2.2.1:
     dependencies:
