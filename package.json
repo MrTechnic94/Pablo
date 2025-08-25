@@ -8,8 +8,8 @@
     "pm2:docker": "npx pm2-runtime start . --name pablo -- --color",
     "env:encrypt": "npx dotenvx encrypt -f ./config/.env",
     "env:decrypt": "npx dotenvx decrypt -f ./config/.env",
-    "pm2": "npx pm2 start . --name pablo -- --color",
     "lint:update": "pnpm exec biome migrate --write",
+    "pm2": "npx pm2 start . --name pablo -- --color",
     "nodemon": "nodemon .",
     "lint": "biome lint .",
     "start": "node ."
@@ -34,7 +34,7 @@
     "zlib-sync": "^0.1.10"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.0",
+    "@biomejs/biome": "^2.2.2",
     "nodemon": "^3.1.10",
     "pm2": "^6.0.8"
   },

@@ -36,7 +36,7 @@ module.exports = {
         }
 
         if (!targetUser.roles.cache.has(role.id)) {
-            return await interaction.reply({ content: `❌ Użytkownik ${targetUser} nie posiada roli ${role}.`, flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: `❌ Użytkownik '${targetUser}' nie posiada roli '${role}'.`, flags: MessageFlags.Ephemeral });
         }
 
         try {
