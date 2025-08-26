@@ -1,8 +1,8 @@
 'use strict';
 
 const logger = require('./logger');
+const PabloClient = require('./pabloClient');
 const { engines } = require('../package.json');
-const { PabloClient } = require('./pabloClient');
 
 // Utworzenie zmiennej globalnej do sprawdzania czy tryb developera jest wlaczony
 global.isDev = process.env.DEV_MODE === 'true';
