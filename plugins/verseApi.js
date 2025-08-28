@@ -1,6 +1,7 @@
 'use strict';
 
-const { verses, Bible } = require('../config/default.json');
+const verses = require('../config/verses.json');
+const { Bible } = require('../config/default.json');
 const { request } = require('undici');
 const logger = require('./logger');
 
