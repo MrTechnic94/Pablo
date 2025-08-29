@@ -49,7 +49,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Cmd - remove] ${err}`);
+            logger.error(`[Slash ▸ Remove] ${err}`);
             await interaction.reply({ content: '❌ Nie udało się zabrać roli.', flags: MessageFlags.Ephemeral });
         }
     },

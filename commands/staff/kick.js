@@ -48,7 +48,7 @@ module.exports = {
                 description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
             });
 
-            await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Cmd - kick] Failed to send DM to '${targetUser.user.tag}'.`));
+            await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Kick] Failed to send DM to '${targetUser.user.tag}'.`));
 
             await targetUser.kick(reason);
 
@@ -59,7 +59,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Cmd - kick] ${err}`);
+            logger.error(`[Slash ▸ Kick] ${err}`);
             await interaction.reply({ content: '❌ Wystąpił problem podczas wyrzucania użytkownika.', flags: MessageFlags.Ephemeral });
         }
     },

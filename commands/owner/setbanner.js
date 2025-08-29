@@ -41,7 +41,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Cmd - setbanner] ${err}`);
+            logger.error(`[Slash ▸ Setbanner] ${err}`);
             await interaction.reply({ content: '❌ Wystąpił problem podczas ustawiania baneru.', flags: MessageFlags.Ephemeral });
         }
     },

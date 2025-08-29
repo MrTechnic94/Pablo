@@ -49,7 +49,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Cmd - give] ${err}`);
+            logger.error(`[Slash ▸ Give] ${err}`);
             await interaction.reply({ content: '❌ Nie udało się nadać roli.', flags: MessageFlags.Ephemeral });
         }
     },

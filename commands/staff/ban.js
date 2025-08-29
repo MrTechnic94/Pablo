@@ -64,7 +64,7 @@ module.exports = {
                 description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
             });
 
-            await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Cmd - ban] Failed to send DM to '${targetUser.user.tag}'.`));
+            await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Ban] Failed to send DM to '${targetUser.user.tag}'.`));
 
             await targetUser.ban({ reason, deleteMessageSeconds: deleteMessageDuration });
 
@@ -75,7 +75,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Cmd - ban] ${err}`);
+            logger.error(`[Slash ▸ Ban] ${err}`);
             await interaction.reply({ content: '❌ Wystąpił problem podczas banowania użytkownika.', flags: MessageFlags.Ephemeral });
         }
     },

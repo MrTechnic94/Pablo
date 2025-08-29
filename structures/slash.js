@@ -20,7 +20,7 @@ module.exports = async (client) => {
 
         for (const file of commandFiles) {
             const filePath = resolve(categoryPath, file);
-            const commandName = file.slice(0, file.lastIndexOf('.'));
+            const commandNameBig = file.charAt(0).toUpperCase() + file.slice(1, file.lastIndexOf('.'));
 
             try {
                 const command = require(filePath);
@@ -29,11 +29,11 @@ module.exports = async (client) => {
                     commands.push(command.data.toJSON());
                     client.commands.set(command.data.name, command);
                 } else {
-                    logger.error(`[Slash] The '${commandName}' command is missing 'data' or 'execute'.`);
+                    logger.error(`[Slash ▸ ${commandNameBig}] Command is missing 'data' or 'execute'.`);
                     process.exit(1);
                 }
             } catch (err) {
-                logger.error(`[Slash] Error while loading command '${commandName}':\n${err}`);
+                logger.error(`[Slash ▸ ${commandNameBig}] ${err}`);
                 process.exit(1);
             }
         }

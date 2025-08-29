@@ -1,6 +1,7 @@
 'use strict';
 
 const { Events, MessageFlags } = require('discord.js');
+const { roles } = require('../../config/default.json');
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -9,13 +10,14 @@ module.exports = {
             const command = interaction.client.commands.get(interaction.commandName);
 
             if (!command) {
-                return logger.error(`[InteractionCreate] Command '${interaction.commandName}' not found.`);
+                return logger.error(`[Slash] Command '${interaction.commandName}' not found.`);
             }
 
             try {
                 await command.execute(interaction, logger);
             } catch (err) {
-                logger.error(`[InteractionCreate] Error while executing '${interaction.commandName}' command:\n${err}`);
+                const commandNameBig = interaction.commandName.charAt(0).toUpperCase() + interaction.commandName.slice(1);
+                logger.error(`[Slash ▸ ${commandNameBig}] ${err}`);
                 if (interaction.replied || interaction.deferred) {
                     await interaction.followUp({ content: '❌ Wystąpił problem podczas wykonywania komendy.', flags: MessageFlags.Ephemeral });
                 } else {
@@ -23,8 +25,6 @@ module.exports = {
                 }
             }
         } else if (interaction.isButton()) {
-            const { roles } = require('../../config/default.json');
-
             try {
                 switch (interaction.customId) {
                     // Weryfikacja
@@ -113,7 +113,7 @@ module.exports = {
                     }
                 }
             } catch (err) {
-                logger.error(`[InteractionCreate] Error while adding role:\n${err}`);
+                logger.error(`[Slash] Error while adding role:\n${err}`);
                 await interaction.reply({
                     content: '❌ Wystąpił nieoczekiwany problem. Spróbuj ponownie później.',
                     flags: MessageFlags.Ephemeral

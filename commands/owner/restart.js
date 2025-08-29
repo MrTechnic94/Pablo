@@ -34,7 +34,7 @@ module.exports = {
 
                     process.exit(0);
                 } catch (err) {
-                    logger.error(`[Cmd - restart] ${err}`);
+                    logger.error(`[Slash ▸ Restart] ${err}`);
                     await interaction.reply({ content: '❌ Wystąpił problem podczas restartowania bota.', flags: MessageFlags.Ephemeral });
                 }
                 break;
@@ -81,7 +81,7 @@ module.exports = {
 
                     await interaction.reply({ embeds: [successEmbed] });
                 } catch (err) {
-                    logger.error(`[Cmd - restart] ${err}`);
+                    logger.error(`[Slash ▸ Restart] ${err}`);
                     await interaction.reply({
                         content: '❌ Wystąpił problem podczas restartu statusu bota.',
                         flags: MessageFlags.Ephemeral
@@ -112,7 +112,7 @@ module.exports = {
 
                     await interaction.reply({ embeds: [successEmbed] })
                 } catch (err) {
-                    logger.error(`[Cmd - restart] ${err}`);
+                    logger.error(`[Slash ▸ Restart] ${err}`);
                     await interaction.reply({
                         content: '❌ Wystąpił problem podczas restart avataru bota.',
                         flags: MessageFlags.Ephemeral

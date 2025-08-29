@@ -87,7 +87,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Cmd - setstatus] ${err}`);
+            logger.error(`[Slash ▸ Setstatus] ${err}`);
             await interaction.reply({
                 content: '❌ Wystąpił problem podczas zmiany statusu bota.',
                 flags: MessageFlags.Ephemeral

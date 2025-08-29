@@ -42,7 +42,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Cmd - nick] ${err}`);
+            logger.error(`[Slash ▸ Nick] ${err}`);
             await interaction.reply({ content: '❌ Nie udało się zmienić Twojego pseudonimu.', flags: MessageFlags.Ephemeral });
         }
     },
