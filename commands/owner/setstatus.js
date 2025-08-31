@@ -18,11 +18,11 @@ module.exports = {
                 .setDescription('Rodzaj aktywności bota.')
                 .setRequired(true)
                 .addChoices(
-                    { name: 'Playing', value: 'Playing' },
-                    { name: 'Watching', value: 'Watching' },
-                    { name: 'Listening', value: 'Listening' },
-                    { name: 'Competing', value: 'Competing' },
-                    { name: 'Custom', value: 'Custom' }
+                    { name: 'W grze', value: 'Playing' },
+                    { name: 'Ogląda', value: 'Watching' },
+                    { name: 'Słucha', value: 'Listening' },
+                    { name: 'Rywalizuje', value: 'Competing' },
+                    { name: 'Niestandardowy', value: 'Custom' }
                 )
         )
         .addStringOption(option =>
@@ -30,11 +30,10 @@ module.exports = {
                 .setDescription('Status dostępności bota.')
                 .setRequired(true)
                 .addChoices(
-                    { name: 'Online', value: 'Online' },
-                    { name: 'Idle', value: 'Idle' },
-                    { name: 'Do Not Disturb', value: 'DoNotDisturb' },
-                    { name: 'Invisible', value: 'Invisible' },
-                    { name: 'Offline', value: 'Offline' }
+                    { name: 'Dostępny', value: 'Online' },
+                    { name: 'Zaraz wracam', value: 'Idle' },
+                    { name: 'Nie przeszkadzać', value: 'DoNotDisturb' },
+                    { name: 'Niewidoczny', value: 'Invisible' }
                 )
         )
         .setContexts(InteractionContextType.Guild),
@@ -78,11 +77,27 @@ module.exports = {
                 Invisible: '🎱'
             };
 
+            const activityTypes = {
+                Playing: 'W grze',
+                Watching: 'Ogląda',
+                Listening: 'Słucha',
+                Competing: 'Rywalizuje',
+                Custom: 'Niestandardowy'
+            };
+
+            const presenceTypes = {
+                Online: 'Dostępny',
+                Idle: 'Zaraz wracam',
+                DoNotDisturb: 'Nie przeszkadzać',
+                Invisible: 'Niewidoczny',
+                Offline: 'Offline'
+            };
+
             const presenceEmoji = presenceEmojis[config.botOptions.changedActivityPresence] || '❓';
 
             const successEmbed = createEmbed({
                 title: 'Status zmieniony',
-                description: `\`💬\` **Nazwa:** ${status}\n\`🔎\` **Rodzaj:** ${type}\n\`${presenceEmoji}\` **Status:** ${botPresence === 'DoNotDisturb' ? 'Do Not Disturb' : botPresence}`
+                description: `\`💬\` **Nazwa:** ${status}\n\`🔎\` **Rodzaj:** ${activityTypes[type]}\n\`${presenceEmoji}\` **Status:** ${presenceTypes[botPresence]}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });

@@ -7,7 +7,7 @@ const { roles } = require('../../config/default.json');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('nick')
-        .setDescription('Zamiana pseudonimu na serwerze.')
+        .setDescription('Zmiana pseudonimu na serwerze.')
         .addStringOption(option =>
             option.setName('nowy')
                 .setDescription('Nowy pseudonim.')

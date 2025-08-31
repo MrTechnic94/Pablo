@@ -36,7 +36,7 @@ module.exports = {
         }
 
         if (!targetUser.roles.cache.has(role.id)) {
-            return await interaction.reply({ content: `❌ Użytkownik '${targetUser}' nie posiada roli '${role}'.`, flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: `❌ Użytkownik ${targetUser} nie posiada roli ${role}.`, flags: MessageFlags.Ephemeral });
         }
 
         try {
@@ -44,7 +44,7 @@ module.exports = {
 
             const successEmbed = createEmbed({
                 title: 'Rola zabrana',
-                description: `\`🎭\` **Zabrałeś rolę:** ${role}\n\`👤\` **Użytkownikowi:** ${targetUser}\n\`📛\` **Polecenia użył:** ${interaction.user}`
+                description: `\`🎭\` **Usunięto rolę:** ${role}\n\`👤\` **Użytkownikowi:** ${targetUser}\n\`📛\` **Polecenia użył:** ${interaction.user}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });

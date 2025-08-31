@@ -20,7 +20,7 @@ module.exports = {
         )
         .addIntegerOption(option =>
             option.setName('usuń_wiadomości')
-                .setDescription('Wybierz, przez jak długi czas usunąć wiadomości użytkownika.')
+                .setDescription('Wybierz czas, przez jaki wiadomości użytkownika mają zostać usunięte.')
                 .setRequired(false)
                 .addChoices(
                     { name: 'Nie usuwaj', value: 0 },

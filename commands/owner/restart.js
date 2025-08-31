@@ -72,11 +72,27 @@ module.exports = {
                         Invisible: '🎱'
                     };
 
+                    const activityTypes = {
+                        Playing: 'W grze',
+                        Watching: 'Ogląda',
+                        Listening: 'Słucha',
+                        Competing: 'Rywalizuje',
+                        Custom: 'Niestandardowy'
+                    };
+
+                    const presenceTypes = {
+                        Online: 'Dostępny',
+                        Idle: 'Zaraz wracam',
+                        DoNotDisturb: 'Nie przeszkadzać',
+                        Invisible: 'Niewidoczny',
+                        Offline: 'Offline'
+                    };
+
                     const presenceEmoji = presenceEmojis[config.botOptions.defaultActivityPresence] || '❓';
 
                     const successEmbed = createEmbed({
                         title: 'Status zmieniony',
-                        description: `\`💬\` **Nazwa:** ${botOptions.defaultActivityName}\n\`🔎\` **Rodzaj:** ${botOptions.defaultActivityType}\n\`${presenceEmoji}\` **Status:** ${botOptions.defaultActivityPresence === 'DoNotDisturb' ? 'Do Not Disturb' : botOptions.defaultActivityPresence}`
+                        description: `\`💬\` **Nazwa:** ${botOptions.defaultActivityName}\n\`🔎\` **Rodzaj:** ${activityTypes[botOptions.defaultActivityType]}\n\`${presenceEmoji}\` **Status:** ${presenceTypes[botOptions.defaultActivityPresence]}`
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });
