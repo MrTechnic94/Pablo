@@ -48,7 +48,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Cmd - setavatar] ${err}`);
+            logger.error(`[Slash ▸ Setavatar] ${err}`);
             await interaction.reply({ content: '❌ Wystąpił problem podczas ustawiania avatara.', flags: MessageFlags.Ephemeral });
         }
     },

@@ -44,12 +44,12 @@ module.exports = {
 
             const successEmbed = createEmbed({
                 title: 'Rola nadana',
-                description: `\`🎭\` **Dodałeś rolę:** ${role}\n\`👤\` **Użytkownikowi:** ${targetUser}\n\`📛\` **Polecenia użył:** ${interaction.user}`
+                description: `\`🎭\` **Nadano rolę:** ${role}\n\`👤\` **Użytkownikowi:** ${targetUser}\n\`📛\` **Polecenia użył:** ${interaction.user}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Cmd - give] ${err}`);
+            logger.error(`[Slash ▸ Give] ${err}`);
             await interaction.reply({ content: '❌ Nie udało się nadać roli.', flags: MessageFlags.Ephemeral });
         }
     },

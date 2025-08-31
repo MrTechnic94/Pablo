@@ -15,7 +15,7 @@ function createEmbed({ title, url, author = {}, description, thumbnail, fields =
     if (thumbnail) builtEmbed.setThumbnail(thumbnail);
     if (fields.length || fields.name) builtEmbed.setFields(fields);
     if (image) builtEmbed.setImage(image);
-    if (timestamp) builtEmbed.setTimestamp();
+    if (timestamp) builtEmbed.setTimestamp(timestamp);
     if (footer?.text) builtEmbed.setFooter(footer);
     if (color) builtEmbed.setColor(color);
 

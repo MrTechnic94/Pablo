@@ -47,7 +47,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Cmd - unban] ${err}`);
+            logger.error(`[Slash ▸ Unban] ${err}`);
             await interaction.reply({ content: '❌ Wystąpił problem podczas odbanowywania użytkownika.', flags: MessageFlags.Ephemeral });
         }
     },

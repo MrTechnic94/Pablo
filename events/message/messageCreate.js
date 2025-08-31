@@ -20,8 +20,10 @@ module.exports = {
             }, 5000);
         } else {
             try {
-                await message.react('👍');
-                await message.react('👎');
+                await Promise.all([
+                    message.react('👍'),
+                    message.react('👎')
+                ]);
             } catch (err) {
                 logger.error(`[MessageCreate] Failed to add reaction:\n${err}`);
             }

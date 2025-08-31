@@ -14,8 +14,8 @@ module.exports = {
                 .setRequired(true)
                 .addChoices(
                     { name: 'Weryfikacja', value: 'weryfikacja' },
-                    { name: 'Auto role dodatkowe', value: 'auto-role-dodatkowe' },
-                    { name: 'Auto role kolory', value: 'auto-role-kolory' },
+                    { name: 'Auto role - Dodatkowe', value: 'auto-role-dodatkowe' },
+                    { name: 'Auto role - Kolory', value: 'auto-role-kolory' },
                     { name: 'Pomoc', value: 'pomoc' }
                 )
         )
@@ -34,7 +34,9 @@ module.exports = {
                         '**• Informacje ogólne**\n\n1. Nie pinguj.\n2. Staraj się nie pisać caps lockiem.\n3. Rasizm/homofobia = ban.\n4. Nie wysyłamy treści niezwiązanych z tematem kanału.\n5. Nadmierny spam = mute (20 min).\n\n' +
                         '**• Ważne informacje**\n\n1. Reklamowanie się = ban.\n2. Nieznajomość regulaminu nie zwalnia cię z jego przestrzegania.\n3. Nie spoileruj, jeśli ktoś nie chce.\n4. Administracja ma zawsze rację.'
                     ),
-                    footer: { text: '❗ Regulamin to jakiś farmazon.' }
+                    footer: {
+                        text: '❗ Regulamin to jakiś farmazon.'
+                    }
                 });
 
                 const buttonVerify = new ButtonBuilder()

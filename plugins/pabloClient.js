@@ -45,4 +45,4 @@ class PabloClient extends Client {
     }
 }
 
-module.exports = { PabloClient };
+module.exports = PabloClient;

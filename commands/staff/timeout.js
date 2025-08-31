@@ -55,7 +55,7 @@ module.exports = {
                 description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🕒\` **Czas wyciszenia:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
             });
 
-            await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Cmd - timeout] Failed to send DM to ${targetUser.tag}.`));
+            await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed to send DM to '${targetUser.tag}'.`));
 
             await member.timeout(timeInfo.seconds * 1000, reason);
 
@@ -66,7 +66,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Cmd - timeout] ${err}`);
+            logger.error(`[Slash ▸ Timeout] ${err}`);
             await interaction.reply({ content: '❌ Wystąpił problem podczas nakładania wyciszenia na użytkownika.', flags: MessageFlags.Ephemeral });
         }
     },

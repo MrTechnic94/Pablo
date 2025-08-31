@@ -42,7 +42,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Cmd - quote] ${err}`);
+            logger.error(`[Slash ▸ Quote] ${err}`);
             await interaction.reply({ content: `❌ Wystąpił problem podczas pobierania ${title.toLowerCase()}.`, flags: MessageFlags.Ephemeral });
         }
     },

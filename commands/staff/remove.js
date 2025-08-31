@@ -44,12 +44,12 @@ module.exports = {
 
             const successEmbed = createEmbed({
                 title: 'Rola zabrana',
-                description: `\`🎭\` **Zabrałeś rolę:** ${role}\n\`👤\` **Użytkownikowi:** ${targetUser}\n\`📛\` **Polecenia użył:** ${interaction.user}`
+                description: `\`🎭\` **Usunięto rolę:** ${role}\n\`👤\` **Użytkownikowi:** ${targetUser}\n\`📛\` **Polecenia użył:** ${interaction.user}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Cmd - remove] ${err}`);
+            logger.error(`[Slash ▸ Remove] ${err}`);
             await interaction.reply({ content: '❌ Nie udało się zabrać roli.', flags: MessageFlags.Ephemeral });
         }
     },

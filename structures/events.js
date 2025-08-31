@@ -15,12 +15,13 @@ module.exports = (client) => {
 
         for (const file of eventFiles) {
             const eventName = file.slice(0, file.lastIndexOf('.'));
+            const eventNameBig = eventName.charAt(0).toUpperCase() + eventName.slice(1);
 
             try {
                 const event = require(resolve(eventsDir, directory.name, file));
 
                 if (typeof event.execute !== 'function') {
-                    logger.error(`[Event] Event '${eventName}' is missing 'execute'.`);
+                    logger.error(`[Event ▸ ${eventNameBig}] Event is missing 'execute'.`);
                     process.exit(1);
                 }
 
@@ -37,7 +38,7 @@ module.exports = (client) => {
                         client[event.once ? 'once' : 'on'](eventName, eventHandler);
                 }
             } catch (err) {
-                logger.error(`[Event] Erorr while loading event '${eventName}':\n${err}`);
+                logger.error(`[Event ▸ ${eventNameBig}] ${err}`);
                 process.exit(1);
             }
         }

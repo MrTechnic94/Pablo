@@ -7,7 +7,7 @@ const { roles } = require('../../config/default.json');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('nick')
-        .setDescription('Zamiana pseudonimu na serwerze.')
+        .setDescription('Zmiana pseudonimu na serwerze.')
         .addStringOption(option =>
             option.setName('nowy')
                 .setDescription('Nowy pseudonim.')
@@ -42,7 +42,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Cmd - nick] ${err}`);
+            logger.error(`[Slash ▸ Nick] ${err}`);
             await interaction.reply({ content: '❌ Nie udało się zmienić Twojego pseudonimu.', flags: MessageFlags.Ephemeral });
         }
     },
