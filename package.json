@@ -25,7 +25,7 @@
     "@dotenvx/dotenvx": "^1.49.0",
     "discord.js": "^14.22.1",
     "node-cron": "^4.2.1",
-    "pino": "^9.9.0",
+    "pino": "^9.9.4",
     "undici": "^7.15.0"
   },
   "optionalDependencies": {
@@ -34,9 +34,9 @@
     "zlib-sync": "^0.1.10"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.2",
+    "@biomejs/biome": "^2.2.3",
     "nodemon": "^3.1.10",
-    "pm2": "^6.0.8"
+    "pm2": "^6.0.10"
   },
   "repository": {
     "type": "git",
