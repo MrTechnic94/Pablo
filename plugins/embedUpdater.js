@@ -2,7 +2,7 @@
 
 const { getConfig, syncConfig } = require('./configManipulator');
 const { createEmbed } = require('./createEmbed');
-const { ChannelType } = require('discord.js');
+const { ChannelType, PresenceUpdateStatus } = require('discord.js');
 
 async function embedUpdater(client, logger) {
     const config = getConfig();
@@ -19,7 +19,7 @@ async function embedUpdater(client, logger) {
     // Uzytkownicy
     const memberCount = channel.guild.memberCount;
     const onlineCount = channel.guild.members.cache.filter(m =>
-        ['online', 'idle', 'dnd'].includes(m.presence?.status)
+        [PresenceUpdateStatus.Online, PresenceUpdateStatus.Idle, PresenceUpdateStatus.DoNotDisturb].includes(m.presence?.status)
     ).size;
 
     // Emotki

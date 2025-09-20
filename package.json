@@ -22,11 +22,11 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.49.0",
+    "@dotenvx/dotenvx": "^1.50.1",
     "discord.js": "^14.22.1",
     "node-cron": "^4.2.1",
-    "pino": "^9.9.4",
-    "undici": "^7.15.0"
+    "pino": "^9.10.0",
+    "undici": "^7.16.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.9",
@@ -34,9 +34,9 @@
     "zlib-sync": "^0.1.10"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.3",
+    "@biomejs/biome": "^2.2.4",
     "nodemon": "^3.1.10",
-    "pm2": "^6.0.10"
+    "pm2": "^6.0.11"
   },
   "repository": {
     "type": "git",
