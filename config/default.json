@@ -83,5 +83,9 @@
     },
     "Bible": {
         "id": "1c9761e0230da6e0-01"
+    },
+    "dev": {
+        "embedUpdaterChannel": "1421798867929796638",
+        "embedUpdaterEmbed": "1421894724893278229"
     }
 }

@@ -7,8 +7,8 @@ const { ChannelType, PresenceUpdateStatus } = require('discord.js');
 async function embedUpdater(client, logger) {
     const config = getConfig();
 
-    const channelId = config.channels.statystykiSerwera;
-    const messageId = config.embeds.statisticsEmbed;
+    const channelId = global.isDev ? config.dev.embedUpdaterChannel : config.channels.statystykiSerwera;
+    const messageId = global.isDev ? config.dev.embedUpdaterEmbed : config.embeds.statisticsEmbed;
 
     const channel = await client.channels.fetch(channelId);
 
@@ -95,7 +95,13 @@ async function embedUpdater(client, logger) {
             await message.edit({ embeds: [embed] });
         } else {
             const sent = await channel.send({ embeds: [embed] });
-            config.embeds.statisticsEmbed = sent.id;
+
+            if (global.isDev) {
+                config.dev.embedUpdaterEmbed = sent.id;
+            } else {
+                config.embeds.statisticsEmbed = sent.id
+            }
+
             syncConfig(config);
             logger.info(`[EmbedUpdater] The new embed has been sent, and its ID is: '${sent.id}'.`);
         }

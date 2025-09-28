@@ -16,6 +16,13 @@ module.exports = {
         // Wyswietlenie informacji, jezeli bot dziala w trybie developera
         if (global.isDev) {
             logger.info('[Client] Running in developer mode.');
+
+            // Sprawdzenie zuzycie pamieci RAM co 15 sekund
+            cron.schedule('*/15 * * * * *', () => {
+                const used = process.memoryUsage().heapUsed / 1024 / 1024;
+
+                logger.debug(`[Client] RAM usage: ${used.toFixed(2)} MB`);
+            });
         }
 
         // Sprawdza avatar od razu po starcie
@@ -28,7 +35,7 @@ module.exports = {
         cron.schedule('*/2 * * * *', async () => {
             const config = getConfig();
 
-            if (global.isDev || !config.embeds.autoEmbedUpdate) return;
+            if (!config.embeds.autoEmbedUpdate) return;
 
             await embedUpdater(client, logger);
         });
