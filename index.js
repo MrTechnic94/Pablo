@@ -4,7 +4,7 @@
  * Dla prywatnego serwera.
  *
  * Znajdziesz mnie i moje projekty tutaj: 'https://github.com/MrTechnic94/'.
- * Jezeli potrzebujesz pomocy, znajdziesz mnie tutaj: 'https://t.me/MrTechnic94/'.
+ * Jezeli potrzebujesz pomocy, napisz tutaj: 'https://t.me/MrTechnic94/'.
  *
  * [i] Aby zaczac uzyj polecenia 'pnpm build'.
  * [i] Edytuj pod swoje potrzeby plik 'default.json'.
