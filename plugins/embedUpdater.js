@@ -99,7 +99,7 @@ async function embedUpdater(client, logger) {
             if (global.isDev) {
                 config.dev.embedUpdaterEmbed = sent.id;
             } else {
-                config.embeds.statisticsEmbed = sent.id
+                config.embeds.statisticsEmbed = sent.id;
             }
 
             syncConfig(config);

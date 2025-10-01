@@ -10,7 +10,8 @@ module.exports = {
             const command = interaction.client.commands.get(interaction.commandName);
 
             if (!command) {
-                return logger.error(`[Slash] Command '${interaction.commandName}' not found.`);
+                logger.error(`[Slash] Command '${interaction.commandName}' not found.`);
+                return await interaction.reply({ content: '❌ Polecenie które próbujesz wykonwać nie istnieje.', flags: MessageFlags.Ephemeral });
             }
 
             try {
