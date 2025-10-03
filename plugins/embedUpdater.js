@@ -36,7 +36,8 @@ async function embedUpdater(client, logger) {
     const guildCreatedAt = Math.floor(channel.guild.createdTimestamp / 1000);
 
     // Kanaly glosowe
-    const voiceActive = channel.guild.voiceStates.cache.filter(vc => vc.channel !== null).size;
+    const voiceActive = channel.guild.voiceStates.cache.filter(vc => vc.channel?.type === ChannelType.GuildVoice).size;
+    const stageActive = channel.guild.voiceStates.cache.filter(vc => vc.channel?.type === ChannelType.GuildStageVoice).size;
     const selfMuted = channel.guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.selfMute).size;
     const selfDeafened = channel.guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.selfDeaf).size;
     const serverMuted = channel.guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.serverMute).size;
@@ -64,7 +65,7 @@ async function embedUpdater(client, logger) {
             },
             {
                 name: '**• Kanały głosowe**',
-                value: `${config.emojis.stage} ${voiceActive}\n${config.emojis.selfMute} ${selfMuted} ${config.emojis.selfDeaf} ${selfDeafened}\n${config.emojis.serverMute} ${serverMuted} ${config.emojis.serverDeaf} ${serverDeafened}`,
+                value: `${config.emojis.voice} ${voiceActive} ${config.emojis.stage} ${stageActive}\n${config.emojis.selfMute} ${selfMuted} ${config.emojis.selfDeaf} ${selfDeafened}\n${config.emojis.serverMute} ${serverMuted} ${config.emojis.serverDeaf} ${serverDeafened}`,
                 inline: true,
             },
             {

@@ -9,7 +9,7 @@ const cron = require('node-cron');
 module.exports = {
     name: Events.ClientReady,
     once: true,
-    execute(logger, client) {
+    async execute(logger, client) {
         // Informacja o zalogowaniu sie bota do Discord
         logger.info(`[Client] ${client.user.tag} is ready.`);
 
@@ -23,13 +23,13 @@ module.exports = {
 
                 logger.debug(`[Client] RAM usage: ${used.toFixed(2)} MB`);
             });
+
+            // Aktualizuje embed ze statystykami od razu po starcie
+            await embedUpdater(client, logger);
         }
 
         // Sprawdza avatar od razu po starcie
         // await updateAvatar(client, logger);
-
-        // Aktualizuje embed ze statystykami od razu po starcie
-        // await embedUpdater(client, logger);
 
         // Aktualizuje embed ze statystykami co 2 minut
         cron.schedule('*/2 * * * *', async () => {
