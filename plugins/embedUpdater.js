@@ -12,7 +12,7 @@ async function embedUpdater(client, logger) {
 
     const channel = await client.channels.fetch(channelId);
 
-    if (!channel || !(channel.type === ChannelType.GuildText)) {
+    if (channel?.type !== ChannelType.GuildText) {
         return logger.error('[EmbedUpdater] Set ID is not a text channel.');
     }
 
