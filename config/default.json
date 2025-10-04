@@ -2,8 +2,8 @@
     "botOptions": {
         "changedAvatar": false,
         "currentAvatar": "Default",
-        "avatarDefaultPath": "./images/pabloDefault.webp",
-        "avatarChrismasPath": "./images/pabloChristmas.webp",
+        "avatarDefaultPath": "./assets/profile/pabloDefault.webp",
+        "avatarChrismasPath": "./assets/profile/pabloChristmas.webp",
         "defaultActivityName": "✞ Jesus Forever",
         "defaultActivityType": "Listening",
         "defaultActivityPresence": "Online",
@@ -67,13 +67,14 @@
         "galaxyBall": "<a:galaxyBall:1337491880274952256>",
         "ball": "<a:ball:1337491873043841156>",
         "stage": "<:stage:1396793266367631370>",
+        "voice": "<:voice:1423726887829639309>",
         "serverMute": "<:serverMute:1396793251591229520>",
         "serverDeaf": "<:serverDeaf:1396793217793527998>",
         "selfDeaf": "<:selfDeaf:1396793208658460762>",
         "selfMute": "<:selfMute:1396793197182717994>"
     },
     "channels": {
-        "memy": "1057569815218376735",
+        "memy": "1418942899936297010",
         "statystykiSerwera": "1397615226614054932"
     },
     "embeds": {
@@ -83,5 +84,9 @@
     },
     "Bible": {
         "id": "1c9761e0230da6e0-01"
+    },
+    "dev": {
+        "embedUpdaterChannel": "1421798867929796638",
+        "embedUpdaterEmbed": "1421894724893278229"
     }
 }

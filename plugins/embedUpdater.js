@@ -2,24 +2,24 @@
 
 const { getConfig, syncConfig } = require('./configManipulator');
 const { createEmbed } = require('./createEmbed');
-const { ChannelType } = require('discord.js');
+const { ChannelType, PresenceUpdateStatus } = require('discord.js');
 
 async function embedUpdater(client, logger) {
     const config = getConfig();
 
-    const channelId = config.channels.statystykiSerwera;
-    const messageId = config.embeds.statisticsEmbed;
+    const channelId = global.isDev ? config.dev.embedUpdaterChannel : config.channels.statystykiSerwera;
+    const messageId = global.isDev ? config.dev.embedUpdaterEmbed : config.embeds.statisticsEmbed;
 
     const channel = await client.channels.fetch(channelId);
 
-    if (!channel || !(channel.type === ChannelType.GuildText)) {
+    if (channel?.type !== ChannelType.GuildText) {
         return logger.error('[EmbedUpdater] Set ID is not a text channel.');
     }
 
     // Uzytkownicy
     const memberCount = channel.guild.memberCount;
     const onlineCount = channel.guild.members.cache.filter(m =>
-        ['online', 'idle', 'dnd'].includes(m.presence?.status)
+        [PresenceUpdateStatus.Online, PresenceUpdateStatus.Idle, PresenceUpdateStatus.DoNotDisturb].includes(m.presence?.status)
     ).size;
 
     // Emotki
@@ -36,7 +36,8 @@ async function embedUpdater(client, logger) {
     const guildCreatedAt = Math.floor(channel.guild.createdTimestamp / 1000);
 
     // Kanaly glosowe
-    const voiceActive = channel.guild.voiceStates.cache.filter(vc => vc.channel !== null).size;
+    const voiceActive = channel.guild.voiceStates.cache.filter(vc => vc.channel?.type === ChannelType.GuildVoice).size;
+    const stageActive = channel.guild.voiceStates.cache.filter(vc => vc.channel?.type === ChannelType.GuildStageVoice).size;
     const selfMuted = channel.guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.selfMute).size;
     const selfDeafened = channel.guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.selfDeaf).size;
     const serverMuted = channel.guild.voiceStates.cache.filter(vc => vc.channel !== null && vc.serverMute).size;
@@ -64,7 +65,7 @@ async function embedUpdater(client, logger) {
             },
             {
                 name: '**• Kanały głosowe**',
-                value: `${config.emojis.stage} ${voiceActive}\n${config.emojis.selfMute} ${selfMuted} ${config.emojis.selfDeaf} ${selfDeafened}\n${config.emojis.serverMute} ${serverMuted} ${config.emojis.serverDeaf} ${serverDeafened}`,
+                value: `${config.emojis.voice} ${voiceActive} ${config.emojis.stage} ${stageActive}\n${config.emojis.selfMute} ${selfMuted} ${config.emojis.selfDeaf} ${selfDeafened}\n${config.emojis.serverMute} ${serverMuted} ${config.emojis.serverDeaf} ${serverDeafened}`,
                 inline: true,
             },
             {
@@ -95,7 +96,13 @@ async function embedUpdater(client, logger) {
             await message.edit({ embeds: [embed] });
         } else {
             const sent = await channel.send({ embeds: [embed] });
-            config.embeds.statisticsEmbed = sent.id;
+
+            if (global.isDev) {
+                config.dev.embedUpdaterEmbed = sent.id;
+            } else {
+                config.embeds.statisticsEmbed = sent.id;
+            }
+
             syncConfig(config);
             logger.info(`[EmbedUpdater] The new embed has been sent, and its ID is: '${sent.id}'.`);
         }
