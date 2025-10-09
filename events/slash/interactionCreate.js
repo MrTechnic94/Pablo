@@ -36,6 +36,7 @@ module.exports = {
                                 flags: MessageFlags.Ephemeral
                             });
                         }
+
                         await interaction.member.roles.add(roles.user);
                         await interaction.reply({
                             content: 'Dziękujemy za akceptację regulaminu!',
