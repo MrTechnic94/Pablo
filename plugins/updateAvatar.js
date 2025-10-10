@@ -11,8 +11,7 @@ async function updateAvatar(client, logger) {
         // Ustawienie daty zmiany avataru na 1 grudnia, a przywrocenie domyslnego na 1 lutego
         const isChristmasTime = month === 11 || (month === 1 && day === 1);
 
-        // Wymuszenie pobrania informacji bez cache
-        const config = getConfig({ force: true });
+        const config = getConfig();
 
         const defaultAvatar = config.botOptions.avatarDefaultPath;
         const christmasAvatar = config.botOptions.avatarChrismasPath;
