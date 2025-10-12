@@ -6,23 +6,28 @@ const { roles } = require('../../config/default.json');
 module.exports = {
     name: Events.InteractionCreate,
     async execute(logger, interaction) {
-        if (interaction.isChatInputCommand()) {
+        if (interaction.isChatInputCommand() || interaction.isUserContextMenuCommand() || interaction.isMessageContextMenuCommand()) {
+            const commandType = interaction.isChatInputCommand() ? 'Slash' : 'Context';
+
             const command = interaction.client.commands.get(interaction.commandName);
 
             if (!command) {
-                logger.error(`[Slash] Command '${interaction.commandName}' not found.`);
+                logger.error(`[${commandType}] Command '${interaction.commandName}' not found.`);
                 return await interaction.reply({ content: '❌ Polecenie które próbujesz wykonwać nie istnieje.', flags: MessageFlags.Ephemeral });
             }
 
             try {
                 await command.execute(interaction, logger);
             } catch (err) {
-                const commandNameBig = interaction.commandName.charAt(0).toUpperCase() + interaction.commandName.slice(1);
-                logger.error(`[Slash ▸ ${commandNameBig}] ${err}`);
+                const commandName = command.__fileName || command.data?.name || interaction.commandName;
+
+                const commandNameBig = commandName.charAt(0).toUpperCase() + commandName.slice(1);
+
+                logger.error(`[${commandType} ▸ ${commandNameBig}] ${err}`);
                 if (interaction.replied || interaction.deferred) {
-                    await interaction.followUp({ content: '❌ Wystąpił problem podczas wykonywania komendy.', flags: MessageFlags.Ephemeral });
+                    await interaction.followUp({ content: '❌ Wystąpił problem podczas wykonywania polecenia.', flags: MessageFlags.Ephemeral });
                 } else {
-                    await interaction.reply({ content: '❌ Wystąpił problem podczas wykonywania komendy.', flags: MessageFlags.Ephemeral });
+                    await interaction.reply({ content: '❌ Wystąpił problem podczas wykonywania polecenia.', flags: MessageFlags.Ephemeral });
                 }
             }
         } else if (interaction.isButton()) {

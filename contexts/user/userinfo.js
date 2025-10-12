@@ -1,20 +1,18 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
+const { ContextMenuCommandBuilder, ApplicationCommandType, MessageFlags } = require('discord.js');
 const { createEmbed } = require('../../plugins/createEmbed');
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('userinfo')
-        .setDescription('Wyświetla informacje o użytkowniku.')
-        .addUserOption(option =>
-            option.setName('użytkownik')
-                .setDescription('Użytkownik, o którym chcesz zobaczyć informacje.')
-                .setRequired(false)
-        )
-        .setContexts(InteractionContextType.Guild),
+    data: new ContextMenuCommandBuilder()
+        .setName('Informacje o użytkowniku')
+        .setType(ApplicationCommandType.User),
     async execute(interaction) {
-        const targetMember = interaction.options.getMember('użytkownik') || interaction.member;
+        const targetMember = interaction.targetMember;
+
+        if (!targetMember) {
+            return await interaction.reply({ content: '❌ Użytkownik nie jest na serwerze.', flags: MessageFlags.Ephemeral });
+        }
 
         const roles = targetMember.roles.cache
             .filter(role => role.id !== interaction.guild.id)
@@ -39,6 +37,6 @@ module.exports = {
             ]
         });
 
-        await interaction.reply({ embeds: [successEmbed] });
+        await interaction.reply({ embeds: [successEmbed], flags: MessageFlags.Ephemeral });
     },
 };
