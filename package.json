@@ -23,7 +23,7 @@
   "private": true,
   "dependencies": {
     "@dotenvx/dotenvx": "^1.51.0",
-    "discord.js": "^14.24.1",
+    "discord.js": "^14.24.2",
     "ioredis": "^5.8.2",
     "node-cron": "^4.2.1",
     "pino": "^10.1.0",
