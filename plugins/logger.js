@@ -11,25 +11,22 @@ try {
     isPinoPretty = false;
 }
 
-let logger;
+const options = {
+    level: 'debug',
+    base: null
+};
 
 if (isPinoPretty) {
-    logger = pino({
-        level: 'debug',
-        base: { pid: undefined },
-        transport: {
-            target: 'pino-pretty',
-            options: {
-                colorize: true,
-                translateTime: 'SYS:HH:MM:ss'
-            }
-        }
-    });
-} else {
-    logger = pino({
-        level: 'debug'
-    });
+    options.transport = {
+        target: 'pino-pretty',
+        options: {
+            colorize: true,
+            translateTime: 'SYS:HH:MM:ss'
+        },
+    };
 }
+
+const logger = pino(options);
 
 if (!isPinoPretty) {
     logger.warn('[Logger] To achieve better formatting, install \'pino-pretty\' module.');

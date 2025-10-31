@@ -19,7 +19,7 @@ async function fetchVerse(verseID) {
 
         const { data } = await body.json();
 
-        if (!data.passages || !data.passages.length) {
+        if (!data.passages?.length) {
             logger.error(`[VerseApi] No passages found for verseID '${verseID}'.`);
             return null;
         }

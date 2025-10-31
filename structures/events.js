@@ -1,5 +1,6 @@
 'use strict';
 
+const db = require('../plugins/database');
 const logger = require('../plugins/logger');
 const { readdirSync } = require('node:fs');
 const { resolve } = require('node:path');
@@ -32,6 +33,11 @@ module.exports = (client) => {
                 switch (directory.name) {
                     case 'process':
                         process[event.once ? 'once' : 'on'](eventName, eventHandler);
+                        break;
+
+                    case 'database':
+                        if (!global.isDev) return;
+                        db[event.once ? 'once' : 'on'](eventName, eventHandler);
                         break;
 
                     default:

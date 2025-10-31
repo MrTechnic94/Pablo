@@ -39,7 +39,7 @@ function startup() {
     checkEnvVariables(['BOT_TOKEN', 'BOT_ID', 'BOT_OWNER_ID', 'BIBLE_API_KEY']);
 
     // Sprawdza czy tryb developera jest odpowiednio skonfigurowany
-    if (global.isDev) checkEnvVariables(['DEV_BOT_TOKEN', 'DEV_BOT_ID']);
+    if (global.isDev) checkEnvVariables(['DB_HOST', 'DB_PORT', 'DB_PASSWORD', 'DB_CONNECT_TIMEOUT', 'DEV_BOT_TOKEN', 'DEV_BOT_ID']);
 
     checkNodeVersion();
 

@@ -1,9 +1,9 @@
 'use strict';
 
-const logger = require('../plugins/logger');
-const { REST, Routes } = require('discord.js');
+const { REST, Routes, ApplicationCommandType } = require('discord.js');
 const { readdirSync } = require('node:fs');
 const { resolve } = require('node:path');
+const logger = require('../plugins/logger');
 
 module.exports = async (client) => {
     const commandsPath = resolve(__dirname, '../commands');
@@ -26,6 +26,7 @@ module.exports = async (client) => {
                 const command = require(filePath);
 
                 if (command?.data && typeof command.execute === 'function') {
+                    command.__fileName = file.slice(0, file.lastIndexOf('.'));
                     commands.push(command.data.toJSON());
                     client.commands.set(command.data.name, command);
                 } else {
@@ -39,17 +40,64 @@ module.exports = async (client) => {
         }
     }
 
+    const contextsPath = resolve(__dirname, '../contexts');
+    const contextCategories = readdirSync(contextsPath, { withFileTypes: true })
+        .filter(dirent => dirent.isDirectory())
+        .map(dirent => dirent.name);
+
+    for (const category of contextCategories) {
+        const categoryPath = resolve(contextsPath, category);
+        const contextFiles = readdirSync(categoryPath)
+            .filter(file => file.endsWith('.js'));
+
+        for (const file of contextFiles) {
+            const filePath = resolve(categoryPath, file);
+            const commandNameBig = file.charAt(0).toUpperCase() + file.slice(1, file.lastIndexOf('.'));
+
+            try {
+                const command = require(filePath);
+
+                if (command?.data && typeof command.execute === 'function') {
+                    command.__fileName = file.slice(0, file.lastIndexOf('.'));
+                    commands.push(command.data.toJSON());
+                    client.commands.set(command.data.name, command);
+                } else {
+                    logger.error(`[Context ▸ ${commandNameBig}] Command is missing 'data' or 'execute'.`);
+                    process.exit(1);
+                }
+            } catch (err) {
+                logger.error(`[Context ▸ ${commandNameBig}] ${err}`);
+                process.exit(1);
+            }
+        }
+    }
+
     const rest = new REST().setToken(global.isDev ? process.env.DEV_BOT_TOKEN : process.env.BOT_TOKEN);
 
     try {
-        logger.info(`[Slash] Registering ${commands.length} slash commands...`);
-        await rest.put(
-            Routes.applicationCommands(global.isDev ? process.env.DEV_BOT_ID : process.env.BOT_ID),
-            { body: commands }
+        const slashCommands = commands.filter(
+            cmd => !cmd.type || cmd.type === ApplicationCommandType.ChatInput
         );
+        const contextCommands = commands.filter(
+            cmd => cmd.type && (cmd.type === ApplicationCommandType.User || cmd.type === ApplicationCommandType.Message)
+        );
+
+        logger.info(`[Slash] Registering ${slashCommands.length} slash commands...`);
+        logger.info(`[Context] Registering ${contextCommands.length} context commands...`);
+
+        const allCommands = [...slashCommands, ...contextCommands];
+
+        if (allCommands.length > 0) {
+            await rest.put(
+                Routes.applicationCommands(global.isDev ? process.env.DEV_BOT_ID : process.env.BOT_ID),
+                { body: allCommands }
+            );
+        }
+
         logger.info('[Slash] Successfully registered slash commands.');
+        logger.info('[Context] Successfully registered context commands.');
     } catch (err) {
-        logger.error(`[Slash] Error during command registration:\n${err}`);
+        logger.error(`[Handler] Error during command registration:\n${err}`);
         process.exit(1);
     }
 };

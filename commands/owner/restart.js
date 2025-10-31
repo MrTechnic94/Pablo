@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, ActivityType, PresenceUpdateStatus, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, PresenceUpdateStatus, MessageFlags } = require('discord.js');
 const { getConfig, syncConfig } = require('../../plugins/configManipulator');
 const { createEmbed } = require('../../plugins/createEmbed');
 const { botOptions } = require('../../config/default.json');
@@ -42,7 +42,6 @@ module.exports = {
 
             case 'Status': {
                 if (interaction.client.user.presence?.activities?.[0]?.name === botOptions.defaultActivityName &&
-                    interaction.client.user.presence?.activities?.[0]?.type === ActivityType[botOptions.defaultActivityType] &&
                     interaction.client.user.presence?.status === PresenceUpdateStatus[botOptions.defaultActivityPresence]) {
                     return await interaction.reply({ content: '❌ Status jest już zrestartowany.', flags: MessageFlags.Ephemeral });
                 }
@@ -51,15 +50,13 @@ module.exports = {
                     await interaction.client.user.setPresence({
                         status: PresenceUpdateStatus[botOptions.defaultActivityPresence],
                         activities: [{
-                            name: botOptions.defaultActivityName,
-                            type: ActivityType[botOptions.defaultActivityType],
+                            name: botOptions.defaultActivityName
                         }],
                     });
 
                     const config = getConfig();
 
                     config.botOptions.changedActivityName = "";
-                    config.botOptions.changedActivityType = "";
                     config.botOptions.changedActivityPresence = "";
 
                     syncConfig(config);
@@ -70,14 +67,6 @@ module.exports = {
                         Idle: '🌙',
                         DoNotDisturb: '⛔',
                         Invisible: '🎱'
-                    };
-
-                    const activityTypes = {
-                        Playing: 'W grze',
-                        Watching: 'Ogląda',
-                        Listening: 'Słucha',
-                        Competing: 'Rywalizuje',
-                        Custom: 'Niestandardowy'
                     };
 
                     const presenceTypes = {
@@ -92,7 +81,7 @@ module.exports = {
 
                     const successEmbed = createEmbed({
                         title: 'Status zmieniony',
-                        description: `\`💬\` **Nazwa:** ${botOptions.defaultActivityName}\n\`🔎\` **Rodzaj:** ${activityTypes[botOptions.defaultActivityType]}\n\`${presenceEmoji}\` **Status:** ${presenceTypes[botOptions.defaultActivityPresence]}`
+                        description: `\`💬\` **Nazwa:** ${botOptions.defaultActivityName}\n\`${presenceEmoji}\` **Status:** ${presenceTypes[botOptions.defaultActivityPresence]}`
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });

@@ -7,8 +7,8 @@ const { ChannelType, PresenceUpdateStatus } = require('discord.js');
 async function embedUpdater(client, logger) {
     const config = getConfig();
 
-    const channelId = global.isDev ? config.dev.embedUpdaterChannel : config.channels.statystykiSerwera;
-    const messageId = global.isDev ? config.dev.embedUpdaterEmbed : config.embeds.statisticsEmbed;
+    const channelId = global.isDev ? config.developer.embedUpdaterChannel : config.channels.statystykiSerwera;
+    const messageId = global.isDev ? config.developer.embedUpdaterEmbed : config.embeds.statisticsEmbed;
 
     const channel = await client.channels.fetch(channelId);
 
@@ -47,7 +47,7 @@ async function embedUpdater(client, logger) {
     // Odjecie 1 ze wzgledu na wykluczenie 'roli' @everyone
     const rolesCount = channel.guild.roles.cache.size - 1;
 
-    const embed = createEmbed({
+    const successEmbed = createEmbed({
         author: {
             name: channel.guild.name,
             iconURL: channel.guild.iconURL()
@@ -93,12 +93,12 @@ async function embedUpdater(client, logger) {
     try {
         if (messageId) {
             const message = await channel.messages.fetch(messageId);
-            await message.edit({ embeds: [embed] });
+            await message.edit({ embeds: [successEmbed] });
         } else {
-            const sent = await channel.send({ embeds: [embed] });
+            const sent = await channel.send({ embeds: [successEmbed] });
 
             if (global.isDev) {
-                config.dev.embedUpdaterEmbed = sent.id;
+                config.developer.embedUpdaterEmbed = sent.id;
             } else {
                 config.embeds.statisticsEmbed = sent.id;
             }
