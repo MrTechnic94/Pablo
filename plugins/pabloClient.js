@@ -1,6 +1,6 @@
 'use strict';
 
-const { Client, GatewayIntentBits, PresenceUpdateStatus, Options } = require('discord.js');
+const { Client, GatewayIntentBits, PresenceUpdateStatus, ActivityType, Options } = require('discord.js');
 const { clientOptions, botOptions, clientCache, clientSweepers } = require('../config/default.json');
 
 class PabloClient extends Client {
@@ -15,7 +15,8 @@ class PabloClient extends Client {
             presence: {
                 status: PresenceUpdateStatus[botOptions.changedActivityPresence || botOptions.defaultActivityPresence],
                 activities: [{
-                    name: botOptions.changedActivityName || botOptions.defaultActivityName
+                    name: botOptions.changedActivityName || botOptions.defaultActivityName,
+                    type: ActivityType.Custom
                 }]
             },
             allowedMentions: {
