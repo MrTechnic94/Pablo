@@ -22,7 +22,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.51.0",
+    "@dotenvx/dotenvx": "^1.51.1",
     "discord.js": "^14.24.2",
     "ioredis": "^5.8.2",
     "node-cron": "^4.2.1",
@@ -35,7 +35,7 @@
     "zlib-sync": "^0.1.10"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.2",
+    "@biomejs/biome": "^2.3.4",
     "nodemon": "^3.1.10",
     "pm2": "^6.0.13"
   },
