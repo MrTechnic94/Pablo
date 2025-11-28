@@ -2,6 +2,7 @@
 
 const logger = require('./logger');
 const PabloClient = require('./pabloClient');
+const packageUpdater = require('./packageUpdater');
 const { engines } = require('../package.json');
 
 // Utworzenie zmiennej globalnej do sprawdzania czy tryb developera jest wlaczony
@@ -35,7 +36,10 @@ function connectClient() {
     client.login(global.isDev ? process.env.DEV_BOT_TOKEN : process.env.BOT_TOKEN);
 }
 
-function startup() {
+async function startup() {
+    // Automatyczna aktualizacja pakietow
+    await packageUpdater();
+
     checkEnvVariables(['BOT_TOKEN', 'BOT_ID', 'BOT_OWNER_ID', 'BIBLE_API_KEY']);
 
     // Sprawdza czy tryb developera jest odpowiednio skonfigurowany
