@@ -23,21 +23,21 @@
   "private": true,
   "dependencies": {
     "@dotenvx/dotenvx": "^1.51.1",
-    "discord.js": "^14.24.2",
-    "ioredis": "^5.8.2",
+    "discord.js": "^14.25.1",
+    "ioredis": "5.8.2",
     "node-cron": "^4.2.1",
     "pino": "^10.1.0",
     "undici": "^7.16.0"
   },
   "optionalDependencies": {
+    "@biomejs/biome": "2.3.8",
     "bufferutil": "^4.0.9",
     "pino-pretty": "^13.1.2",
     "zlib-sync": "^0.1.10"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.4",
-    "nodemon": "^3.1.10",
-    "pm2": "^6.0.13"
+    "nodemon": "^3.1.11",
+    "pm2": "^6.0.14"
   },
   "repository": {
     "type": "git",
