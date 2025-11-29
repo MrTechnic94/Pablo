@@ -1,9 +1,9 @@
 'use strict';
 
+const logger = require('./logger');
 const verses = require('../config/verses.json');
 const { Bible } = require('../config/default.json');
 const { request } = require('undici');
-const logger = require('./logger');
 
 async function fetchVerse(verseID) {
     try {

@@ -25,11 +25,11 @@ module.exports = {
             });
 
             // Aktualizuje embed ze statystykami od razu po starcie
-            await embedUpdater(client, logger);
+            await embedUpdater(client);
         }
 
         // Sprawdza avatar od razu po starcie
-        // await updateAvatar(client, logger);
+        // await updateAvatar(client);
 
         // Aktualizuje embed ze statystykami co 2 minut
         cron.schedule('*/2 * * * *', async () => {
@@ -37,7 +37,7 @@ module.exports = {
 
             if (!config.embeds.autoEmbedUpdate) return;
 
-            await embedUpdater(client, logger);
+            await embedUpdater(client);
         });
 
         // Sprawdza codziennie o polnocy
@@ -46,7 +46,7 @@ module.exports = {
 
             if (config.botOptions.changedAvatar) return;
 
-            await updateAvatar(client, logger);
+            await updateAvatar(client);
         });
     },
 };

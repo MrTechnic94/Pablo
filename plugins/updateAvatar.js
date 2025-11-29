@@ -1,8 +1,9 @@
 'use strict';
 
 const { getConfig, syncConfig } = require('./configManipulator');
+const logger = require('./logger');
 
-async function updateAvatar(client, logger) {
+async function updateAvatar(client) {
     try {
         const today = new Date();
         const day = today.getDate();

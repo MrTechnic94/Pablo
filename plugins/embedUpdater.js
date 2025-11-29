@@ -1,10 +1,11 @@
 'use strict';
 
+const { ChannelType, PresenceUpdateStatus } = require('discord.js');
 const { getConfig, syncConfig } = require('./configManipulator');
 const { createEmbed } = require('./createEmbed');
-const { ChannelType, PresenceUpdateStatus } = require('discord.js');
+const logger = require('./logger');
 
-async function embedUpdater(client, logger) {
+async function embedUpdater(client) {
     const config = getConfig();
 
     const channelId = global.isDev ? config.developer.embedUpdaterChannel : config.channels.statystykiSerwera;
