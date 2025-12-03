@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -9,7 +9,7 @@ module.exports = {
         .setDescription('Ustawia nowy baner bota.')
         .addAttachmentOption(option =>
             option.setName('obraz')
-                .setDescription('Nowy baner.')
+                .setDescription('Nowy baner. Zalecane 680x240.')
                 .setRequired(true)
         )
         .setContexts(InteractionContextType.Guild),
@@ -27,7 +27,9 @@ module.exports = {
         }
 
         try {
-            const oldBanner = interaction.client.user.bannerURL({ size: 256 });
+            const botInfo = await interaction.client.users.fetch(interaction.client.user.id);
+
+            const oldBanner = botInfo.bannerURL({ size: 256 });
 
             await interaction.client.user.setBanner(attachment.url);
 

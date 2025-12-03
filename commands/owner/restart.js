@@ -1,8 +1,8 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PresenceUpdateStatus, MessageFlags } = require('discord.js');
-const { getConfig, syncConfig } = require('../../plugins/configManipulator');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { getConfig, syncConfig } = require('../../lib/core/configManipulator');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 const { botOptions } = require('../../config/default.json');
 
 module.exports = {

@@ -1,8 +1,8 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
-const { verseOfTheDay, randomVerse } = require('../../plugins/verseApi');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { verseOfTheDay, randomVerse } = require('../../lib/services/verseApi');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()

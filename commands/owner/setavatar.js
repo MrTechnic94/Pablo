@@ -1,8 +1,8 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
-const { getConfig, syncConfig } = require('../../plugins/configManipulator');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { getConfig, syncConfig } = require('../../lib/core/configManipulator');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -10,7 +10,7 @@ module.exports = {
         .setDescription('Ustawia nowy avatar bota.')
         .addAttachmentOption(option =>
             option.setName('obraz')
-                .setDescription('Nowy avatar.')
+                .setDescription('Nowy avatar. Zalecane 1024x1024.')
                 .setRequired(true)
         )
         .setContexts(InteractionContextType.Guild),

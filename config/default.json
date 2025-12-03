@@ -2,8 +2,8 @@
     "botOptions": {
         "changedAvatar": false,
         "currentAvatar": "Default",
-        "avatarDefaultPath": "./assets/profile/pabloDefault.webp",
-        "avatarChrismasPath": "./assets/profile/pabloChristmas.webp",
+        "avatarDefaultPath": "./assets/profiles/default.webp",
+        "avatarChrismasPath": "./assets/profiles/christmas.webp",
         "defaultActivityName": "✞ Jesus Forever",
         "defaultActivityPresence": "Online",
         "changedActivityName": "",

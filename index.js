@@ -24,4 +24,4 @@
 'use strict';
 
 require('@dotenvx/dotenvx').config({ path: './config/.env' });
-require('./plugins/startup').startup();
+require('./lib/core/startup').startup();

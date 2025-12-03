@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()

@@ -2,7 +2,7 @@
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { emojis, roles } = require('../../config/default.json');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -161,7 +161,6 @@ module.exports = {
 
                 const embedsToSend = [funEmbed, musicEmbed, levelsEmbed, infoEmbed, vipEmbed];
                 const messages = await Promise.all(embedsToSend.map(embed => interaction.channel.send({ embeds: [embed] })));
-
 
                 const helpEmbed = createEmbed({
                     title: 'Spis treści',

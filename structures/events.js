@@ -1,7 +1,7 @@
 'use strict';
 
-const db = require('../plugins/database');
-const logger = require('../plugins/logger');
+const db = require('../lib/core/database');
+const logger = require('../lib/core/logger');
 const { readdirSync } = require('node:fs');
 const { resolve } = require('node:path');
 

@@ -3,7 +3,7 @@
 const { REST, Routes, ApplicationCommandType } = require('discord.js');
 const { readdirSync } = require('node:fs');
 const { resolve } = require('node:path');
-const logger = require('../plugins/logger');
+const logger = require('../lib/core/logger');
 
 module.exports = async (client) => {
     const commandsPath = resolve(__dirname, '../commands');

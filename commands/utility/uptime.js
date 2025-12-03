@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
-const { formatDuration } = require('../../plugins/parseTime');
+const { formatDuration } = require('../../lib/utils/parseTime');
 
 module.exports = {
     data: new SlashCommandBuilder()
