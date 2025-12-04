@@ -29,7 +29,7 @@ module.exports = {
         const { fn, title } = verseFuncs[versetType] || verseFuncs.daily;
 
         try {
-            const { reference, content } = await fn();
+            const { reference, content } = await fn(logger);
 
             if (!reference || !content) {
                 return interaction.reply({ content: `❌ Nie udało się pobrać ${title.toLowerCase()}.`, flags: MessageFlags.Ephemeral });

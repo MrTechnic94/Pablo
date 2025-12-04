@@ -13,6 +13,6 @@ module.exports = {
         if (global.isDev) logger.info('[Client] Running in developer mode.');
 
         // Zaladowanie harmonogramu zadan bota w tle
-        await scheduler(client);
+        await scheduler(client, logger);
     },
 };

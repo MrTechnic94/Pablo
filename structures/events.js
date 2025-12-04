@@ -1,11 +1,10 @@
 'use strict';
 
 const db = require('../lib/core/database');
-const logger = require('../lib/core/logger');
 const { readdirSync } = require('node:fs');
 const { resolve } = require('node:path');
 
-module.exports = (client) => {
+module.exports = (client, logger) => {
     const eventsDir = resolve(__dirname, '../events');
 
     readdirSync(eventsDir, { withFileTypes: true }).forEach((directory) => {
