@@ -32,18 +32,18 @@ module.exports = {
             const { reference, content } = await fn(logger);
 
             if (!reference || !content) {
-                return interaction.reply({ content: `❌ Nie udało się pobrać ${title.toLowerCase()}.`, flags: MessageFlags.Ephemeral });
+                return interaction.reply({ content: `\`❌\` Nie udało się pobrać ${title.toLowerCase()}.`, flags: MessageFlags.Ephemeral });
             }
 
             const successEmbed = createEmbed({
-                title: `📜 ${title} (${reference})`,
+                title: `\`📜\` ${title} (${reference})`,
                 description: content
             });
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Quote] ${err}`);
-            await interaction.reply({ content: `❌ Wystąpił problem podczas pobierania ${title.toLowerCase()}.`, flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: `\`❌\` Wystąpił problem podczas pobierania ${title.toLowerCase()}.`, flags: MessageFlags.Ephemeral });
         }
     },
 };

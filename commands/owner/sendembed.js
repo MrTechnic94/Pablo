@@ -22,7 +22,7 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '❌ Nie masz permisji.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }
 
         const type = interaction.options.getString('rodzaj');
@@ -178,7 +178,7 @@ module.exports = {
             }
 
             default:
-                await interaction.reply({ content: '❌ Nieznany parametr.', flags: MessageFlags.Ephemeral });
+                await interaction.reply({ content: '`❌` Nieznany parametr.', flags: MessageFlags.Ephemeral });
         }
     },
 };

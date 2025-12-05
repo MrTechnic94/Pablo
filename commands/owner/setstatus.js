@@ -27,7 +27,7 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '❌ Nie masz permisji.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }
 
         const status = interaction.options.getString('nazwa');
@@ -35,7 +35,7 @@ module.exports = {
 
         if (interaction.client.user.presence?.activities?.[0]?.name === status &&
             interaction.client.user.presence?.status === PresenceUpdateStatus[botPresence]) {
-            return await interaction.reply({ content: '❌ Nie możesz ustawić takiego samego statusu.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie możesz ustawić takiego samego statusu.', flags: MessageFlags.Ephemeral });
         }
 
         try {
@@ -80,7 +80,7 @@ module.exports = {
         } catch (err) {
             logger.error(`[Slash ▸ Setstatus] ${err}`);
             await interaction.reply({
-                content: '❌ Wystąpił problem podczas zmiany statusu bota.',
+                content: '`❌` Wystąpił problem podczas zmiany statusu bota.',
                 flags: MessageFlags.Ephemeral
             });
         }

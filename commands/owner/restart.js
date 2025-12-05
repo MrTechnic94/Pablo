@@ -22,7 +22,7 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '❌ Nie masz permisji.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }
 
         const type = interaction.options.getString('rodzaj');
@@ -35,7 +35,7 @@ module.exports = {
                     process.exit(0);
                 } catch (err) {
                     logger.error(`[Slash ▸ Restart] ${err}`);
-                    await interaction.reply({ content: '❌ Wystąpił problem podczas restartowania bota.', flags: MessageFlags.Ephemeral });
+                    await interaction.reply({ content: '`❌` Wystąpił problem podczas restartowania bota.', flags: MessageFlags.Ephemeral });
                 }
                 break;
             }
@@ -43,7 +43,7 @@ module.exports = {
             case 'Status': {
                 if (interaction.client.user.presence?.activities?.[0]?.name === botOptions.defaultActivityName &&
                     interaction.client.user.presence?.status === PresenceUpdateStatus[botOptions.defaultActivityPresence]) {
-                    return await interaction.reply({ content: '❌ Status jest już zrestartowany.', flags: MessageFlags.Ephemeral });
+                    return await interaction.reply({ content: '`❌` Status jest już zrestartowany.', flags: MessageFlags.Ephemeral });
                 }
 
                 try {
@@ -88,7 +88,7 @@ module.exports = {
                 } catch (err) {
                     logger.error(`[Slash ▸ Restart] ${err}`);
                     await interaction.reply({
-                        content: '❌ Wystąpił problem podczas restartu statusu bota.',
+                        content: '`❌` Wystąpił problem podczas restartu statusu bota.',
                         flags: MessageFlags.Ephemeral
                     });
                 }
@@ -99,7 +99,7 @@ module.exports = {
                 const config = getConfig();
 
                 if (!config.botOptions.changedAvatar) {
-                    return await interaction.reply({ content: '❌ Avatar nie został zmieniony.', flags: MessageFlags.Ephemeral });
+                    return await interaction.reply({ content: '`❌` Avatar nie został zmieniony.', flags: MessageFlags.Ephemeral });
                 }
 
                 try {
@@ -119,7 +119,7 @@ module.exports = {
                 } catch (err) {
                     logger.error(`[Slash ▸ Restart] ${err}`);
                     await interaction.reply({
-                        content: '❌ Wystąpił problem podczas restart avataru bota.',
+                        content: '`❌` Wystąpił problem podczas restart avataru bota.',
                         flags: MessageFlags.Ephemeral
                     });
                 }

@@ -19,7 +19,7 @@ module.exports = {
         const userData = await user.fetch();
 
         if (!userData.bannerURL()) {
-            return await interaction.reply({ content: '❌ Użytkownik nie ma ustawionego baneru.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Użytkownik nie ma ustawionego baneru.', flags: MessageFlags.Ephemeral });
         }
 
         const successEmbed = createEmbed({

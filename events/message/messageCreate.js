@@ -14,7 +14,7 @@ module.exports = {
         // Auto reakcje dla kanalu
         if (!message.attachments.size && !allowedExtensions.test(message.content) && !urlRegex.test(message.content)) {
             await message.delete().catch(() => null);
-            const warningMessage = await message.channel.send('❌ Możesz wysyłać tutaj tylko memy.');
+            const warningMessage = await message.channel.send('`❌` Możesz wysyłać tutaj tylko memy.');
             setTimeout(() => {
                 warningMessage.delete().catch(() => null);
             }, 5000);

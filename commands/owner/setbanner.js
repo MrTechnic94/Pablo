@@ -15,7 +15,7 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '❌ Nie masz permisji.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }
 
         const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
@@ -23,7 +23,7 @@ module.exports = {
         const extension = attachment.url.split('.').pop().toLowerCase().split('?')[0];
 
         if (!allowedExtensions.includes(extension)) {
-            return await interaction.reply({ content: '❌ Możesz wgrać tylko pliki: png, jpg, jpeg, gif lub webp.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Możesz wgrać tylko pliki: png, jpg, jpeg, gif lub webp.', flags: MessageFlags.Ephemeral });
         }
 
         try {
@@ -44,7 +44,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Setbanner] ${err}`);
-            await interaction.reply({ content: '❌ Wystąpił problem podczas ustawiania baneru.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '`❌` Wystąpił problem podczas ustawiania baneru.', flags: MessageFlags.Ephemeral });
         }
     },
 };

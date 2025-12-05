@@ -19,7 +19,7 @@ module.exports = {
         const player2 = interaction.options.getUser('przeciwnik');
 
         if (player1.id === player2.id) {
-            return await interaction.reply({ content: '❌ Nie możesz walczyć sam ze sobą.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie możesz walczyć sam ze sobą.', flags: MessageFlags.Ephemeral });
         }
 
         const players = [
@@ -31,7 +31,7 @@ module.exports = {
         const battleLog = [];
 
         const countdownEmbed = createEmbed({
-            title: '💢 SOLÓWA ! 💢',
+            title: '`💢` SOLÓWA ! `💢`',
             description: '*Solo zacznie się za 3...*'
         });
 
@@ -58,7 +58,7 @@ module.exports = {
             battleLog.push(attackMessage);
 
             const battleEmbed = createEmbed({
-                title: '💢 SOLÓWA ! 💢',
+                title: '`💢` SOLÓWA ! `💢`',
                 description: battleLog.join('\n'),
                 fields: [
                     { name: `\`👤\` ${players[0].user.username}`, value: `${players[0].hp}/100 HP`, inline: true },
@@ -79,7 +79,7 @@ module.exports = {
         battleLog.push(`\`\`\`🏆 ${winner.user.username} wygrał pojedynek! 🏆\`\`\``);
 
         const finalEmbed = createEmbed({
-            title: '💢 SOLÓWA ! 💢',
+            title: '`💢` SOLÓWA ! `💢`',
             description: battleLog.join('\n'),
             fields: [
                 { name: `\`👤\` ${players[0].user.username}`, value: `${players[0].hp}/100 HP`, inline: true },

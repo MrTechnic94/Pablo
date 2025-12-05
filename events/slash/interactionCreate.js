@@ -13,7 +13,7 @@ module.exports = {
 
             if (!command) {
                 logger.error(`[${commandType}] Command '${interaction.commandName}' not found.`);
-                return await interaction.reply({ content: '❌ Polecenie które próbujesz wykonwać nie istnieje.', flags: MessageFlags.Ephemeral });
+                return await interaction.reply({ content: '`❌` Polecenie które próbujesz wykonwać nie istnieje.', flags: MessageFlags.Ephemeral });
             }
 
             try {
@@ -25,9 +25,9 @@ module.exports = {
 
                 logger.error(`[${commandType} ▸ ${commandNameBig}] ${err}`);
                 if (interaction.replied || interaction.deferred) {
-                    await interaction.followUp({ content: '❌ Wystąpił problem podczas wykonywania polecenia.', flags: MessageFlags.Ephemeral });
+                    await interaction.followUp({ content: '`❌` Wystąpił problem podczas wykonywania polecenia.', flags: MessageFlags.Ephemeral });
                 } else {
-                    await interaction.reply({ content: '❌ Wystąpił problem podczas wykonywania polecenia.', flags: MessageFlags.Ephemeral });
+                    await interaction.reply({ content: '`❌` Wystąpił problem podczas wykonywania polecenia.', flags: MessageFlags.Ephemeral });
                 }
             }
         } else if (interaction.isButton()) {
@@ -37,7 +37,7 @@ module.exports = {
                     case 'accept_rules': {
                         if (interaction.member.roles.cache.has(roles.user)) {
                             return await interaction.reply({
-                                content: '❌ Już zaakceptowałeś regulamin.',
+                                content: '`❌` Już zaakceptowałeś regulamin.',
                                 flags: MessageFlags.Ephemeral
                             });
                         }
@@ -122,7 +122,7 @@ module.exports = {
             } catch (err) {
                 logger.error(`[Slash] Error while adding role:\n${err}`);
                 await interaction.reply({
-                    content: '❌ Wystąpił nieoczekiwany problem. Spróbuj ponownie później.',
+                    content: '`❌` Wystąpił nieoczekiwany problem. Spróbuj ponownie później.',
                     flags: MessageFlags.Ephemeral
                 });
             }

@@ -11,7 +11,7 @@ module.exports = {
         const targetMember = interaction.targetMember;
 
         if (!targetMember) {
-            return await interaction.reply({ content: '❌ Użytkownik nie jest na serwerze.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Użytkownik nie jest na serwerze.', flags: MessageFlags.Ephemeral });
         }
 
         const roles = targetMember.roles.cache
