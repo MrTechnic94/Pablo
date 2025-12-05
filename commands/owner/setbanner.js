@@ -27,9 +27,9 @@ module.exports = {
         }
 
         try {
-            const botInfo = await interaction.client.users.fetch(interaction.client.user.id);
+            await interaction.client.user.fetch();
 
-            const oldBanner = botInfo.bannerURL({ size: 256 });
+            const oldBanner = interaction.client.user.bannerURL({ size: 256 })
 
             await interaction.client.user.setBanner(attachment.url);
 

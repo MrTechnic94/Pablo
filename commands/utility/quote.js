@@ -7,7 +7,7 @@ const { createEmbed } = require('../../lib/utils/createEmbed');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('quote')
-        .setDescription('Werset z Biblii.')
+        .setDescription('Wyświetla werset z Biblii.')
         .addStringOption(option =>
             option.setName('rodzaj')
                 .setDescription('Wybierz werset z Biblii który chcesz zobaczyć.')

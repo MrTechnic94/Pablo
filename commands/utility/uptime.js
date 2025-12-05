@@ -6,11 +6,11 @@ const { formatDuration } = require('../../lib/utils/parseTime');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('uptime')
-        .setDescription('Czas pracy bota.')
+        .setDescription('Sprawdza czas pracy bota.')
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         const botUptime = formatDuration(interaction.client.uptime);
 
-        await interaction.reply({ content: `Czas pracy: ${botUptime}` });
+        await interaction.reply({ content: `\`🕒\` Czas pracy: ${botUptime}` });
     },
 };
