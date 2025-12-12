@@ -1,0 +1,60 @@
+{
+    "presence": {
+        "online": {
+            "name": "Dostępny",
+            "emoji": "🟢"
+        },
+        "idle": {
+            "name": "Zaraz wracam",
+            "emoji": "🌙"
+        },
+        "offline": {
+            "name": "Offline",
+            "emoji": "🎱"
+        },
+        "invisible": {
+            "name": "Niewidoczny",
+            "emoji": "🎱"
+        },
+        "dnd": {
+            "name": "Nie przeszkadzać",
+            "emoji": "⛔"
+        }
+    },
+    "device": {
+        "desktop": {
+            "name": "Komputer",
+            "emoji": "🖥️"
+        },
+        "mobile": {
+            "name": "Telefon",
+            "emoji": "📱"
+        },
+        "web": {
+            "name": "Przeglądarka",
+            "emoji": "🌐"
+        }
+    },
+    "channels": {
+        "0": "Tekstowy",
+        "1": "Wiadomość prywatna",
+        "2": "Głosowy",
+        "3": "Grupowa wiadomość prywatna",
+        "4": "Kategoria",
+        "5": "Ogłoszenie",
+        "10": "Wątek ogłoszeniowy",
+        "11": "Wątek publiczny",
+        "12": "Wątek prywatny",
+        "13": "Scena",
+        "14": "Katalog",
+        "15": "Forum",
+        "16": "Media"
+    },
+    "verification": {
+        "0": "**Brak:** Bez ograniczeń.",
+        "1": "**Niski:** Wymaga potwierdzenia adresu e-mail konta Discord.",
+        "2": "**Średni:** Wymaga rejestracji na Discordzie przez co najmniej 5 minut.",
+        "3": "**Wysoki:** Wymaga członkostwa na serwerze przez co najmniej 10 minut.",
+        "4": "**Bardzo wysoki:** Wymaga potwierdzenia numeru telefonu."
+    }
+}

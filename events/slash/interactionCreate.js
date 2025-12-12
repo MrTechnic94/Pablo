@@ -44,7 +44,7 @@ module.exports = {
 
                         await interaction.member.roles.add(roles.user);
                         await interaction.reply({
-                            content: 'Dziękujemy za akceptację regulaminu!',
+                            content: '`🔹` Dziękujemy za akceptację regulaminu.',
                             flags: MessageFlags.Ephemeral
                         });
                         break;
@@ -69,13 +69,13 @@ module.exports = {
                         if (interaction.member.roles.cache.has(roleId)) {
                             await interaction.member.roles.remove(roleId);
                             await interaction.reply({
-                                content: `Rola <@&${roleId}> została usunięta.`,
+                                content: `\`➖\` Rola <@&${roleId}> została usunięta.`,
                                 flags: MessageFlags.Ephemeral
                             });
                         } else {
                             await interaction.member.roles.add(roleId);
                             await interaction.reply({
-                                content: `Rola <@&${roleId}> została dodana.`,
+                                content: `\`➕\` Rola <@&${roleId}> została przypisana.`,
                                 flags: MessageFlags.Ephemeral
                             });
                         }
@@ -107,13 +107,13 @@ module.exports = {
 
                         if (interaction.member.roles.cache.has(roleId)) {
                             await interaction.reply({
-                                content: `Rola <@&${roleId}> została usunięta.`,
+                                content: `\`➖\` Rola <@&${roleId}> została usunięta.`,
                                 flags: MessageFlags.Ephemeral
                             });
                         } else {
                             await interaction.member.roles.add(roleId);
                             await interaction.reply({
-                                content: `Rola <@&${roleId}> została dodana.`,
+                                content: `\`➕\` Rola <@&${roleId}> została przypisana.`,
                                 flags: MessageFlags.Ephemeral
                             });
                         }

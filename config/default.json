@@ -5,9 +5,9 @@
         "avatarDefaultPath": "./assets/profiles/default.webp",
         "avatarChrismasPath": "./assets/profiles/christmas.webp",
         "defaultActivityName": "✞ Jesus Forever",
-        "defaultActivityPresence": "Online",
-        "changedActivityName": "",
-        "changedActivityPresence": ""
+        "defaultActivityPresence": "online",
+        "changedActivityName": "✞ Jesus Forever",
+        "changedActivityPresence": "dnd"
     },
     "clientOptions": {
         "restRequestTimeout": 60000,

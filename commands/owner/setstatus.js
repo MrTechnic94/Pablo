@@ -1,8 +1,9 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags, PresenceUpdateStatus } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
 const { getConfig, syncConfig } = require('../../lib/core/configManipulator');
 const { createEmbed } = require('../../lib/utils/createEmbed');
+const { presence } = require('../../config/lang/messages.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -18,10 +19,11 @@ module.exports = {
                 .setDescription('Status dostępności bota.')
                 .setRequired(true)
                 .addChoices(
-                    { name: 'Dostępny', value: 'Online' },
-                    { name: 'Zaraz wracam', value: 'Idle' },
-                    { name: 'Nie przeszkadzać', value: 'DoNotDisturb' },
-                    { name: 'Niewidoczny', value: 'Invisible' }
+                    { name: 'Dostępny', value: 'online' },
+                    { name: 'Zaraz wracam', value: 'idle' },
+                    { name: 'Offline', value: 'offline' },
+                    { name: 'Niewidoczny', value: 'invisible' },
+                    { name: 'Nie przeszkadzać', value: 'dnd' }
                 )
         )
         .setContexts(InteractionContextType.Guild),
@@ -34,13 +36,13 @@ module.exports = {
         const botPresence = interaction.options.getString('status');
 
         if (interaction.client.user.presence?.activities?.[0]?.name === status &&
-            interaction.client.user.presence?.status === PresenceUpdateStatus[botPresence]) {
+            interaction.client.user.presence?.status === botPresence) {
             return await interaction.reply({ content: '`❌` Nie możesz ustawić takiego samego statusu.', flags: MessageFlags.Ephemeral });
         }
 
         try {
             await interaction.client.user.setPresence({
-                status: PresenceUpdateStatus[botPresence],
+                status: botPresence,
                 activities: [{
                     name: status
                 }],
@@ -53,27 +55,14 @@ module.exports = {
 
             syncConfig(config);
 
-            const presenceEmojis = {
-                Online: '🟢',
-                Offline: '🎱',
-                Idle: '🌙',
-                DoNotDisturb: '⛔',
-                Invisible: '🎱'
-            };
+            const presenceData = presence[botPresence];
 
-            const presenceTypes = {
-                Online: 'Dostępny',
-                Idle: 'Zaraz wracam',
-                DoNotDisturb: 'Nie przeszkadzać',
-                Invisible: 'Niewidoczny',
-                Offline: 'Offline'
-            };
-
-            const presenceEmoji = presenceEmojis[config.botOptions.changedActivityPresence] || '❓';
+            const presenceEmoji = presenceData?.emoji || '❓';
+            const presenceType = presenceData?.name || 'Nieznany';
 
             const successEmbed = createEmbed({
                 title: 'Status zmieniony',
-                description: `\`💬\` **Nazwa:** ${status}\n\`${presenceEmoji}\` **Status:** ${presenceTypes[botPresence]}`
+                description: `\`💬\` **Nazwa:** ${status}\n\`${presenceEmoji}\` **Status:** ${presenceType}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });
