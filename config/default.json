@@ -1,13 +1,13 @@
 {
     "botOptions": {
         "changedAvatar": false,
-        "currentAvatar": "Default",
+        "currentAvatar": "default",
         "avatarDefaultPath": "./assets/profiles/default.webp",
         "avatarChrismasPath": "./assets/profiles/christmas.webp",
         "defaultActivityName": "✞ Jesus Forever",
         "defaultActivityPresence": "online",
-        "changedActivityName": "✞ Jesus Forever",
-        "changedActivityPresence": "dnd"
+        "changedActivityName": "",
+        "changedActivityPresence": ""
     },
     "clientOptions": {
         "restRequestTimeout": 60000,
