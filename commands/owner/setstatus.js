@@ -1,10 +1,12 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PresenceUpdateStatus, MessageFlags } = require('discord.js');
-const { getConfig, syncConfig } = require('../../plugins/configManipulator');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { SlashCommandBuilder, InteractionContextType, MessageFlags, ActivityType } = require('discord.js');
+const { getConfig, syncConfig } = require('../../lib/core/configManipulator');
+const { createEmbed } = require('../../lib/utils/createEmbed');
+const { presence } = require('../../config/lang/messages.json');
 
 module.exports = {
+    index: false,
     data: new SlashCommandBuilder()
         .setName('setstatus')
         .setDescription('Ustawia status bota.')
@@ -18,31 +20,33 @@ module.exports = {
                 .setDescription('Status dostępności bota.')
                 .setRequired(true)
                 .addChoices(
-                    { name: 'Dostępny', value: 'Online' },
-                    { name: 'Zaraz wracam', value: 'Idle' },
-                    { name: 'Nie przeszkadzać', value: 'DoNotDisturb' },
-                    { name: 'Niewidoczny', value: 'Invisible' }
+                    { name: 'Dostępny', value: 'online' },
+                    { name: 'Zaraz wracam', value: 'idle' },
+                    { name: 'Offline', value: 'offline' },
+                    { name: 'Niewidoczny', value: 'invisible' },
+                    { name: 'Nie przeszkadzać', value: 'dnd' }
                 )
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '❌ Nie masz permisji.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }
 
         const status = interaction.options.getString('nazwa');
         const botPresence = interaction.options.getString('status');
 
         if (interaction.client.user.presence?.activities?.[0]?.name === status &&
-            interaction.client.user.presence?.status === PresenceUpdateStatus[botPresence]) {
-            return await interaction.reply({ content: '❌ Nie możesz ustawić takiego samego statusu.', flags: MessageFlags.Ephemeral });
+            interaction.client.user.presence?.status === botPresence) {
+            return await interaction.reply({ content: '`❌` Nie możesz ustawić takiego samego statusu.', flags: MessageFlags.Ephemeral });
         }
 
         try {
             await interaction.client.user.setPresence({
-                status: PresenceUpdateStatus[botPresence],
+                status: botPresence,
                 activities: [{
-                    name: status
+                    name: status,
+                    type: ActivityType.Custom
                 }],
             });
 
@@ -53,34 +57,21 @@ module.exports = {
 
             syncConfig(config);
 
-            const presenceEmojis = {
-                Online: '🟢',
-                Offline: '🎱',
-                Idle: '🌙',
-                DoNotDisturb: '⛔',
-                Invisible: '🎱'
-            };
+            const presenceData = presence[botPresence];
 
-            const presenceTypes = {
-                Online: 'Dostępny',
-                Idle: 'Zaraz wracam',
-                DoNotDisturb: 'Nie przeszkadzać',
-                Invisible: 'Niewidoczny',
-                Offline: 'Offline'
-            };
-
-            const presenceEmoji = presenceEmojis[config.botOptions.changedActivityPresence] || '❓';
+            const presenceEmoji = presenceData?.emoji || '❓';
+            const presenceType = presenceData?.name || 'Nieznany';
 
             const successEmbed = createEmbed({
                 title: 'Status zmieniony',
-                description: `\`💬\` **Nazwa:** ${status}\n\`${presenceEmoji}\` **Status:** ${presenceTypes[botPresence]}`
+                description: `\`💬\` **Nazwa:** ${status}\n\`${presenceEmoji}\` **Status:** ${presenceType}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Setstatus] ${err}`);
             await interaction.reply({
-                content: '❌ Wystąpił problem podczas zmiany statusu bota.',
+                content: '`❌` Wystąpił problem podczas zmiany statusu bota.',
                 flags: MessageFlags.Ephemeral
             });
         }

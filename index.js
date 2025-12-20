@@ -13,7 +13,7 @@
  * z configu co 2h jezeli ustawisz je recznie w 'default.json'.
  * Wiec mozna je zmieniac bez koniecznosci restartu bota.
  * [i] Profilowe bota oraz emotki ktore sa wykorzystane do poprawnego
- * dzialania bota sa dostepne w 'assets/profile' oraz 'assets/emoji'.
+ * dzialania bota sa dostepne w 'assets/profiles' oraz 'assets/emojis'.
  * Zalecane jest dodanie tych emotek dla bota w jego panelu
  * (https://discord.com/developers/applications) oraz zmiane ID
  * w pliku konfiguracyjnym 'default.json' w sekcji 'emojis'.
@@ -23,5 +23,6 @@
 
 'use strict';
 
+const logger = require('./lib/core/logger');
 require('@dotenvx/dotenvx').config({ path: './config/.env' });
-require('./plugins/startup').startup();
+require('./lib/core/startup').startup(logger);

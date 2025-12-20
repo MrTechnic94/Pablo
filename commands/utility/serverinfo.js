@@ -1,10 +1,12 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
-const { formatDuration } = require('../../plugins/parseTime');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { SlashCommandBuilder, InteractionContextType, ChannelType } = require('discord.js');
+const { formatDuration } = require('../../lib/utils/parseTime');
+const { verification } = require('../../config/lang/messages.json');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
         .setName('serverinfo')
         .setDescription('Wyświetla informacje o serwerze.')
@@ -12,34 +14,62 @@ module.exports = {
     async execute(interaction) {
         const guild = interaction.guild;
 
+        // Wlasciciel
         const owner = await guild.fetchOwner();
 
+        // Kiedy utworzono
+        const createdAt = Math.floor(guild.createdTimestamp / 1000);
+
+        // Uzytkownicy
         const onlineMembers = guild.members.cache.filter(m =>
             ['online', 'idle', 'dnd'].includes(m.presence?.status)
         ).size;
 
-        const verificationLevels = [
-            '**• Brak:** Bez ograniczeń.',
-            '**• Niski:** Wymaga potwierdzenia adresu e-mail konta Discord.',
-            '**• Średni:** Wymaga rejestracji na Discordzie przez co najmniej 5 minut.',
-            '**• Wysoki:** Wymaga członkostwa na serwerze przez co najmniej 10 minut.',
-            '**• Bardzo wysoki:** Wymaga potwierdzenia numeru telefonu.'
-        ];
+        // Emotki
+        const emojiCount = guild.emojis.cache.size;
+        const stickerCount = guild.stickers.cache.size;
 
+        // Kanaly
+        const channelCounts = guild.channels.cache.reduce((acc, channel) => {
+            switch (channel.type) {
+                case ChannelType.GuildText:
+                    acc.text++;
+                    break;
+                case ChannelType.GuildVoice:
+                case ChannelType.GuildStageVoice:
+                    acc.voice++;
+                    break;
+                case ChannelType.GuildCategory:
+                    acc.category++;
+                    break;
+            }
+            return acc;
+        }, { text: 0, voice: 0, category: 0 });
+
+        // AFK
         const afkChannelName = guild.afkChannel ? `${guild.afkChannel}` : 'Brak.';
-        const afkTimeout = guild.afkTimeout ? formatDuration(guild.afkTimeout * 1000, { fullWords: true }) : 'Brak';
+        const afkTimeout = guild.afkTimeout ? formatDuration(guild.afkTimeout * 1000, { fullWords: true }) : 'Brak.';
         const afkInfo = `**• Kanał:** ${afkChannelName}\n**• Limit czasu:** ${afkTimeout}`;
+
+        // Nitro boost
+        const boostLevel = guild.premiumTier;
+        const boostCount = guild.premiumSubscriptionCount;
 
         const successEmbed = createEmbed({
             title: 'Podgląd serwera',
             thumbnail: guild.iconURL(),
             fields: [
-                { name: '`🛡️` Poziom weryfikacji', value: verificationLevels[guild.verificationLevel] },
-                { name: '`👥` Użytkownicy', value: `**• Łącznie:** ${guild.memberCount}\n**• Online:** ${onlineMembers}` },
-                { name: '`🎭` Role', value: `**• Łącznie:** ${guild.roles.cache.size - 1}` },
-                { name: '`👑` Właściciel', value: `<@${owner.id}>` },
-                { name: '`🌙` AFK', value: afkInfo },
-                { name: '`❓` Inne', value: `**• Nazwa:** ${guild.name}\n**• Widget:** ${guild.widgetEnabled ? 'włączony' : 'wyłączony'}\n**• ID:** ${guild.id}` }
+                { name: '`🔍` Serwer', value: `**•** ${guild.name}`, inline: false },
+                { name: '`🔑` ID', value: `**•** ${guild.id}`, inline: false },
+                { name: '`👑` Właściciel', value: `**•** <@${owner.id}>`, inline: false },
+                { name: '`📅` Utworzono', value: `**•** <t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },
+                { name: '`👥` Użytkownicy', value: `**• Łącznie:** ${guild.memberCount}\n**• Online:** ${onlineMembers}`, inline: false },
+                { name: '`🎭` Role', value: `**• Łącznie:** ${guild.roles.cache.size - 1}`, inline: false },
+                { name: '`#️⃣` Kanały', value: `**• Tekstowe:** ${channelCounts.text}\n**• Głosowe:** ${channelCounts.voice}\n**• Kategorie:** ${channelCounts.category}`, inline: false },
+                { name: '`💎` Nitro boost', value: `**• Poziom:** ${boostLevel}\n**• Boosty:** ${boostCount || 0}`, inline: false },
+                { name: '`📸` Media', value: `**• Emotki:** ${emojiCount}\n**• Naklejki:** ${stickerCount}`, inline: false },
+                { name: '`🛡️` Poziom weryfikacji', value: `**•** ${verification[guild.verificationLevel]}`, inline: false },
+                { name: '`🌙` AFK', value: afkInfo, inline: false }
             ]
         });
 

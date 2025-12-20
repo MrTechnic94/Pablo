@@ -1,16 +1,17 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
-const { formatDuration } = require('../../plugins/parseTime');
+const { formatDuration } = require('../../lib/utils/parseTime');
 
 module.exports = {
+    category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
         .setName('uptime')
-        .setDescription('Czas pracy bota.')
+        .setDescription('Sprawdza czas pracy bota.')
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         const botUptime = formatDuration(interaction.client.uptime);
 
-        await interaction.reply({ content: `Czas pracy: ${botUptime}` });
+        await interaction.reply({ content: `\`🕒\` Czas pracy: ${botUptime}` });
     },
 };

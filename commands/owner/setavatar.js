@@ -1,22 +1,23 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
-const { getConfig, syncConfig } = require('../../plugins/configManipulator');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { getConfig, syncConfig } = require('../../lib/core/configManipulator');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    index: false,
     data: new SlashCommandBuilder()
         .setName('setavatar')
         .setDescription('Ustawia nowy avatar bota.')
         .addAttachmentOption(option =>
             option.setName('obraz')
-                .setDescription('Nowy avatar.')
+                .setDescription('Nowy avatar. Zalecane 1024x1024.')
                 .setRequired(true)
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '❌ Nie masz permisji.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }
 
         const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
@@ -24,7 +25,7 @@ module.exports = {
         const extension = attachment.url.split('.').pop().toLowerCase().split('?')[0];
 
         if (!allowedExtensions.includes(extension)) {
-            return await interaction.reply({ content: '❌ Możesz wgrać tylko pliki: png, jpg, jpeg, gif lub webp.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Możesz wgrać tylko pliki: png, jpg, jpeg, gif lub webp.', flags: MessageFlags.Ephemeral });
         }
 
         try {
@@ -49,7 +50,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Setavatar] ${err}`);
-            await interaction.reply({ content: '❌ Wystąpił problem podczas ustawiania avatara.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '`❌` Wystąpił problem podczas ustawiania avatara.', flags: MessageFlags.Ephemeral });
         }
     },
 };

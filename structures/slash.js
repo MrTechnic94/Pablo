@@ -3,9 +3,8 @@
 const { REST, Routes, ApplicationCommandType } = require('discord.js');
 const { readdirSync } = require('node:fs');
 const { resolve } = require('node:path');
-const logger = require('../plugins/logger');
 
-module.exports = async (client) => {
+module.exports = async (client, logger) => {
     const commandsPath = resolve(__dirname, '../commands');
     const commandCategories = readdirSync(commandsPath, { withFileTypes: true })
         .filter(dirent => dirent.isDirectory())

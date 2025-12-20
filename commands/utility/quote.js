@@ -1,13 +1,14 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
-const { verseOfTheDay, randomVerse } = require('../../plugins/verseApi');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { verseOfTheDay, randomVerse } = require('../../lib/services/verseApi');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
         .setName('quote')
-        .setDescription('Werset z Biblii.')
+        .setDescription('Wyświetla werset z Biblii.')
         .addStringOption(option =>
             option.setName('rodzaj')
                 .setDescription('Wybierz werset z Biblii który chcesz zobaczyć.')
@@ -29,21 +30,21 @@ module.exports = {
         const { fn, title } = verseFuncs[versetType] || verseFuncs.daily;
 
         try {
-            const { reference, content } = await fn();
+            const { reference, content } = await fn(logger);
 
             if (!reference || !content) {
-                return interaction.reply({ content: `❌ Nie udało się pobrać ${title.toLowerCase()}.`, flags: MessageFlags.Ephemeral });
+                return interaction.reply({ content: `\`❌\` Nie udało się pobrać ${title.toLowerCase()}.`, flags: MessageFlags.Ephemeral });
             }
 
             const successEmbed = createEmbed({
-                title: `📜 ${title} (${reference})`,
+                title: `\`📜\` ${title} (${reference})`,
                 description: content
             });
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Quote] ${err}`);
-            await interaction.reply({ content: `❌ Wystąpił problem podczas pobierania ${title.toLowerCase()}.`, flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: `\`❌\` Wystąpił problem podczas pobierania ${title.toLowerCase()}.`, flags: MessageFlags.Ephemeral });
         }
     },
 };

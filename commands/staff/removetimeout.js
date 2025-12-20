@@ -1,9 +1,10 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`📛` Administracja',
     data: new SlashCommandBuilder()
         .setName('removetimeout')
         .setDescription('Odcisz użytkownika.')
@@ -20,11 +21,11 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (!interaction.member.permissions.has(PermissionFlagsBits.ModerateMembers) && interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '❌ Nie masz uprawnień do odciszania użytkowników.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie masz uprawnień do odciszania użytkowników.', flags: MessageFlags.Ephemeral });
         }
 
         if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.ModerateMembers)) {
-            return await interaction.reply({ content: '❌ Nie mam uprawnień do odciszania użytkowników.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie mam uprawnień do odciszania użytkowników.', flags: MessageFlags.Ephemeral });
         }
 
         const targetUser = interaction.options.getUser('użytkownik');
@@ -34,7 +35,7 @@ module.exports = {
             const member = await interaction.guild.members.fetch(targetUser.id);
 
             if (!member.isCommunicationDisabled()) {
-                return await interaction.reply({ content: '❌ Ten użytkownik nie jest wyciszony.', flags: MessageFlags.Ephemeral });
+                return await interaction.reply({ content: '`❌` Ten użytkownik nie jest wyciszony.', flags: MessageFlags.Ephemeral });
             }
 
             const embedDM = createEmbed({
@@ -54,7 +55,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Removetimeout] ${err}`);
-            await interaction.reply({ content: '❌ Wystąpił problem podczas usuwania wyciszenia użytkownikowi.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '`❌` Wystąpił problem podczas usuwania wyciszenia użytkownikowi.', flags: MessageFlags.Ephemeral });
         }
     },
 };

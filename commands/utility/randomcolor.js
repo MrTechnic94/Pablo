@@ -1,9 +1,10 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
         .setName('randomcolor')
         .setDescription('Generuje losowy kolor.')

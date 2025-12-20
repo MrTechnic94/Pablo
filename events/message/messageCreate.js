@@ -9,12 +9,12 @@ const urlRegex = /https?:\/\/(?:www\.)?[\w.-]{1,256}\.[a-zA-Z]{1,6}\b[\w\-@:%_+.
 module.exports = {
     name: Events.MessageCreate,
     async execute(logger, message) {
-        if (message.author.bot || message.channel.id !== channels.memy) return;
+        if (message.channel.id !== channels.memy) return;
 
         // Auto reakcje dla kanalu
         if (!message.attachments.size && !allowedExtensions.test(message.content) && !urlRegex.test(message.content)) {
             await message.delete().catch(() => null);
-            const warningMessage = await message.channel.send('❌ Możesz wysyłać tutaj tylko memy.');
+            const warningMessage = await message.channel.send('`❌` Możesz wysyłać tutaj tylko memy.');
             setTimeout(() => {
                 warningMessage.delete().catch(() => null);
             }, 5000);

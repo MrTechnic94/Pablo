@@ -1,9 +1,10 @@
 'use strict';
 
 const { ContextMenuCommandBuilder, ApplicationCommandType, MessageFlags } = require('discord.js');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    index: false,
     data: new ContextMenuCommandBuilder()
         .setName('Pokaż baner')
         .setType(ApplicationCommandType.User),
@@ -13,7 +14,7 @@ module.exports = {
         const userData = await user.fetch();
 
         if (!userData.bannerURL()) {
-            return await interaction.reply({ content: '❌ Użytkownik nie ma ustawionego baneru.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Użytkownik nie ma ustawionego baneru.', flags: MessageFlags.Ephemeral });
         }
 
         const successEmbed = createEmbed({

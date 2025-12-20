@@ -1,10 +1,11 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const { formatDuration } = require('../../plugins/parseTime');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { formatDuration } = require('../../lib/utils/parseTime');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`📛` Administracja',
     data: new SlashCommandBuilder()
         .setName('ban')
         .setDescription('Zbanuj użytkownika na serwerze.')
@@ -35,11 +36,11 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (!interaction.member.permissions.has(PermissionFlagsBits.BanMembers)) {
-            return await interaction.reply({ content: '❌ Nie masz uprawnień do banowania użytkowników.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie masz uprawnień do banowania użytkowników.', flags: MessageFlags.Ephemeral });
         }
 
         if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.BanMembers)) {
-            return await interaction.reply({ content: '❌ Nie mam uprawnień do banowania użytkowników.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie mam uprawnień do banowania użytkowników.', flags: MessageFlags.Ephemeral });
         }
 
         const targetUser = interaction.options.getMember('użytkownik');
@@ -47,15 +48,15 @@ module.exports = {
         const deleteMessageDuration = interaction.options.getInteger('usuń_wiadomości') || 0;
 
         if (!targetUser) {
-            return await interaction.reply({ content: '❌ Nie znaleziono użytkownika.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie znaleziono użytkownika.', flags: MessageFlags.Ephemeral });
         }
 
         if (interaction.member.roles.highest.position <= targetUser.roles.highest.position) {
-            return await interaction.reply({ content: '❌ Nie możesz zbanować tego użytkownika, ponieważ jego ranga jest równa lub wyższa od Twojej.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie możesz zbanować tego użytkownika, ponieważ jego ranga jest równa lub wyższa od Twojej.', flags: MessageFlags.Ephemeral });
         }
 
         if (!targetUser.bannable) {
-            return await interaction.reply({ content: '❌ Nie mogę zbanować tego użytkownika.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie mogę zbanować tego użytkownika.', flags: MessageFlags.Ephemeral });
         }
 
         try {
@@ -76,7 +77,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Ban] ${err}`);
-            await interaction.reply({ content: '❌ Wystąpił problem podczas banowania użytkownika.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '`❌` Wystąpił problem podczas banowania użytkownika.', flags: MessageFlags.Ephemeral });
         }
     },
 };

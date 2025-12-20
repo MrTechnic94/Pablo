@@ -1,11 +1,13 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PresenceUpdateStatus, MessageFlags } = require('discord.js');
-const { getConfig, syncConfig } = require('../../plugins/configManipulator');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { SlashCommandBuilder, InteractionContextType, MessageFlags, ActivityType } = require('discord.js');
+const { getConfig, syncConfig } = require('../../lib/core/configManipulator');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 const { botOptions } = require('../../config/default.json');
+const { presence } = require('../../config/lang/messages.json');
 
 module.exports = {
+    index: false,
     data: new SlashCommandBuilder()
         .setName('restart')
         .setDescription('Restart bota lub jego funkcji.')
@@ -22,7 +24,7 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '❌ Nie masz permisji.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }
 
         const type = interaction.options.getString('rodzaj');
@@ -35,22 +37,23 @@ module.exports = {
                     process.exit(0);
                 } catch (err) {
                     logger.error(`[Slash ▸ Restart] ${err}`);
-                    await interaction.reply({ content: '❌ Wystąpił problem podczas restartowania bota.', flags: MessageFlags.Ephemeral });
+                    await interaction.reply({ content: '`❌` Wystąpił problem podczas restartowania bota.', flags: MessageFlags.Ephemeral });
                 }
                 break;
             }
 
             case 'Status': {
                 if (interaction.client.user.presence?.activities?.[0]?.name === botOptions.defaultActivityName &&
-                    interaction.client.user.presence?.status === PresenceUpdateStatus[botOptions.defaultActivityPresence]) {
-                    return await interaction.reply({ content: '❌ Status jest już zrestartowany.', flags: MessageFlags.Ephemeral });
+                    interaction.client.user.presence?.status === botOptions.defaultActivityPresence) {
+                    return await interaction.reply({ content: '`❌` Status jest już zrestartowany.', flags: MessageFlags.Ephemeral });
                 }
 
                 try {
                     await interaction.client.user.setPresence({
-                        status: PresenceUpdateStatus[botOptions.defaultActivityPresence],
+                        status: botOptions.defaultActivityPresence,
                         activities: [{
-                            name: botOptions.defaultActivityName
+                            name: botOptions.defaultActivityName,
+                            type: ActivityType.Custom
                         }],
                     });
 
@@ -61,34 +64,21 @@ module.exports = {
 
                     syncConfig(config);
 
-                    const presenceEmojis = {
-                        Online: '🟢',
-                        Offline: '🎱',
-                        Idle: '🌙',
-                        DoNotDisturb: '⛔',
-                        Invisible: '🎱'
-                    };
+                    const presenceData = presence[botOptions.defaultActivityPresence];
 
-                    const presenceTypes = {
-                        Online: 'Dostępny',
-                        Idle: 'Zaraz wracam',
-                        DoNotDisturb: 'Nie przeszkadzać',
-                        Invisible: 'Niewidoczny',
-                        Offline: 'Offline'
-                    };
-
-                    const presenceEmoji = presenceEmojis[config.botOptions.defaultActivityPresence] || '❓';
+                    const presenceEmoji = presenceData?.emoji || '❓';
+                    const presenceType = presenceData?.name || 'Nieznany';
 
                     const successEmbed = createEmbed({
                         title: 'Status zmieniony',
-                        description: `\`💬\` **Nazwa:** ${botOptions.defaultActivityName}\n\`${presenceEmoji}\` **Status:** ${presenceTypes[botOptions.defaultActivityPresence]}`
+                        description: `\`💬\` **Nazwa:** ${botOptions.defaultActivityName}\n\`${presenceEmoji}\` **Status:** ${presenceType}`
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });
                 } catch (err) {
                     logger.error(`[Slash ▸ Restart] ${err}`);
                     await interaction.reply({
-                        content: '❌ Wystąpił problem podczas restartu statusu bota.',
+                        content: '`❌` Wystąpił problem podczas restartu statusu bota.',
                         flags: MessageFlags.Ephemeral
                     });
                 }
@@ -99,7 +89,7 @@ module.exports = {
                 const config = getConfig();
 
                 if (!config.botOptions.changedAvatar) {
-                    return await interaction.reply({ content: '❌ Avatar nie został zmieniony.', flags: MessageFlags.Ephemeral });
+                    return await interaction.reply({ content: '`❌` Avatar nie został zmieniony.', flags: MessageFlags.Ephemeral });
                 }
 
                 try {
@@ -119,7 +109,7 @@ module.exports = {
                 } catch (err) {
                     logger.error(`[Slash ▸ Restart] ${err}`);
                     await interaction.reply({
-                        content: '❌ Wystąpił problem podczas restart avataru bota.',
+                        content: '`❌` Wystąpił problem podczas restart avataru bota.',
                         flags: MessageFlags.Ephemeral
                     });
                 }

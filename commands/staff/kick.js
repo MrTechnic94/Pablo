@@ -1,9 +1,10 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`📛` Administracja',
     data: new SlashCommandBuilder()
         .setName('kick')
         .setDescription('Wyrzuć użytkownika z serwera.')
@@ -20,26 +21,26 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (!interaction.member.permissions.has(PermissionFlagsBits.KickMembers) && interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '❌ Nie masz uprawnień do wyrzucania użytkowników.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie masz uprawnień do wyrzucania użytkowników.', flags: MessageFlags.Ephemeral });
         }
 
         if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.KickMembers)) {
-            return await interaction.reply({ content: '❌ Nie mam uprawnień do wyrzucania użytkowników.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie mam uprawnień do wyrzucania użytkowników.', flags: MessageFlags.Ephemeral });
         }
 
         const targetUser = interaction.options.getMember('użytkownik');
         const reason = interaction.options.getString('powód') || 'Brak.';
 
         if (!targetUser) {
-            return await interaction.reply({ content: '❌ Nie znaleziono użytkownika.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie znaleziono użytkownika.', flags: MessageFlags.Ephemeral });
         }
 
         if (interaction.member.roles.highest.position <= targetUser.roles.highest.position) {
-            return await interaction.reply({ content: '❌ Nie możesz wyrzucić tego użytkownika, ponieważ jego ranga jest równa lub wyższa od Twojej.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie możesz wyrzucić tego użytkownika, ponieważ jego ranga jest równa lub wyższa od Twojej.', flags: MessageFlags.Ephemeral });
         }
 
         if (!targetUser.kickable) {
-            return await interaction.reply({ content: '❌ Nie mogę wyrzucić tego użytkownika.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie mogę wyrzucić tego użytkownika.', flags: MessageFlags.Ephemeral });
         }
 
         try {
@@ -60,7 +61,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Kick] ${err}`);
-            await interaction.reply({ content: '❌ Wystąpił problem podczas wyrzucania użytkownika.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '`❌` Wystąpił problem podczas wyrzucania użytkownika.', flags: MessageFlags.Ephemeral });
         }
     },
 };

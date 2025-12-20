@@ -1,10 +1,11 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
-const { createEmbed } = require('../../plugins/createEmbed');
+const { createEmbed } = require('../../lib/utils/createEmbed');
 const { roles } = require('../../config/default.json');
 
 module.exports = {
+    category: '`⭐` V.I.P',
     data: new SlashCommandBuilder()
         .setName('nick')
         .setDescription('Zmiana pseudonimu na serwerze.')
@@ -17,7 +18,7 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (!interaction.member.roles.cache.has(roles.admin) && !interaction.member.roles.cache.has(roles.changeNickname) && interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '❌ Nie masz wymaganej roli.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie masz wymaganej roli.', flags: MessageFlags.Ephemeral });
         }
 
         const oldNick = interaction.member.nickname;
@@ -25,11 +26,11 @@ module.exports = {
         const newNick = interaction.options.getString('nowy');
 
         if (!newNick && !oldNick) {
-            return await interaction.reply({ content: '❌ Nie masz ustawionego pseudonimu.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie masz ustawionego pseudonimu.', flags: MessageFlags.Ephemeral });
         }
 
         if (oldNick === newNick) {
-            return await interaction.reply({ content: '❌ Nie możesz ustawić takiego samego pseudonimu.', flags: MessageFlags.Ephemeral });
+            return await interaction.reply({ content: '`❌` Nie możesz ustawić takiego samego pseudonimu.', flags: MessageFlags.Ephemeral });
         }
 
         try {
@@ -43,7 +44,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Nick] ${err}`);
-            await interaction.reply({ content: '❌ Nie udało się zmienić Twojego pseudonimu.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '`❌` Nie udało się zmienić Twojego pseudonimu.', flags: MessageFlags.Ephemeral });
         }
     },
 };

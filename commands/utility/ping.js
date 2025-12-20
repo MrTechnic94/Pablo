@@ -3,6 +3,7 @@
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
 
 module.exports = {
+    category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('Sprawdza opóźnienie bota.')
@@ -13,10 +14,10 @@ module.exports = {
             await interaction.reply({ content: 'Pingowanie...' });
 
             const latency = Date.now() - start;
-            await interaction.editReply(`🏓 Pong!\nOpóźnienie: ${latency}ms\nWebsocket: ${interaction.client.ws.ping}ms`);
+            await interaction.editReply(`\`🏓\` Pong!\nOpóźnienie: ${latency}ms\nWebsocket: ${interaction.client.ws.ping}ms`);
         } catch (err) {
             logger.error(`[Slash ▸ Ping] ${err}`);
-            await interaction.reply({ content: '❌ Nie udało się uzyskać informacji o połączeniu.', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: '`❌` Nie udało się uzyskać informacji o połączeniu.', flags: MessageFlags.Ephemeral });
         }
     },
 };
