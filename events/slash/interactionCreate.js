@@ -3,6 +3,16 @@
 const { Events, MessageFlags } = require('discord.js');
 const { roles } = require('../../config/default.json');
 
+// Role - Kolory
+const roleMap = {
+    'colors_black': roles.black,
+    'colors_red': roles.red,
+    'colors_blue': roles.blue,
+    'colors_magenta': roles.magenta,
+    'colors_green': roles.green
+};
+const colorRoleIds = Object.values(roleMap);
+
 module.exports = {
     name: Events.InteractionCreate,
     async execute(logger, interaction) {
@@ -49,78 +59,38 @@ module.exports = {
                         });
                         break;
                     }
-
-                    // Auto role dodatkowe
-                    case 'additional_gamer':
-                    case 'additional_xbox':
-                    case 'additional_playstation':
-                    case 'additional_pc':
-                    case 'additional_phone': {
-                        const roleMapping = {
-                            additional_gamer: roles.gamer,
-                            additional_xbox: roles.xbox,
-                            additional_playstation: roles.playstation,
-                            additional_pc: roles.pc,
-                            additional_phone: roles.phone
-                        };
-
-                        const roleId = roleMapping[interaction.customId];
-
-                        if (interaction.member.roles.cache.has(roleId)) {
-                            await interaction.member.roles.remove(roleId);
-                            await interaction.reply({
-                                content: `\`➖\` Rola <@&${roleId}> została usunięta.`,
-                                flags: MessageFlags.Ephemeral
-                            });
-                        } else {
-                            await interaction.member.roles.add(roleId);
-                            await interaction.reply({
-                                content: `\`➕\` Rola <@&${roleId}> została przypisana.`,
-                                flags: MessageFlags.Ephemeral
-                            });
-                        }
-                        break;
-                    }
-
-                    // Auto role kolorow
-                    case 'colors_black':
-                    case 'colors_red':
-                    case 'colors_blue':
-                    case 'colors_magenta':
-                    case 'colors_green': {
-                        const roleMap = {
-                            'colors_black': roles.black,
-                            'colors_red': roles.red,
-                            'colors_blue': roles.blue,
-                            'colors_magenta': roles.magenta,
-                            'colors_green': roles.green
-                        };
-
-                        const roleId = roleMap[interaction.customId];
-                        if (!roleId) break;
-
-                        for (const id of Object.values(roleMap)) {
-                            if (interaction.member.roles.cache.has(id)) {
-                                await interaction.member.roles.remove(id);
-                            }
-                        }
-
-                        if (interaction.member.roles.cache.has(roleId)) {
-                            await interaction.reply({
-                                content: `\`➖\` Rola <@&${roleId}> została usunięta.`,
-                                flags: MessageFlags.Ephemeral
-                            });
-                        } else {
-                            await interaction.member.roles.add(roleId);
-                            await interaction.reply({
-                                content: `\`➕\` Rola <@&${roleId}> została przypisana.`,
-                                flags: MessageFlags.Ephemeral
-                            });
-                        }
-                    }
                 }
             } catch (err) {
                 logger.error(`[Slash] Error while adding role:\n${err}`);
+                await interaction.reply({
+                    content: '`❌` Wystąpił nieoczekiwany problem. Spróbuj ponownie później.',
+                    flags: MessageFlags.Ephemeral
+                });
+            }
+        } else if (interaction.isStringSelectMenu()) {
+            try {
+                switch (interaction.customId) {
+                    // Auto role - kolorow
+                    case 'colors_menu': {
+                        const roleId = roleMap[interaction.values[0]];
+                        if (!roleId) return;
+
+                        const currentRoles = Array.from(interaction.member.roles.cache.keys());
+
+                        const newRoles = currentRoles
+                            .filter(id => !colorRoleIds.includes(id))
+                            .concat(roleId);
+
+                        await interaction.member.roles.set(newRoles);
+                        await interaction.reply({
+                            content: `\`➕\` Twój nowy kolor to <@&${roleId}>.`,
+                            flags: MessageFlags.Ephemeral
+                        });
+                        break;
+                    }
+                }
+            } catch (err) {
+                logger.error(`[Slash] Error in select menu:\n${err}`);
                 await interaction.reply({
                     content: '`❌` Wystąpił nieoczekiwany problem. Spróbuj ponownie później.',
                     flags: MessageFlags.Ephemeral

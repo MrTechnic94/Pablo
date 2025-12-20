@@ -4,6 +4,7 @@ const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, Messag
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`📛` Administracja',
     data: new SlashCommandBuilder()
         .setName('clear')
         .setDescription('Usuwa wybraną ilość wiadomości z kanału.')

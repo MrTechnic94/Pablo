@@ -4,6 +4,7 @@ const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('d
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    index: false,
     data: new SlashCommandBuilder()
         .setName('setbanner')
         .setDescription('Ustawia nowy baner bota.')

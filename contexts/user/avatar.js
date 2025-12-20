@@ -4,6 +4,7 @@ const { ContextMenuCommandBuilder, ApplicationCommandType, MessageFlags } = requ
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    index: false,
     data: new ContextMenuCommandBuilder()
         .setName('Pokaż avatar')
         .setType(ApplicationCommandType.User),

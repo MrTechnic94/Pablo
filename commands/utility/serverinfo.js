@@ -6,6 +6,7 @@ const { verification } = require('../../config/lang/messages.json');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
         .setName('serverinfo')
         .setDescription('Wyświetla informacje o serwerze.')
@@ -61,7 +62,7 @@ module.exports = {
                 { name: '`🔍` Serwer', value: `**•** ${guild.name}`, inline: false },
                 { name: '`🔑` ID', value: `**•** ${guild.id}`, inline: false },
                 { name: '`👑` Właściciel', value: `**•** <@${owner.id}>`, inline: false },
-                { name: '`📅` Utworzono', value: `**•** <t:${createdAt}:D> (<t:${createdAt}:R>)`, inline: false },
+                { name: '`📅` Utworzono', value: `**•** <t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },
                 { name: '`👥` Użytkownicy', value: `**• Łącznie:** ${guild.memberCount}\n**• Online:** ${onlineMembers}`, inline: false },
                 { name: '`🎭` Role', value: `**• Łącznie:** ${guild.roles.cache.size - 1}`, inline: false },
                 { name: '`#️⃣` Kanały', value: `**• Tekstowe:** ${channelCounts.text}\n**• Głosowe:** ${channelCounts.voice}\n**• Kategorie:** ${channelCounts.category}`, inline: false },

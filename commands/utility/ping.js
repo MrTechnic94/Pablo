@@ -3,6 +3,7 @@
 const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
 
 module.exports = {
+    category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('Sprawdza opóźnienie bota.')

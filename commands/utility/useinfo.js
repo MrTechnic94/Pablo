@@ -5,6 +5,7 @@ const { presence, device } = require('../../config/lang/messages.json');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
         .setName('userinfo')
         .setDescription('Wyświetla informacje o użytkowniku.')

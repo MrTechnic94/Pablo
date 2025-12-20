@@ -5,6 +5,7 @@ const { presence, device } = require('../../config/lang/messages.json');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    index: false,
     data: new ContextMenuCommandBuilder()
         .setName('Informacje o użytkowniku')
         .setType(ApplicationCommandType.User),

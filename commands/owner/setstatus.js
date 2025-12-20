@@ -1,11 +1,12 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, MessageFlags, ActivityType } = require('discord.js');
 const { getConfig, syncConfig } = require('../../lib/core/configManipulator');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 const { presence } = require('../../config/lang/messages.json');
 
 module.exports = {
+    index: false,
     data: new SlashCommandBuilder()
         .setName('setstatus')
         .setDescription('Ustawia status bota.')
@@ -44,7 +45,8 @@ module.exports = {
             await interaction.client.user.setPresence({
                 status: botPresence,
                 activities: [{
-                    name: status
+                    name: status,
+                    type: ActivityType.Custom
                 }],
             });
 

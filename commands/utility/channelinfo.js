@@ -1,17 +1,12 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, ChannelType } = require('discord.js');
+const { formatDuration } = require('../../lib/utils/parseTime');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 const { channels } = require('../../config/lang/messages.json');
 
-const archiveDuration = {
-    60: '1 godz',
-    1440: '24 godz',
-    4320: '3 dni',
-    10080: '1 tydzień'
-};
-
 module.exports = {
+    category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
         .setName('channelinfo')
         .setDescription('Wyświetla informacje o kanale.')
@@ -63,9 +58,8 @@ module.exports = {
         }
 
         if (channel.isThread()) {
-            const autoArchiveDurationMinutes = channel.autoArchiveDuration;
-            const autoArchive = autoArchiveDurationMinutes
-                ? archiveDuration[autoArchiveDurationMinutes] || `${autoArchiveDurationMinutes} minut`
+            const autoArchive = channel.autoArchiveDuration
+                ? formatDuration(channel.autoArchiveDuration * 60000, { fullWords: true })
                 : 'Nie ustawiono.';
 
             const archived = channel.archived ? 'Tak' : 'Nie';
@@ -79,9 +73,11 @@ module.exports = {
         }
 
         if (channel.rateLimitPerUser && channel.rateLimitPerUser > 0) {
+            const slowmodeValue = formatDuration(channel.rateLimitPerUser * 1000, { fullWords: true });
+
             fields.push({
                 name: '`⏱️` Tryb powolny',
-                value: `**•** ${channel.rateLimitPerUser} sekund`,
+                value: `**•** ${slowmodeValue}`,
                 inline: false
             });
         }

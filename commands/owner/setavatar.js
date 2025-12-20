@@ -5,6 +5,7 @@ const { getConfig, syncConfig } = require('../../lib/core/configManipulator');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    index: false,
     data: new SlashCommandBuilder()
         .setName('setavatar')
         .setDescription('Ustawia nowy avatar bota.')

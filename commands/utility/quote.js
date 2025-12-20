@@ -5,6 +5,7 @@ const { verseOfTheDay, randomVerse } = require('../../lib/services/verseApi');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
         .setName('quote')
         .setDescription('Wyświetla werset z Biblii.')

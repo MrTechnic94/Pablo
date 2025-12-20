@@ -5,6 +5,7 @@ const { parseTimeString } = require('../../lib/utils/parseTime');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`📛` Administracja',
     data: new SlashCommandBuilder()
         .setName('timeout')
         .setDescription('Nałóż wyciszenie na użytkownika.')

@@ -4,6 +4,7 @@ const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, Messag
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`📛` Administracja',
     data: new SlashCommandBuilder()
         .setName('kick')
         .setDescription('Wyrzuć użytkownika z serwera.')

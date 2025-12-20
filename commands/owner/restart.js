@@ -1,12 +1,13 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, MessageFlags, ActivityType } = require('discord.js');
 const { getConfig, syncConfig } = require('../../lib/core/configManipulator');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 const { botOptions } = require('../../config/default.json');
 const { presence } = require('../../config/lang/messages.json');
 
 module.exports = {
+    index: false,
     data: new SlashCommandBuilder()
         .setName('restart')
         .setDescription('Restart bota lub jego funkcji.')
@@ -51,7 +52,8 @@ module.exports = {
                     await interaction.client.user.setPresence({
                         status: botOptions.defaultActivityPresence,
                         activities: [{
-                            name: botOptions.defaultActivityName
+                            name: botOptions.defaultActivityName,
+                            type: ActivityType.Custom
                         }],
                     });
 

@@ -5,6 +5,7 @@ const { createEmbed } = require('../../lib/utils/createEmbed');
 const { roles } = require('../../config/default.json');
 
 module.exports = {
+    category: '`📛` Administracja',
     data: new SlashCommandBuilder()
         .setName('give')
         .setDescription('Nadaje wybraną rolę użytkownikowi.')

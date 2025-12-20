@@ -4,6 +4,7 @@ const { SlashCommandBuilder, InteractionContextType, PermissionsBitField } = req
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
         .setName('roleinfo')
         .setDescription('Wyświetla informacje o wybranej roli.')
@@ -58,13 +59,13 @@ module.exports = {
             fields: [
                 { name: '`🔍` Rola', value: `**•** ${role}`, inline: false },
                 { name: '`🔑` ID', value: `**•** ${role.id}`, inline: false },
-                { name: '`🔢` Liczba osób', value: `**•** ${memberCount}`, inline: false },
+                { name: '`🔢` Posiadających rolę', value: `**•** ${memberCount}`, inline: false },
                 { name: '`🎨` Kolor (HEX)', value: `**•** ${role.hexColor}`, inline: false },
                 { name: '`📅` Utworzono', value: `**•** <t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },
                 { name: '`✨` Wyświetlana oddzielnie?', value: `**•** ${hoist}`, inline: false },
                 { name: '`🗣️` Można wzmiankować?', value: `**•** ${mentionable}`, inline: false },
                 { name: '`🔗` Zintegrowana?', value: `**•** ${integratedStatus}`, inline: false },
-                { name: '`🛡️` Najważniejsze uprawnienia', value: permissionString, inline: false },
+                { name: '`🛡️` Uprawnienia', value: permissionString, inline: false },
                 { name: '`🔢` BitField uprawnień', value: `**•** ${perms}`, inline: false }
             ]
         });

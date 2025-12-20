@@ -4,6 +4,7 @@ const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const { formatDuration } = require('../../lib/utils/parseTime');
 
 module.exports = {
+    category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
         .setName('uptime')
         .setDescription('Sprawdza czas pracy bota.')

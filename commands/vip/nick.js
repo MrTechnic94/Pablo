@@ -5,6 +5,7 @@ const { createEmbed } = require('../../lib/utils/createEmbed');
 const { roles } = require('../../config/default.json');
 
 module.exports = {
+    category: '`⭐` V.I.P',
     data: new SlashCommandBuilder()
         .setName('nick')
         .setDescription('Zmiana pseudonimu na serwerze.')

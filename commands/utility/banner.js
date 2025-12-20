@@ -4,6 +4,7 @@ const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('d
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
         .setName('banner')
         .setDescription('Wyświetla baner użytkownika.')

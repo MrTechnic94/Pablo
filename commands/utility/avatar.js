@@ -4,6 +4,7 @@ const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
+    category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
         .setName('avatar')
         .setDescription('Wyświetla avatar użytkownika.')
