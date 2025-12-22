@@ -9,7 +9,7 @@ module.exports = {
     data: new ContextMenuCommandBuilder()
         .setName('Informacje o użytkowniku')
         .setType(ApplicationCommandType.User),
-    async execute(interaction) {
+    async execute(interaction, logger) {
         const targetMember = interaction.targetMember;
 
         if (!targetMember) {
@@ -29,13 +29,18 @@ module.exports = {
         const createdAt = Math.floor(targetMember.user.createdTimestamp / 1000);
         const joinedAt = Math.floor(targetMember.joinedTimestamp / 1000);
 
-        // Zaproszenia
+        // Zaproszenia - Pobiera tylko aktualne
         let inviteCount = 0;
 
-        const invites = await interaction.guild.invites.fetch();
-        inviteCount = invites
-            .filter(i => i.inviter && i.inviter.id === targetMember.id)
-            .reduce((acc, invite) => acc + invite.uses, 0);
+        try {
+            const invites = await interaction.guild.invites.fetch();
+            inviteCount = invites
+                .filter(i => i.inviter && i.inviter.id === targetMember.id)
+                .reduce((acc, invite) => acc + (invite.uses || 0), 0);
+        } catch (err) {
+            logger.error(`[Slash ▸ Userinfo] Invitations could not be downloaded:\n${err}`);
+            inviteCount = 'Brak uprawnień.';
+        }
 
         // Urzadzenie
         const clientStatus = targetMember.presence?.clientStatus;
@@ -46,11 +51,11 @@ module.exports = {
 
         const deviceString = deviceNames.join(', ') || 'Użytkownik jest offline.';
 
-        const deviceEmoji = clientStatus ? Object.keys(clientStatus).map(key => device[key]?.emoji).join(' ') : '❓';
+        const deviceEmoji = Object.keys(clientStatus || {}).map(key => device[key]?.emoji).join(' ') || '❓';
 
         // Status
         const rawStatus = targetMember.presence?.status || 'Niedostępny.';
-        const userStatus = presence[rawStatus]?.name || 'Niedostępny';
+        const userStatus = presence[rawStatus]?.name || 'Niedostępny.';
         const statusEmoji = presence[rawStatus]?.emoji || '🎱';
 
         const successEmbed = createEmbed({
@@ -59,7 +64,7 @@ module.exports = {
             fields: [
                 { name: '`👤` Użytkownik', value: `**•** <@${targetMember.id}>`, inline: false },
                 { name: '`🔑` ID', value: `**•** ${targetMember.user.id}`, inline: false },
-                { name: '`✏️` Pseudonim', value: `**•** ${targetMember.nickname || 'Nie ustawiono'}`, inline: false },
+                { name: '`✏️` Pseudonim', value: `**•** ${targetMember.nickname || 'Nie ustawiono.'}`, inline: false },
                 { name: `\`${deviceEmoji}\` Urządzenie`, value: `**•** ${deviceString}`, inline: false },
                 { name: `\`${statusEmoji}\` Status`, value: `**•** ${userStatus}`, inline: false },
                 { name: '`🚪` Dołączył na serwer', value: `**•** <t:${joinedAt}> (<t:${joinedAt}:R>)`, inline: false },

@@ -11,6 +11,7 @@ const roleMap = {
     'colors_magenta': roles.magenta,
     'colors_green': roles.green
 };
+
 const colorRoleIds = Object.values(roleMap);
 
 module.exports = {
@@ -73,7 +74,13 @@ module.exports = {
                     // Auto role - kolorow
                     case 'colors_menu': {
                         const roleId = roleMap[interaction.values[0]];
-                        if (!roleId) return;
+
+                        if (interaction.member.roles.cache.has(roleId)) {
+                            return await interaction.reply({
+                                content: '`❌` Posiadasz już taką rolę.',
+                                flags: MessageFlags.Ephemeral
+                            });
+                        }
 
                         const currentRoles = Array.from(interaction.member.roles.cache.keys());
 
