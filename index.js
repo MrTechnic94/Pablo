@@ -19,6 +19,8 @@
  * w pliku konfiguracyjnym 'default.json' w sekcji 'emojis'.
  * UWAGA: emotki te nie sa moja wlasnoscia, zostaly skopiowane/pobrane
  * z innych serwerow Discorda lub ze strony 'https://emoji.gg'.
+ * OPCJONALNIE: przeczytaj plik 'setup-service.sh' jezeli chcesz
+ * hostowac swojego bota na vps.
  */
 
 'use strict';

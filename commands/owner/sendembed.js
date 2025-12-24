@@ -88,7 +88,7 @@ module.exports = {
                                 value: 'colors_blue',
                             },
                             {
-                                label: 'Fioletowy',
+                                label: 'Magenta',
                                 emoji: '💜',
                                 value: 'colors_magenta',
                             },

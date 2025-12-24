@@ -17,6 +17,7 @@
         "messageCacheLifetime": 21600,
         "intents": [
             "Guilds",
+            "GuildInvites",
             "GuildMembers",
             "GuildMessages",
             "GuildPresences",
