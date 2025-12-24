@@ -1,0 +1,17 @@
+[Unit]
+Description=Pablo NodeJS Service
+After=network.target
+
+[Service]
+Type=simple
+User={{USER}}
+Group={{GROUP}}
+WorkingDirectory={{DIR}}
+ExecStart={{NODE}} {{DIR}}/index.js
+
+Restart=on-failure
+RestartSec=5
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

@@ -66,8 +66,10 @@ module.exports = {
                 const attacker = players[round % 2];
                 const defender = players[(round + 1) % 2];
 
-                const isCrit = Math.random() < 0.15; // 15% szans na krytyka
-                const isMiss = Math.random() < 0.10; // 10% szans na unik
+                // 15% szans na krytyka
+                const isCrit = Math.random() < 0.15;
+                // 10% szans na unik
+                const isMiss = Math.random() < 0.10;
                 let damage = Math.floor(Math.random() * (25 - 10 + 1) + 10);
                 let actionText = '';
 

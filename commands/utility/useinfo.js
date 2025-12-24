@@ -80,6 +80,6 @@ module.exports = {
             ]
         });
 
-        await interaction.reply({ embeds: [successEmbed], flags: MessageFlags.Ephemeral });
+        await interaction.reply({ embeds: [successEmbed] });
     },
 };

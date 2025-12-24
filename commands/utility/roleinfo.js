@@ -41,6 +41,7 @@ module.exports = {
         }
 
         const adminPermission = role.permissions.has(PermissionsBitField.Flags.Administrator);
+
         let permissionString;
 
         if (adminPermission) {
