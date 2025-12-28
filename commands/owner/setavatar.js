@@ -20,12 +20,14 @@ module.exports = {
             return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
         }
 
+        await interaction.deferReply();
+
         const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
         const attachment = interaction.options.getAttachment('obraz');
         const extension = attachment.url.split('.').pop().toLowerCase().split('?')[0];
 
         if (!allowedExtensions.includes(extension)) {
-            return await interaction.reply({ content: '`❌` Możesz wgrać tylko pliki: png, jpg, jpeg, gif lub webp.', flags: MessageFlags.Ephemeral });
+            return await interaction.editReply({ content: '`❌` Możesz wgrać tylko pliki: png, jpg, jpeg, gif lub webp.' });
         }
 
         try {
@@ -47,10 +49,10 @@ module.exports = {
                 image: newAvatar
             });
 
-            await interaction.reply({ embeds: [successEmbed] });
+            await interaction.editReply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Setavatar] ${err}`);
-            await interaction.reply({ content: '`❌` Wystąpił problem podczas ustawiania avatara.', flags: MessageFlags.Ephemeral });
+            await interaction.editReply({ content: '`❌` Wystąpił problem podczas ustawiania avatara.' });
         }
     },
 };

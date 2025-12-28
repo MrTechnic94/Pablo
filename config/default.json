@@ -17,7 +17,6 @@
         "messageCacheLifetime": 21600,
         "intents": [
             "Guilds",
-            "GuildInvites",
             "GuildMembers",
             "GuildMessages",
             "GuildPresences",
@@ -30,12 +29,25 @@
         "guildInviteManager": 0,
         "reactionManager": 0,
         "reactionUserManager": 0,
-        "threadMemberManager": 0
+        "threadMemberManager": 0,
+        "messageManager": 50,
+        "guildScheduledEventManager": 0,
+        "guildTextThreadManager": 0,
+        "guildForumThreadManager": 0,
+        "guildMemberManager": {
+            "maxSize": 500
+        },
+        "userManager": {
+            "maxSize": 1000
+        }
     },
     "clientSweepers": {
         "messages": {
             "interval": 1800,
-            "lifetime": 3600
+            "lifetime": 108000
+        },
+        "user": {
+            "interval": 3600
         }
     },
     "roles": {
