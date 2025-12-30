@@ -1,0 +1,89 @@
+{
+    "botOptions": {
+        "changedAvatar": false,
+        "currentAvatar": "default",
+        "avatarDefaultPath": "./assets/profiles/default.webp",
+        "avatarChrismasPath": "./assets/profiles/christmas.webp",
+        "defaultActivityName": "✞ Jesus Forever",
+        "defaultActivityPresence": "online",
+        "changedActivityName": "",
+        "changedActivityPresence": ""
+    },
+    "clientOptions": {
+        "restRequestTimeout": 60000,
+        "messageEditHistoryMaxSize": 0,
+        "messageCacheMaxSize": 25,
+        "messageSweepInterval": 43200,
+        "messageCacheLifetime": 21600,
+        "intents": [
+            "Guilds",
+            "GuildMembers",
+            "GuildMessages",
+            "GuildPresences",
+            "GuildVoiceStates",
+            "MessageContent"
+        ],
+        "repliedUser": false
+    },
+    "clientCache": {
+        "guildInviteManager": 0,
+        "reactionManager": 0,
+        "reactionUserManager": 0,
+        "threadMemberManager": 0,
+        "messageManager": 50,
+        "guildScheduledEventManager": 0,
+        "guildTextThreadManager": 0,
+        "guildForumThreadManager": 0,
+        "guildMemberManager": {
+            "maxSize": 500
+        },
+        "userManager": {
+            "maxSize": 1000
+        }
+    },
+    "clientSweepers": {
+        "messages": {
+            "interval": 1800,
+            "lifetime": 108000
+        },
+        "user": {
+            "interval": 3600
+        }
+    },
+    "roles": {
+        "owner": "",
+        "admin": "",
+        "vip": "",
+        "user": "",
+        "black": "",
+        "red": "",
+        "blue": "",
+        "magenta": "",
+        "green": "",
+        "changeNickname": ""
+    },
+    "emojis": {
+        "stage": "PORADNIK ZNAJDZIESZ TUTAJ: index.js",
+        "voice": "PORADNIK ZNAJDZIESZ TUTAJ: index.js",
+        "selfDeaf": "PORADNIK ZNAJDZIESZ TUTAJ: index.js",
+        "selfMute": "PORADNIK ZNAJDZIESZ TUTAJ: index.js",
+        "serverMute": "PORADNIK ZNAJDZIESZ TUTAJ: index.js",
+        "serverDeaf": "PORADNIK ZNAJDZIESZ TUTAJ: index.js"
+    },
+    "channels": {
+        "memy": "",
+        "statystykiSerwera": ""
+    },
+    "embeds": {
+        "defaultColor": 6102251,
+        "autoEmbedUpdate": true,
+        "statisticsEmbed": ""
+    },
+    "Bible": {
+        "id": "1c9761e0230da6e0-01"
+    },
+    "developer": {
+        "embedUpdaterChannel": "",
+        "embedUpdaterEmbed": ""
+    }
+}

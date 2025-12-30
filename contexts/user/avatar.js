@@ -1,13 +1,14 @@
 'use strict';
 
-const { ContextMenuCommandBuilder, ApplicationCommandType, MessageFlags } = require('discord.js');
+const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, MessageFlags } = require('discord.js');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
     index: false,
     data: new ContextMenuCommandBuilder()
         .setName('Pokaż avatar')
-        .setType(ApplicationCommandType.User),
+        .setType(ApplicationCommandType.User)
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         const user = interaction.targetUser;
 

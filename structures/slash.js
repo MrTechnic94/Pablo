@@ -1,6 +1,6 @@
 'use strict';
 
-const { REST, Routes, ApplicationCommandType } = require('discord.js');
+const { REST, ApplicationCommandType, Routes } = require('discord.js');
 const { readdirSync } = require('node:fs');
 const { resolve } = require('node:path');
 

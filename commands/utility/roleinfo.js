@@ -20,13 +20,13 @@ module.exports = {
         // Podstawowe informacje
         const memberCount = role.members.size;
         const createdAt = Math.floor(role.createdTimestamp / 1000);
-        const hoist = role.hoist ? 'Tak' : 'Nie';
-        const mentionable = role.mentionable ? 'Tak' : 'Nie';
+        const hoist = role.hoist ? 'Tak.' : 'Nie.';
+        const mentionable = role.mentionable ? 'Tak.' : 'Nie.';
 
         // Integracja
-        let integratedStatus = 'Nie';
+        let integratedStatus = 'Nie.';
         if (role.managed) {
-            integratedStatus = role.tags?.botId ? `Tak (Bot: <@${role.tags.botId}>)` : 'Tak (Boost Serwera)';
+            integratedStatus = role.tags?.botId ? `Tak (Bot: <@${role.tags.botId}>)` : 'Tak (Boost serwera)';
         }
 
         // Uprawnienia

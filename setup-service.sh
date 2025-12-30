@@ -60,7 +60,7 @@ fi
 # Dane do podstawienia
 USER_NAME="$BOT_USER"
 GROUP_NAME="$BOT_USER"
-NODE_PATH=$(which node)
+PNPM_PATH=$(which pnpm)
 
 printf "USER: ${GREEN}$USER_NAME${NC}\n"
 printf "DIRECTORY: ${GREEN}$CURRENT_DIR${NC}\n"
@@ -69,7 +69,7 @@ printf "DIRECTORY: ${GREEN}$CURRENT_DIR${NC}\n"
 sed -e "s|{{USER}}|$USER_NAME|g" \
     -e "s|{{GROUP}}|$GROUP_NAME|g" \
     -e "s|{{DIR}}|$CURRENT_DIR|g" \
-    -e "s|{{NODE}}|$NODE_PATH|g" \
+    -e "s|{{PNPM}}|$PNPM_PATH|g" \
     "$TEMPLATE" > "$SERVICE_NAME" || { printf "${BOLD}${BRIGHT_RED}ERROR${NC}${RED}Failed to create service file${NC}\n"; exit 1; }
 
 if [ "$IS_IN_ROOT" = true ]; then

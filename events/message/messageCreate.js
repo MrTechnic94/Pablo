@@ -9,7 +9,7 @@ const urlRegex = /https?:\/\/(?:www\.)?[\w.-]{1,256}\.[a-zA-Z]{1,6}\b[\w\-@:%_+.
 module.exports = {
     name: Events.MessageCreate,
     async execute(logger, message) {
-        if (message.channel.id !== channels.memy) return;
+        if (message.author.bot || message.channel.id !== channels.memy) return;
 
         // Auto reakcje dla kanalu
         if (!message.attachments.size && !allowedExtensions.test(message.content) && !urlRegex.test(message.content)) {

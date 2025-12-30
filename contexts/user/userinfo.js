@@ -1,6 +1,6 @@
 'use strict';
 
-const { ContextMenuCommandBuilder, ApplicationCommandType, MessageFlags } = require('discord.js');
+const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, MessageFlags } = require('discord.js');
 const { presence, device } = require('../../config/lang/messages.json');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 
@@ -8,7 +8,8 @@ module.exports = {
     index: false,
     data: new ContextMenuCommandBuilder()
         .setName('Informacje o użytkowniku')
-        .setType(ApplicationCommandType.User),
+        .setType(ApplicationCommandType.User)
+        .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         const targetMember = interaction.targetMember;
 

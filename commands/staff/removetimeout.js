@@ -17,6 +17,7 @@ module.exports = {
             option.setName('powód')
                 .setDescription('Powód odciszenia.')
                 .setRequired(false)
+                .setMaxLength(450)
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
@@ -40,7 +41,7 @@ module.exports = {
 
             const embedDM = createEmbed({
                 title: 'Zostałeś odciszony',
-                description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
+                description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
             });
 
             await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Removetimeout] Failed to send DM to '${targetUser.user.tag}'.`));
@@ -49,7 +50,7 @@ module.exports = {
 
             const successEmbed = createEmbed({
                 title: 'Użytkownik odciszony',
-                description: `\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
+                description: `\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });

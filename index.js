@@ -7,6 +7,7 @@
  * Jezeli potrzebujesz pomocy, napisz tutaj: 'https://discord.com/users/586543379295240192'.
  *
  * [i] Aby zaczac uzyj polecenia 'pnpm build'.
+ * [i] Edytuj nazwe pliku 'default.example.json' -> 'default.json'.
  * [i] Edytuj pod swoje potrzeby plik 'default.json'.
  * [i] Reszte konfiguracji znajdziesz w pliku '.env.example'.
  * [i] Niektore pliki (np. embedUpdater itp.) pobieraja zmienne
@@ -26,5 +27,4 @@
 'use strict';
 
 const logger = require('./lib/core/logger');
-require('@dotenvx/dotenvx').config({ path: './config/.env' });
 require('./lib/core/startup').startup(logger);

@@ -29,7 +29,7 @@ module.exports = {
             .join(', ') || 'Brak.';
 
         // Sprawdza czy bot
-        const isBot = targetMember.user.bot ? 'Tak' : 'Nie';
+        const isBot = targetMember.user.bot ? 'Tak.' : 'Nie.';
 
         // Kiedy utworzono konto i kiedy dolaczyl na serwer
         const createdAt = Math.floor(targetMember.user.createdTimestamp / 1000);
