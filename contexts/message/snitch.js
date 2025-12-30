@@ -2,6 +2,7 @@
 
 const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, MessageFlags, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { createEmbed } = require('../../lib/utils/createEmbed');
+const { channels } = require('../../config/default.json');
 
 module.exports = {
     index: false,
@@ -28,7 +29,7 @@ module.exports = {
             return interaction.reply({ content: '`❌` Nie możesz zgłosić samego siebie.', flags: MessageFlags.Ephemeral });
         }
 
-        const logChannel = interaction.guild.channels.cache.get(process.env.SNITCH_CHANNEL_ID);
+        const logChannel = interaction.guild.channels.cache.get(channels.snitch);
 
         if (!logChannel || !logChannel.isTextBased()) {
             return interaction.reply({ content: '`❌` System zgłoszeń nie został skonfigurowany.', flags: MessageFlags.Ephemeral });

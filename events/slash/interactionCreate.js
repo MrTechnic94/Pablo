@@ -82,6 +82,8 @@ module.exports = {
                         }
 
                         // Czyszczenie duplikatow
+                        let duplicatesDeleted = 0;
+
                         if (targetId) {
                             const logChannel = interaction.channel;
                             const messages = await logChannel.messages.fetch({ limit: 50 });
@@ -91,16 +93,16 @@ module.exports = {
                                 msg.embeds[0].fields.some(f => f.name.includes('Zgłoszony') && f.value.includes(targetId))
                             );
 
-                            if (duplicates.size > 0) {
-                                for (const msg of duplicates.values()) {
-                                    await msg.delete().catch(() => null);
-                                }
+                            duplicatesDeleted = duplicates.size;
+
+                            if (duplicatesDeleted > 0) {
+                                await Promise.all(duplicates.map(msg => msg.delete().catch(() => null)));
                             }
                         }
 
                         await interaction.message.delete().catch(() => null);
                         await interaction.reply({
-                            content: `\`➖\` Zgłoszenie zostało odrzucone. Powiązane zgłoszenia zostały wyczyszczone.`,
+                            content: `\`➖\` Zgłoszenie zostało odrzucone. ${duplicatesDeleted > 0 ? `\nWyczyszczono powiązane zgłoszenia (Łącznie: **${duplicatesDeleted}**).` : ''}`,
                             flags: MessageFlags.Ephemeral
                         });
                         break;
