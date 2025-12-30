@@ -7,7 +7,7 @@ Type=simple
 User={{USER}}
 Group={{GROUP}}
 WorkingDirectory={{DIR}}
-ExecStart={{NODE}} {{DIR}}/index.js
+ExecStart={{PNPM}} start
 
 Restart=on-failure
 RestartSec=5

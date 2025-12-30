@@ -17,6 +17,7 @@ module.exports = {
             option.setName('powód')
                 .setDescription('Powód odbanowania.')
                 .setRequired(false)
+                .setMaxLength(450)
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
@@ -43,7 +44,7 @@ module.exports = {
 
             const successEmbed = createEmbed({
                 title: 'Użytkownik odbanowany',
-                description: `\`👤\` **Odbanowano:** ${bannedUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`,
+                description: `\`👤\` **Odbanowano:** ${bannedUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`,
             });
 
             await interaction.reply({ embeds: [successEmbed] });

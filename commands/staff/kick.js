@@ -17,6 +17,7 @@ module.exports = {
             option.setName('powód')
                 .setDescription('Powód wyrzucenia.')
                 .setRequired(false)
+                .setMaxLength(450)
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
@@ -46,7 +47,7 @@ module.exports = {
         try {
             const embedDM = createEmbed({
                 title: 'Zostałeś wyrzucony',
-                description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
+                description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
             });
 
             await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Kick] Failed to send DM to '${targetUser.user.tag}'.`));
@@ -55,7 +56,7 @@ module.exports = {
 
             const successEmbed = createEmbed({
                 title: 'Użytkownik wyrzucony',
-                description: `\`👤\` **Wyrzucono:** ${targetUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`🚨\` **Powód:** ${reason}`
+                description: `\`👤\` **Wyrzucono:** ${targetUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });

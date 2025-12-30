@@ -1,7 +1,6 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
-const { formatDuration } = require('../../lib/utils/parseTime');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -10,8 +9,8 @@ module.exports = {
         .setDescription('Sprawdza czas pracy bota.')
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
-        const botUptime = formatDuration(interaction.client.uptime);
+        const botUptime = Math.floor(interaction.client.readyTimestamp / 1000);
 
-        await interaction.reply({ content: `\`🕒\` Czas pracy: ${botUptime}` });
+        await interaction.reply({ content: `\`🕒\` Uruchomiono: <t:${botUptime}:R>` });
     },
 };

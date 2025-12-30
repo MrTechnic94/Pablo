@@ -15,7 +15,7 @@ module.exports = {
                 .setRequired(false)
         )
         .setContexts(InteractionContextType.Guild),
-    async execute(interaction, logger) {
+    async execute(interaction) {
         const targetMember = interaction.options.getMember('użytkownik') ?? interaction.member;
 
         if (interaction.options.getUser('użytkownik') && !interaction.options.getMember('użytkownik')) {
@@ -29,24 +29,11 @@ module.exports = {
             .join(', ') || 'Brak.';
 
         // Sprawdza czy bot
-        const isBot = targetMember.user.bot ? 'Tak' : 'Nie';
+        const isBot = targetMember.user.bot ? 'Tak.' : 'Nie.';
 
         // Kiedy utworzono konto i kiedy dolaczyl na serwer
         const createdAt = Math.floor(targetMember.user.createdTimestamp / 1000);
         const joinedAt = Math.floor(targetMember.joinedTimestamp / 1000);
-
-        // Zaproszenia - Pobiera tylko aktualne
-        let inviteCount = 0;
-
-        try {
-            const invites = await interaction.guild.invites.fetch();
-            inviteCount = invites
-                .filter(i => i.inviter && i.inviter.id === targetMember.id)
-                .reduce((acc, invite) => acc + (invite.uses || 0), 0);
-        } catch (err) {
-            logger.error(`[Slash ▸ Userinfo] Invitations could not be downloaded:\n${err}`);
-            inviteCount = 'Brak uprawnień.';
-        }
 
         // Urzadzenie
         const clientStatus = targetMember.presence?.clientStatus;
@@ -76,7 +63,7 @@ module.exports = {
                 { name: '`🚪` Dołączył na serwer', value: `**•** <t:${joinedAt}> (<t:${joinedAt}:R>)`, inline: false },
                 { name: '`📆` Stworzył konto', value: `**•** <t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },
                 { name: `\`🎭\` Role (${targetMember.roles.cache.size - 1})`, value: roles, inline: false },
-                { name: '`❓` Inne', value: `**• Bot:** ${isBot}\n**• Zaproszonych:** ${inviteCount}`, inline: false }
+                { name: '`🤖` Bot', value: `**•** ${isBot}`, inline: false }
             ]
         });
 

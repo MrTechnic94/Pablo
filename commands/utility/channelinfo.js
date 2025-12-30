@@ -21,7 +21,7 @@ module.exports = {
 
         const channelType = channels[channel.type] || 'Nieznany.';
         const createdAt = Math.floor(channel.createdTimestamp / 1000);
-        const nsfw = channel.nsfw ? 'Tak' : 'Nie';
+        const nsfw = channel.nsfw ? 'Tak.' : 'Nie.';
         const parent = channel.parent;
         const topic = channel.topic || 'Brak tematu.';
 
@@ -62,8 +62,8 @@ module.exports = {
                 ? formatDuration(channel.autoArchiveDuration * 60000, { fullWords: true })
                 : 'Nie ustawiono.';
 
-            const archived = channel.archived ? 'Tak' : 'Nie';
-            const locked = channel.locked ? 'Tak' : 'Nie';
+            const archived = channel.archived ? 'Tak.' : 'Nie.';
+            const locked = channel.locked ? 'Tak.' : 'Nie.';
 
             fields.push({
                 name: '`🧵` Szczegóły wątku',

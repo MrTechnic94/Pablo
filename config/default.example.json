@@ -17,7 +17,6 @@
         "messageCacheLifetime": 21600,
         "intents": [
             "Guilds",
-            "GuildInvites",
             "GuildMembers",
             "GuildMessages",
             "GuildPresences",
@@ -30,48 +29,61 @@
         "guildInviteManager": 0,
         "reactionManager": 0,
         "reactionUserManager": 0,
-        "threadMemberManager": 0
+        "threadMemberManager": 0,
+        "messageManager": 50,
+        "guildScheduledEventManager": 0,
+        "guildTextThreadManager": 0,
+        "guildForumThreadManager": 0,
+        "guildMemberManager": {
+            "maxSize": 500
+        },
+        "userManager": {
+            "maxSize": 1000
+        }
     },
     "clientSweepers": {
         "messages": {
             "interval": 1800,
-            "lifetime": 3600
+            "lifetime": 108000
+        },
+        "user": {
+            "interval": 3600
         }
     },
     "roles": {
-        "changeNickname": "1118157654204874772",
-        "owner": "1057380110581383238",
-        "admin": "1098253809546969170",
-        "vip": "1057605610172063805",
-        "user": "1057386272479531179",
-        "black": "1337504385961296047",
-        "red": "1337504448032800848",
-        "blue": "1337504404785467545",
-        "magenta": "1337504435529842688",
-        "green": "1337504425396142160"
+        "owner": "",
+        "admin": "",
+        "vip": "",
+        "user": "",
+        "black": "",
+        "red": "",
+        "blue": "",
+        "magenta": "",
+        "green": "",
+        "changeNickname": ""
     },
     "emojis": {
-        "stage": "<:stage:1424843721295270071>",
-        "voice": "<:voice:1423726887829639309>",
-        "serverMute": "<:serverMute:1396793251591229520>",
-        "serverDeaf": "<:serverDeaf:1396793217793527998>",
-        "selfDeaf": "<:selfDeaf:1396793208658460762>",
-        "selfMute": "<:selfMute:1396793197182717994>"
+        "stage": "PORADNIK ZNAJDZIESZ TUTAJ: index.js",
+        "voice": "PORADNIK ZNAJDZIESZ TUTAJ: index.js",
+        "selfDeaf": "PORADNIK ZNAJDZIESZ TUTAJ: index.js",
+        "selfMute": "PORADNIK ZNAJDZIESZ TUTAJ: index.js",
+        "serverMute": "PORADNIK ZNAJDZIESZ TUTAJ: index.js",
+        "serverDeaf": "PORADNIK ZNAJDZIESZ TUTAJ: index.js"
     },
     "channels": {
-        "memy": "1418942899936297010",
-        "statystykiSerwera": "1397615226614054932"
+        "memy": "",
+        "statystykiSerwera": ""
     },
     "embeds": {
         "defaultColor": 6102251,
         "autoEmbedUpdate": true,
-        "statisticsEmbed": "1397626818772598977"
+        "statisticsEmbed": ""
     },
     "Bible": {
         "id": "1c9761e0230da6e0-01"
     },
     "developer": {
-        "embedUpdaterChannel": "1421798867929796638",
-        "embedUpdaterEmbed": "1421894724893278229"
+        "embedUpdaterChannel": "",
+        "embedUpdaterEmbed": ""
     }
 }
