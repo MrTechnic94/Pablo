@@ -1,8 +1,9 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require('discord.js');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 const { roles } = require('../../config/default.json');
+const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
@@ -21,7 +22,7 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'ACCESS_DENIED');
         }
 
         const type = interaction.options.getString('rodzaj');
@@ -105,7 +106,7 @@ module.exports = {
             }
 
             default:
-                await interaction.reply({ content: '`❌` Nieznany parametr.', flags: MessageFlags.Ephemeral });
+                await reply.error(interaction, 'PARAMETER_NOT_FOUND');
         }
     },
 };

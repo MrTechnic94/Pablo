@@ -1,7 +1,8 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const { createEmbed } = require('../../lib/utils/createEmbed');
+const reply = require('../../lib/utils/responder');
 
 const emojiRegex = /<?(?:a:)?(?<name>\w+):(?<id>\d+)>?/;
 
@@ -22,14 +23,14 @@ module.exports = {
         const match = rawEmoji.match(emojiRegex);
 
         if (!match) {
-            return interaction.reply({ content: '`❌` Nie znaleziono poprawnego emoji. Obsługiwane są tylko niestandardowe emoji z serwera.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'INVALID_EMOJI');
         }
 
         const emojiId = match.groups.id;
         const emoji = interaction.guild.emojis.cache.get(emojiId);
 
         if (!emoji) {
-            return interaction.reply({ content: '`❌` Nie znaleziono takiego emoji na tym serwerze.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'EMOJI_NOT_FOUND');
         }
 
         const createdAt = Math.floor(emoji.createdTimestamp / 1000);

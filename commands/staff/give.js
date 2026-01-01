@@ -1,8 +1,9 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 const { roles } = require('../../config/default.json');
+const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`📛` Administracja',
@@ -22,22 +23,22 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (!interaction.member.roles.cache.has(roles.admin) && !interaction.member.roles.cache.has(roles.owner) && interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '`❌` Nie masz wymaganej roli.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'MISSING_ROLE');
         }
 
         const targetUser = interaction.options.getMember('użytkownik');
         const role = interaction.options.getRole('rola');
 
         if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.ManageRoles)) {
-            return await interaction.reply({ content: '`❌` Nie mam uprawnień do zarządzania rolami.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'BOT_ROLE_PERMISSION_DENY');
         }
 
         if (interaction.guild.members.me.roles.highest.position <= role.position) {
-            return await interaction.reply({ content: '`❌` Rola, którą chcesz nadać, znajduje się wyżej niż moja najwyższa rola.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'ROLE_HIGHER_THAN_BOT');
         }
 
         if (targetUser.roles.cache.has(role.id)) {
-            return await interaction.reply({ content: `\`❌\` Użytkownik ${targetUser} już posiada rolę ${role}.`, flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'USER_ALREADY_HAS_ROLE', role.id);
         }
 
         try {
@@ -51,7 +52,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Give] ${err}`);
-            await interaction.reply({ content: '`❌` Nie udało się nadać roli.', flags: MessageFlags.Ephemeral });
+            await reply.error(interaction, 'ROLE_GIVE_ERROR');
         }
     },
 };

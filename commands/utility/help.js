@@ -1,8 +1,9 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const { sendPaginatedEmbed } = require('../../lib/utils/buttonPaginator');
 const { createEmbed } = require('../../lib/utils/createEmbed');
+const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
@@ -34,7 +35,7 @@ module.exports = {
         const categoryKeys = Object.keys(categories);
 
         if (!categoryKeys) {
-            return await interaction.reply({ content: '`❌` Brak dostępnych poleceń.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'NO_COMMANDS_AVAILABLE');
         }
 
         const pages = categoryKeys.map((category, index) => {

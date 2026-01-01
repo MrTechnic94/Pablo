@@ -1,8 +1,9 @@
 'use strict';
 
 const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, MessageFlags } = require('discord.js');
-const { presence, device } = require('../../config/lang/messages.json');
+const { presence, device } = require('../../locales/pl_PL');
 const { createEmbed } = require('../../lib/utils/createEmbed');
+const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
@@ -14,7 +15,7 @@ module.exports = {
         const targetMember = interaction.targetMember;
 
         if (!targetMember) {
-            return await interaction.reply({ content: '`❌` Użytkownik nie jest na serwerze.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'USER_NOT_FOUND');
         }
 
         // Role

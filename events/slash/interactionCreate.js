@@ -1,8 +1,9 @@
 'use strict';
 
 const { createEmbed } = require('../../lib/utils/createEmbed');
-const { Events, MessageFlags } = require('discord.js');
+const { Events } = require('discord.js');
 const { roles } = require('../../config/default.json');
+const reply = require('../../lib/utils/responder');
 
 // Role - Kolory
 const roleMap = {
@@ -25,7 +26,7 @@ module.exports = {
 
             if (!command) {
                 logger.error(`[${commandType}] Command '${interaction.commandName}' not found.`);
-                return await interaction.reply({ content: '`❌` Polecenie które próbujesz wykonwać nie istnieje.', flags: MessageFlags.Ephemeral });
+                return await reply.error(interaction, 'COMMAND_NOT_FOUND');
             }
 
             try {
@@ -37,9 +38,9 @@ module.exports = {
 
                 logger.error(`[${commandType} ▸ ${commandNameBig}] ${err}`);
                 if (interaction.replied || interaction.deferred) {
-                    await interaction.followUp({ content: '`❌` Wystąpił problem podczas wykonywania polecenia.', flags: MessageFlags.Ephemeral });
+                    await reply.error(interaction, 'COMMAND_ERROR');
                 } else {
-                    await interaction.reply({ content: '`❌` Wystąpił problem podczas wykonywania polecenia.', flags: MessageFlags.Ephemeral });
+                    await reply.error(interaction, 'COMMAND_ERROR');
                 }
             }
         } else if (interaction.isButton()) {
@@ -49,16 +50,10 @@ module.exports = {
                 switch (true) {
                     case customId === 'accept_rules': {
                         if (interaction.member.roles.cache.has(roles.user)) {
-                            return await interaction.reply({
-                                content: '`❌` Już zaakceptowałeś regulamin.',
-                                flags: MessageFlags.Ephemeral
-                            });
+                            return await reply.error(interaction, 'USER_ALREADY_VERIFIED');
                         }
                         await interaction.member.roles.add(roles.user);
-                        await interaction.reply({
-                            content: '`🔹` Dziękujemy za akceptację regulaminu.',
-                            flags: MessageFlags.Ephemeral
-                        });
+                        await reply.success(interaction, 'VERIFIED');
                         break;
                     }
 
@@ -67,12 +62,14 @@ module.exports = {
 
                         const targetField = interaction.message.embeds[0].fields.find(f => f.name.includes('Zgłoszony'));
                         const targetIdMatch = targetField ? targetField.value.match(/<@!?(\d+)>/) : null;
-                        const targetId = targetIdMatch ? targetIdMatch[1] : null; // Wyciągamy ID zgłoszonego
+                        const targetId = targetIdMatch ? targetIdMatch[1] : null;
                         const userDisplay = targetId ? `użytkownika <@${targetId}>` : 'wybranego użytkownika';
+
+                        const description = reply.getString('error', 'SNITCH_REJECTED_DM', userDisplay, interaction.guild.name);
 
                         const embedDM = createEmbed({
                             title: 'Zgłoszenie odrzucone',
-                            description: `\`❌\` Twoje zgłoszenie ${userDisplay} na serwerze **${interaction.guild.name}** zostało odrzucone.`
+                            description: description
                         });
 
                         // Wysyla DM do reportera
@@ -101,10 +98,14 @@ module.exports = {
                         }
 
                         await interaction.message.delete().catch(() => null);
-                        await interaction.reply({
-                            content: `\`➖\` Zgłoszenie zostało odrzucone. ${duplicatesDeleted > 0 ? `\nWyczyszczono powiązane zgłoszenia (Łącznie: **${duplicatesDeleted}**).` : ''}`,
-                            flags: MessageFlags.Ephemeral
-                        });
+
+                        let finalContent = reply.getString('success', 'SNITCH_REJECTED');
+
+                        if (duplicatesDeleted > 0) {
+                            finalContent += reply.getString('success', 'SNITCH_CLEANED', duplicatesDeleted);
+                        }
+
+                        await reply.error(interaction, finalContent);
                         break;
                     }
 
@@ -125,9 +126,15 @@ module.exports = {
 
                         // Wysyla DM do reportera
                         if (reporterId) {
+                            const description = reply.getString(
+                                'success',
+                                'SNITCH_ACCEPTED',
+                                interaction.guild.name
+                            );
+
                             const firstEmbedDM = createEmbed({
                                 title: 'Zgłoszenie zaakceptowane',
-                                description: `\`🤩\` Dziękujemy za czujność! Użytkownik, którego zgłosiłeś, został zbanowany na serwerze **${interaction.guild.name}**.`
+                                description: description
                             });
 
                             await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] })
@@ -174,7 +181,7 @@ module.exports = {
                         } catch (err) {
                             logger.error(`[Slash] Failed to ban user:\n${err}`);
                             if (!interaction.replied && !interaction.deferred) {
-                                await interaction.reply({ content: '`❌` Nie udało się zbanować użytkownika (brak uprawnień).', flags: MessageFlags.Ephemeral });
+                                await reply.error(interaction, 'BAN_FAILED');
                             }
                         }
                         break;
@@ -182,10 +189,7 @@ module.exports = {
                 }
             } catch (err) {
                 logger.error(`[Slash] Unexpected error:\n${err}`);
-                await interaction.reply({
-                    content: '`❌` Wystąpił nieoczekiwany problem. Spróbuj ponownie później.',
-                    flags: MessageFlags.Ephemeral
-                });
+                await reply.error(interaction, 'COMMAND_ERROR');
             }
         } else if (interaction.isStringSelectMenu()) {
             try {
@@ -195,10 +199,7 @@ module.exports = {
                         const roleId = roleMap[interaction.values[0]];
 
                         if (interaction.member.roles.cache.has(roleId)) {
-                            return await interaction.reply({
-                                content: '`❌` Posiadasz już taką rolę.',
-                                flags: MessageFlags.Ephemeral
-                            });
+                            return await reply.error(interaction, 'ROLE_ALREADY_OWNED');
                         }
 
                         const currentRoles = Array.from(interaction.member.roles.cache.keys());
@@ -208,19 +209,13 @@ module.exports = {
                             .concat(roleId);
 
                         await interaction.member.roles.set(newRoles);
-                        await interaction.reply({
-                            content: `\`➕\` Twój nowy kolor to <@&${roleId}>.`,
-                            flags: MessageFlags.Ephemeral
-                        });
+                        await reply.success(interaction, 'NEW_COLOR', roleId);
                         break;
                     }
                 }
             } catch (err) {
                 logger.error(`[Slash] Error in select menu:\n${err}`);
-                await interaction.reply({
-                    content: '`❌` Wystąpił nieoczekiwany problem. Spróbuj ponownie później.',
-                    flags: MessageFlags.Ephemeral
-                });
+                await reply.error(interaction, 'COMMAND_ERROR');
             }
         }
     },

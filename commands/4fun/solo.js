@@ -1,10 +1,11 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags, Collection } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, Collection } = require('discord.js');
 const { createEmbed } = require('../../lib/utils/createEmbed');
+const reply = require('../../lib/utils/responder');
 
 const activeBattles = new Collection();
-const MAX_BATTLES_PER_GUILD = 5;
+const MAX_BATTLES_PER_GUILD = 1;
 
 module.exports = {
     category: '`💎` 4Fun',
@@ -23,17 +24,14 @@ module.exports = {
         const currentGuildBattles = activeBattles.get(guildId) || 0;
 
         if (currentGuildBattles >= MAX_BATTLES_PER_GUILD) {
-            return await interaction.reply({
-                content: `\`❌\` Trwa już zbyt wiele walk (**${MAX_BATTLES_PER_GUILD}**).`,
-                flags: MessageFlags.Ephemeral
-            });
+            return await reply.error(interaction, 'TOO_MANY_FIGHTS', MAX_BATTLES_PER_GUILD);
         }
 
         const player1 = interaction.user;
         const player2 = interaction.options.getUser('przeciwnik');
 
         if (player1.id === player2.id) {
-            return await interaction.reply({ content: '`❌` Nie możesz walczyć sam ze sobą.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'CANT_FIGHT_YOURSELF');
         }
 
         activeBattles.set(guildId, currentGuildBattles + 1);
@@ -118,6 +116,7 @@ module.exports = {
             await message.edit({ embeds: [finalEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Solo] ${err}`);
+            await reply.error(interaction, 'FIGHT_ERROR');
         } finally {
             const updatedCount = activeBattles.get(guildId) || 1;
             activeBattles.set(guildId, Math.max(0, updatedCount - 1));

@@ -58,7 +58,7 @@ module.exports = {
         const successEmbed = createEmbed({
             title: 'Podgląd roli',
             fields: [
-                { name: '`🔍` Rola', value: `**•** ${role}`, inline: false },
+                { name: '`🔍` Rola', value: `**•** <@${role.id}>`, inline: false },
                 { name: '`🔑` ID', value: `**•** ${role.id}`, inline: false },
                 { name: '`🔢` Posiadających rolę', value: `**•** ${memberCount}`, inline: false },
                 { name: '`🎨` Kolor (HEX)', value: `**•** ${role.hexColor}`, inline: false },

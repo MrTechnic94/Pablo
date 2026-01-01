@@ -1,9 +1,10 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags, ActivityType } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, ActivityType } = require('discord.js');
 const { getConfig, syncConfig } = require('../../lib/core/configManipulator');
 const { createEmbed } = require('../../lib/utils/createEmbed');
-const { presence } = require('../../config/lang/messages.json');
+const { presence } = require('../../locales/pl_PL');
+const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
@@ -30,7 +31,7 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
+            return await reply.erro(interaction, 'ACCESS_DENIED');
         }
 
         const status = interaction.options.getString('nazwa');
@@ -38,7 +39,7 @@ module.exports = {
 
         if (interaction.client.user.presence?.activities?.[0]?.name === status &&
             interaction.client.user.presence?.status === botPresence) {
-            return await interaction.reply({ content: '`❌` Nie możesz ustawić takiego samego statusu.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'STATUS_ALREADY_SET');
         }
 
         try {
@@ -70,10 +71,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Setstatus] ${err}`);
-            await interaction.reply({
-                content: '`❌` Wystąpił problem podczas zmiany statusu bota.',
-                flags: MessageFlags.Ephemeral
-            });
+            await reply.error(interaction, 'STATUS_ERROR');
         }
     },
 };

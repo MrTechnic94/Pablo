@@ -3,7 +3,7 @@
 const { SlashCommandBuilder, InteractionContextType, ChannelType } = require('discord.js');
 const { formatDuration } = require('../../lib/utils/parseTime');
 const { createEmbed } = require('../../lib/utils/createEmbed');
-const { channels } = require('../../config/lang/messages.json');
+const { channels } = require('../../locales/pl_PL');
 
 module.exports = {
     category: '`ℹ️` Przydatne',

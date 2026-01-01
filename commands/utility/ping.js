@@ -1,6 +1,7 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
+const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -17,7 +18,7 @@ module.exports = {
             await interaction.editReply(`\`🏓\` Pong!\nOpóźnienie: ${latency}ms\nWebsocket: ${interaction.client.ws.ping}ms`);
         } catch (err) {
             logger.error(`[Slash ▸ Ping] ${err}`);
-            await interaction.reply({ content: '`❌` Nie udało się uzyskać informacji o połączeniu.', flags: MessageFlags.Ephemeral });
+            await reply.error(interaction, 'API_CONNECTION_ERROR');
         }
     },
 };

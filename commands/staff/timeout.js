@@ -1,8 +1,9 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
 const { parseTimeString } = require('../../lib/utils/parseTime');
 const { createEmbed } = require('../../lib/utils/createEmbed');
+const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`📛` Administracja',
@@ -28,11 +29,11 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (!interaction.member.permissions.has(PermissionFlagsBits.ModerateMembers) && interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '`❌` Nie masz uprawnień do wyciszenia użytkowników.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'MODERATE_MEMBERS_PERMISSION_DENY');
         }
 
         if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.ModerateMembers)) {
-            return await interaction.reply({ content: '`❌` Nie mam uprawnień do wyciszenia użytkowników.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'BOT_MODERATE_MEMBERS_PERMISSION_DENY');
         }
 
         const targetUser = interaction.options.getUser('użytkownik');
@@ -42,14 +43,14 @@ module.exports = {
         const timeInfo = parseTimeString(rawTime);
 
         if (!timeInfo) {
-            return await interaction.reply({ content: '`❌` Nieprawidłowy format czasu. Użyj np. 1h, 30m, 1d.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'INVALID_TIME_FORMAT');
         }
 
         try {
             const member = await interaction.guild.members.fetch(targetUser.id);
 
             if (member.isCommunicationDisabled()) {
-                return await interaction.reply({ content: '`❌` Ten użytkownik jest już wyciszony.', flags: MessageFlags.Ephemeral });
+                return await reply.error(interaction, 'USER_IS_TIMED_OUT');
             }
 
             const embedDM = createEmbed({
@@ -69,7 +70,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Timeout] ${err}`);
-            await interaction.reply({ content: '`❌` Wystąpił problem podczas nakładania wyciszenia na użytkownika.', flags: MessageFlags.Ephemeral });
+            await reply.error(interaction, 'TIMEOUT_ERROR');
         }
     },
 };

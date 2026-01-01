@@ -1,8 +1,9 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const { verseOfTheDay, randomVerse } = require('../../lib/services/verseApi');
 const { createEmbed } = require('../../lib/utils/createEmbed');
+const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -33,7 +34,7 @@ module.exports = {
             const { reference, content } = await fn(logger);
 
             if (!reference || !content) {
-                return interaction.reply({ content: `\`❌\` Nie udało się pobrać ${title.toLowerCase()}.`, flags: MessageFlags.Ephemeral });
+                return reply.error(interaction, 'FETCH_ERROR', title.toLowerCase());
             }
 
             const successEmbed = createEmbed({
@@ -44,7 +45,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Quote] ${err}`);
-            await interaction.reply({ content: `\`❌\` Wystąpił problem podczas pobierania ${title.toLowerCase()}.`, flags: MessageFlags.Ephemeral });
+            await reply.error(interaction, 'QUOTE_ERROR', title.toLowerCase());
         }
     },
 };

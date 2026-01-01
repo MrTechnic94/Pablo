@@ -1,5 +1,6 @@
 'use strict';
 
+const { error } = require('../../locales/pl_PL');
 const { channels } = require('../../config/default.json');
 const { Events } = require('discord.js');
 
@@ -14,7 +15,7 @@ module.exports = {
         // Auto reakcje dla kanalu
         if (!message.attachments.size && !allowedExtensions.test(message.content) && !urlRegex.test(message.content)) {
             await message.delete().catch(() => null);
-            const warningMessage = await message.channel.send('`❌` Możesz wysyłać tutaj tylko memy.');
+            const warningMessage = await message.channel.send(error.ONLY_MEMES_ALLOWED);
             setTimeout(() => {
                 warningMessage.delete().catch(() => null);
             }, 5000);

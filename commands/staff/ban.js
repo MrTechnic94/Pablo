@@ -1,8 +1,9 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
 const { formatDuration } = require('../../lib/utils/parseTime');
 const { createEmbed } = require('../../lib/utils/createEmbed');
+const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`📛` Administracja',
@@ -37,11 +38,11 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (!interaction.member.permissions.has(PermissionFlagsBits.BanMembers)) {
-            return await interaction.reply({ content: '`❌` Nie masz uprawnień do banowania użytkowników.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'MANAGE_MESSAGE_PERMISSION_DENY');
         }
 
         if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.BanMembers)) {
-            return await interaction.reply({ content: '`❌` Nie mam uprawnień do banowania użytkowników.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'BOT_BAN_MEMBERS_PERMISSION_DENY');
         }
 
         const targetUser = interaction.options.getMember('użytkownik');
@@ -49,15 +50,15 @@ module.exports = {
         const deleteMessageDuration = interaction.options.getInteger('usuń_wiadomości') || 0;
 
         if (!targetUser) {
-            return await interaction.reply({ content: '`❌` Nie znaleziono użytkownika.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'USER_NOT_FOUND');
         }
 
         if (interaction.member.roles.highest.position <= targetUser.roles.highest.position) {
-            return await interaction.reply({ content: '`❌` Nie możesz zbanować tego użytkownika, ponieważ jego ranga jest równa lub wyższa od Twojej.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'ROLE_TOO_HIGH');
         }
 
         if (!targetUser.bannable) {
-            return await interaction.reply({ content: '`❌` Nie mogę zbanować tego użytkownika.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'BAN_USER_NOT_PUNISHABLE');
         }
 
         try {
@@ -78,7 +79,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Ban] ${err}`);
-            await interaction.reply({ content: '`❌` Wystąpił problem podczas banowania użytkownika.', flags: MessageFlags.Ephemeral });
+            await reply.error(interaction, 'BAN_ERROR');
         }
     },
 };

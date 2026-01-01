@@ -1,10 +1,11 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags, ActivityType } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, ActivityType } = require('discord.js');
 const { getConfig, syncConfig } = require('../../lib/core/configManipulator');
+const { presence } = require('../../locales/pl_PL');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 const { botOptions } = require('../../config/default.json');
-const { presence } = require('../../config/lang/messages.json');
+const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
@@ -18,13 +19,14 @@ module.exports = {
                 .addChoices(
                     { name: 'Bot', value: 'Bot' },
                     { name: 'Status', value: 'Status' },
-                    { name: 'Avatar', value: 'Avatar' }
+                    { name: 'Avatar', value: 'Avatar' },
+                    { name: 'Banner', value: 'Banner' }
                 )
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'ACCESS_DENIED');
         }
 
         const type = interaction.options.getString('rodzaj');
@@ -32,12 +34,12 @@ module.exports = {
         switch (type) {
             case 'Bot': {
                 try {
-                    await interaction.reply({ content: 'Bot restartuje się...', flags: MessageFlags.Ephemeral });
+                    await reply.success(interaction, 'RESTART_BOT');
 
                     process.exit(0);
                 } catch (err) {
                     logger.error(`[Slash ▸ Restart] ${err}`);
-                    await interaction.reply({ content: '`❌` Wystąpił problem podczas restartowania bota.', flags: MessageFlags.Ephemeral });
+                    await reply.error(interaction, 'RESTART_ERROR');
                 }
                 break;
             }
@@ -45,7 +47,7 @@ module.exports = {
             case 'Status': {
                 if (interaction.client.user.presence?.activities?.[0]?.name === botOptions.defaultActivityName &&
                     interaction.client.user.presence?.status === botOptions.defaultActivityPresence) {
-                    return await interaction.reply({ content: '`❌` Status jest już zrestartowany.', flags: MessageFlags.Ephemeral });
+                    return await reply.error(interaction, 'STATUS_ALREADY_RESTARTED');
                 }
 
                 try {
@@ -77,10 +79,7 @@ module.exports = {
                     await interaction.reply({ embeds: [successEmbed] });
                 } catch (err) {
                     logger.error(`[Slash ▸ Restart] ${err}`);
-                    await interaction.reply({
-                        content: '`❌` Wystąpił problem podczas restartu statusu bota.',
-                        flags: MessageFlags.Ephemeral
-                    });
+                    await reply.error(interaction, 'STATUS_ERROR');
                 }
                 break;
             }
@@ -89,7 +88,7 @@ module.exports = {
                 const config = getConfig();
 
                 if (!config.botOptions.changedAvatar) {
-                    return await interaction.reply({ content: '`❌` Avatar nie został zmieniony.', flags: MessageFlags.Ephemeral });
+                    return await reply.error(interaction, 'AVATAR_NO_CHANGE');
                 }
 
                 try {
@@ -107,13 +106,48 @@ module.exports = {
 
                     await interaction.reply({ embeds: [successEmbed] })
                 } catch (err) {
+                    if (err.message.includes('AVATAR_RATE_LIMIT') || err.code === 50035) {
+                        return await reply.error(interaction, 'RATE_LIMIT');
+                    }
+
                     logger.error(`[Slash ▸ Restart] ${err}`);
-                    await interaction.reply({
-                        content: '`❌` Wystąpił problem podczas restart avataru bota.',
-                        flags: MessageFlags.Ephemeral
-                    });
+                    await reply.error(interaction, 'AVATAR_ERROR');
                 }
+                break;
             }
+
+            case 'Banner': {
+                const botUser = await interaction.client.user.fetch();
+
+                if (!botUser.bannerURL()) {
+                    return await reply.error(interaction, 'NO_BANNER_FOUND');
+                }
+
+                try {
+                    await interaction.client.user.setBanner(botOptions.bannerDefaultPath);
+
+                    const isAnimated = botUser.bannerURL()?.includes('.gif');
+
+                    const successEmbed = createEmbed({
+                        title: 'Banner zrestartowany',
+                        description: `\`🖼️\`**Obraz:** [KLIKNIJ🡭](${interaction.client.user.bannerURL({ size: 256 })})\n\`🔥\`**Rodzaj:** ${isAnimated ? 'Animowany.' : 'Statyczny.'}`,
+                        image: interaction.client.user.bannerURL({ size: 256 })
+                    });
+
+                    await interaction.reply({ embeds: [successEmbed] })
+                } catch (err) {
+                    if (err.message.includes('BANNER_RATE_LIMIT') || err.code === 50035) {
+                        return await reply.error(interaction, 'RATE_LIMIT');
+                    }
+
+                    logger.error(`[Slash ▸ Restart] ${err}`);
+                    await reply.error(interaction, 'BANNER_ERROR');
+                }
+                break;
+            }
+
+            default:
+                await reply.error(interaction, 'PARAMETER_NOT_FOUND');
         }
     },
 };

@@ -1,7 +1,8 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const { createEmbed } = require('../../lib/utils/createEmbed');
+const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -20,7 +21,7 @@ module.exports = {
         const userData = await user.fetch();
 
         if (!userData.bannerURL()) {
-            return await interaction.reply({ content: '`❌` Użytkownik nie ma ustawionego baneru.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'USER_NO_BANNER');
         }
 
         const successEmbed = createEmbed({

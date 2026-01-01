@@ -2,6 +2,7 @@
     "botOptions": {
         "changedAvatar": false,
         "currentAvatar": "default",
+        "bannerDefaultPath": "./assets/banner/default.webp",
         "avatarDefaultPath": "./assets/profiles/default.webp",
         "avatarChrismasPath": "./assets/profiles/christmas.webp",
         "defaultActivityName": "✞ Jesus Forever",

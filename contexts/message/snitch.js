@@ -1,8 +1,9 @@
 'use strict';
 
-const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, MessageFlags, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 const { channels } = require('../../config/default.json');
+const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
@@ -15,24 +16,24 @@ module.exports = {
         const target = message.author;
         const reporter = interaction.user;
 
-        const targetMember = interaction.guild.members.cache.get(target.id);
+        const targetMember = await interaction.guild.members.cache.get(target.id);
 
         if (!targetMember) {
-            return interaction.reply({ content: '`❌` Nie znaleziono użytkownika.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'USER_NOT_FOUND');
         }
 
         if (target.bot) {
-            return interaction.reply({ content: '`❌` Nie możesz zgłosić bota.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'REPORT_BOT_ERROR');
         }
 
         if (target.id === reporter.id) {
-            return interaction.reply({ content: '`❌` Nie możesz zgłosić samego siebie.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'CANT_REPORT_SELF');
         }
 
         const logChannel = interaction.guild.channels.cache.get(channels.snitch);
 
         if (!logChannel || !logChannel.isTextBased()) {
-            return interaction.reply({ content: '`❌` System zgłoszeń nie został skonfigurowany.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'SNITCH_CHANNEL_NOT_FOUND');
         }
 
         const reason = message.content || "Wiadomość nie zawiera tekstu.";
@@ -71,9 +72,6 @@ module.exports = {
 
         await logChannel.send({ embeds: [adminEmbed], components: [row] });
 
-        await interaction.reply({
-            content: '`➕` Twoje zgłoszenie wpłyneło do administracji. Dziękujemy za czujność!',
-            flags: MessageFlags.Ephemeral
-        });
+        await reply.success(interaction, 'SNITCH_SENT');
     },
 };

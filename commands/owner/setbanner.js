@@ -1,7 +1,8 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const { createEmbed } = require('../../lib/utils/createEmbed');
+const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
@@ -16,18 +17,18 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
+            return await reply.error('ACCESS_DENIED');
         }
-
-        await interaction.deferReply();
 
         const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
         const attachment = interaction.options.getAttachment('obraz');
         const extension = attachment.url.split('.').pop().toLowerCase().split('?')[0];
 
         if (!allowedExtensions.includes(extension)) {
-            return await interaction.editReply({ content: '`❌` Możesz wgrać tylko pliki: png, jpg, jpeg, gif lub webp.' });
+            return await reply.error(interaction, 'INVALID_EXTENSION');
         }
+
+        await interaction.deferReply();
 
         try {
             await interaction.client.user.fetch();
@@ -46,8 +47,12 @@ module.exports = {
 
             await interaction.editReply({ embeds: [successEmbed] });
         } catch (err) {
+            if (err.message.includes('BANNER_RATE_LIMIT') || err.code === 50035) {
+                return await reply.error(interaction, 'RATE_LIMIT');
+            }
+
             logger.error(`[Slash ▸ Setbanner] ${err}`);
-            await interaction.editReply({ content: '`❌` Wystąpił problem podczas ustawiania baneru.' });
+            await reply.error(interaction, 'BANNER_ERROR');
         }
     },
 };

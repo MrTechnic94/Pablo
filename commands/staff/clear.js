@@ -1,7 +1,8 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
 const { createEmbed } = require('../../lib/utils/createEmbed');
+const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`📛` Administracja',
@@ -27,11 +28,11 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         if (!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages) && interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '`❌` Nie masz uprawnień do usuwania wiadomości.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'MANAGE_MESSAGE_PERMISSION_DENY');
         }
 
         if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.ManageMessages)) {
-            return await interaction.reply({ content: '`❌` Nie mam uprawnień do usuwania wiadomości.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'BOT_MANAGE_MESSAGE_PERMISSION_DENY');
         }
 
         const amount = interaction.options.getInteger('ilość');
@@ -43,7 +44,7 @@ module.exports = {
         const messagesToDelete = removePinned ? fetchedMessages : fetchedMessages.filter(msg => !msg.pinned);
 
         if (!messagesToDelete.size) {
-            return await interaction.reply({ content: '`❌` Nie znaleziono wiadomości do usunięcia z podanymi opcjami.', flags: MessageFlags.Ephemeral });
+            return await reply.error(interaction, 'CLEAR_MESSAGE_NOT_FOUND');
         }
 
         try {
@@ -57,7 +58,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (error) {
             logger.error(`[Slash ▸ Clear] ${error}`);
-            await interaction.reply({ content: '`❌` Wystąpił problem podczas usuwania wiadomości.', flags: MessageFlags.Ephemeral });
+            await reply.error(interaction, 'CLEAR_ERROR');
         }
     },
 };
