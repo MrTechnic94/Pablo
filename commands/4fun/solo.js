@@ -5,7 +5,7 @@ const { createEmbed } = require('../../lib/utils/createEmbed');
 const reply = require('../../lib/utils/responder');
 
 const activeBattles = new Collection();
-const MAX_BATTLES_PER_GUILD = 1;
+const MAX_BATTLES_PER_GUILD = 5;
 
 module.exports = {
     category: '`💎` 4Fun',

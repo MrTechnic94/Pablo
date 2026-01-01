@@ -1,6 +1,6 @@
 'use strict';
 
-const { error } = require('../../locales/pl_PL');
+const reply = require('../../lib/utils/responder');
 const { channels } = require('../../config/default.json');
 const { Events } = require('discord.js');
 
@@ -14,10 +14,10 @@ module.exports = {
 
         // Auto reakcje dla kanalu
         if (!message.attachments.size && !allowedExtensions.test(message.content) && !urlRegex.test(message.content)) {
-            await message.delete().catch(() => null);
-            const warningMessage = await message.channel.send(error.ONLY_MEMES_ALLOWED);
+            const warningMessage = await reply.error(message, 'ONLY_MEMES_ALLOWED');
             setTimeout(() => {
                 warningMessage.delete().catch(() => null);
+                message.delete().catch(() => null);
             }, 5000);
         } else {
             try {
