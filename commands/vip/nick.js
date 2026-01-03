@@ -38,8 +38,8 @@ module.exports = {
             await interaction.member.setNickname(newNick);
 
             const successEmbed = createEmbed({
-                title: 'Zmiana udana',
-                description: `\`✏️\` **Stary pseudonim:** ${oldNick ?? interaction.user.username}\n\`⭐\` **Nowy pseudonim:** ${newNick ?? interaction.user.username}`
+                title: 'Pseudonim zmieniony',
+                description: `\`✏️\` **Wcześniejszy:** ${oldNick ?? interaction.user.username}\n\`🌟\` **Nowy:** ${newNick ?? interaction.user.username}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });

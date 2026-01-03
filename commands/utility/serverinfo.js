@@ -66,7 +66,7 @@ module.exports = {
                 { name: '`👥` Użytkownicy', value: `**• Łącznie:** ${guild.memberCount}\n**• Online:** ${onlineMembers}`, inline: false },
                 { name: '`🎭` Role', value: `**• Łącznie:** ${guild.roles.cache.size - 1}`, inline: false },
                 { name: '`#️⃣` Kanały', value: `**• Tekstowe:** ${channelCounts.text}\n**• Głosowe:** ${channelCounts.voice}\n**• Kategorie:** ${channelCounts.category}`, inline: false },
-                { name: '`💎` Nitro boost', value: `**• Poziom:** ${boostLevel}\n**• Boosty:** ${boostCount || 0}`, inline: false },
+                { name: '`💜` Nitro boost', value: `**• Poziom:** ${boostLevel}\n**• Boosty:** ${boostCount || 0}`, inline: false },
                 { name: '`📸` Media', value: `**• Emotki:** ${emojiCount}\n**• Naklejki:** ${stickerCount}`, inline: false },
                 { name: '`🛡️` Poziom weryfikacji', value: `**•** ${verification[guild.verificationLevel]}`, inline: false },
                 { name: '`🌙` AFK', value: afkInfo, inline: false }
