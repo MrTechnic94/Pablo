@@ -8,6 +8,7 @@ const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
+    ownerOnly: true,
     data: new SlashCommandBuilder()
         .setName('setstatus')
         .setDescription('Ustawia status bota.')
@@ -30,10 +31,6 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
-        if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await reply.error(interaction, 'ACCESS_DENIED');
-        }
-
         const status = interaction.options.getString('nazwa');
         const botPresence = interaction.options.getString('status');
 

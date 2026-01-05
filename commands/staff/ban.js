@@ -7,6 +7,7 @@ const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`📛` Administracja',
+    botPermissions: [PermissionFlagsBits.BanMembers],
     data: new SlashCommandBuilder()
         .setName('ban')
         .setDescription('Zbanuj użytkownika na serwerze.')
@@ -38,10 +39,6 @@ module.exports = {
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction, logger) {
-        if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.BanMembers)) {
-            return await reply.error(interaction, 'BOT_BAN_MEMBERS_PERMISSION_DENY');
-        }
-
         const targetUser = interaction.options.getMember('użytkownik');
         const reason = interaction.options.getString('powód') || 'Brak.';
         const deleteMessageDuration = interaction.options.getInteger('usuń_wiadomości') || 0;

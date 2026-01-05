@@ -6,6 +6,7 @@ const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`📛` Administracja',
+    botPermissions: [PermissionFlagsBits.KickMembers],
     data: new SlashCommandBuilder()
         .setName('kick')
         .setDescription('Wyrzuć użytkownika z serwera.')
@@ -23,10 +24,6 @@ module.exports = {
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
     async execute(interaction, logger) {
-        if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.KickMembers)) {
-            return await reply.error(interaction, 'BOT_KICK_MEMBERS_PERMISSION_DENY');
-        }
-
         const targetUser = interaction.options.getMember('użytkownik');
         const reason = interaction.options.getString('powód') || 'Brak.';
 

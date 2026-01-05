@@ -7,6 +7,7 @@ const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
+    ownerOnly: true,
     data: new SlashCommandBuilder()
         .setName('sendembed')
         .setDescription('Wyślij osadzoną wiadomość.')
@@ -21,10 +22,6 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
-        if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await reply.error(interaction, 'ACCESS_DENIED');
-        }
-
         const type = interaction.options.getString('rodzaj');
 
         switch (type) {

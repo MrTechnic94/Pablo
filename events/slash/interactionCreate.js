@@ -1,5 +1,7 @@
 'use strict';
 
+const { defaultPermissions } = require('../../config/default.json');
+const { permissions } = require('../../locales/pl_PL');
 const { Events } = require('discord.js');
 const reply = require('../../lib/utils/responder');
 
@@ -14,6 +16,30 @@ module.exports = {
             if (!command) {
                 logger.error(`[${commandType}] Command '${interaction.commandName}' not found.`);
                 return await reply.error(interaction, 'COMMAND_NOT_FOUND');
+            }
+
+            // Sprawdzanie permisji bota
+            const commandPermissions = command.botPermissions || [];
+
+            const requiredPermissions = [...new Set([...defaultPermissions, ...commandPermissions])];
+
+            const botPermissions = interaction.channel.permissionsFor(interaction.guild.members.me);
+
+            if (!botPermissions.has(requiredPermissions)) {
+                const missing = botPermissions.missing(requiredPermissions);
+
+                const missingPol = missing.map(p => `\`${permissions[p] || p}\``);
+
+                return await reply.error(
+                    interaction,
+                    missing.length === 1 ? 'BOT_MISSING_PERMISSION' : 'BOT_MISSING_PERMISSIONS',
+                    missingPol.join(' ')
+                );
+            }
+
+            // Sprawdzanie czy komenda jest tylko dla wlasciciela bota
+            if (command.ownerOnly && interaction.user.id !== process.env.BOT_OWNER_ID) {
+                return await reply.error(interaction, 'ACCESS_DENIED');
             }
 
             try {

@@ -6,6 +6,7 @@ const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`📛` Administracja',
+    botPermissions: [PermissionFlagsBits.ModerateMembers],
     data: new SlashCommandBuilder()
         .setName('removetimeout')
         .setDescription('Odcisz użytkownika.')
@@ -23,10 +24,6 @@ module.exports = {
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
     async execute(interaction, logger) {
-        if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.ModerateMembers)) {
-            return await reply.error(interaction, 'MODERATE_MEMBERS_PERMISSION_DENY');
-        }
-
         const targetUser = interaction.options.getUser('użytkownik');
         const reason = interaction.options.getString('powód') || 'Brak.';
 

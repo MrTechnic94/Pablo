@@ -6,6 +6,7 @@ const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`📛` Administracja',
+    botPermissions: [PermissionFlagsBits.ManageMessages],
     data: new SlashCommandBuilder()
         .setName('clear')
         .setDescription('Usuwa wybraną ilość wiadomości z kanału.')
@@ -28,10 +29,6 @@ module.exports = {
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
     async execute(interaction, logger) {
-        if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.ManageMessages)) {
-            return await reply.error(interaction, 'BOT_MANAGE_MESSAGE_PERMISSION_DENY');
-        }
-
         const amount = interaction.options.getInteger('ilość');
         const removePinnedStr = interaction.options.getString('usuń_przypięte') ?? 'false';
         const removePinned = removePinnedStr === 'true';

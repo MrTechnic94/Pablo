@@ -1,8 +1,9 @@
 'use strict';
 
-const reply = require('../../lib/utils/responder');
-const { channels } = require('../../config/default.json');
+const { defaultPermissions } = require('../../config/default.json');
+const { getConfig } = require('../../lib/core/configManipulator');
 const { Events } = require('discord.js');
+const reply = require('../../lib/utils/responder');
 
 const allowedExtensions = /\.(jpg|jpeg|png|gif|webp|mp4|webm|mov)$/i;
 const urlRegex = /https?:\/\/(?:www\.)?[\w.-]{1,256}\.[a-zA-Z]{1,6}\b[\w\-@:%_+.~#?&//=]*/;
@@ -10,7 +11,16 @@ const urlRegex = /https?:\/\/(?:www\.)?[\w.-]{1,256}\.[a-zA-Z]{1,6}\b[\w\-@:%_+.
 module.exports = {
     name: Events.MessageCreate,
     async execute(logger, message) {
-        if (message.author.bot || message.channel.id !== channels.memy) return;
+        const config = getConfig();
+
+        if (!config.other.autoMemesReaction || message.channel.id !== config.channels.memy || message.author.bot) return;
+
+        const botPermissions = message.channel.permissionsFor(message.guild.members.me);
+
+        if (!botPermissions.has(defaultPermissions)) {
+            const missing = botPermissions.missing(defaultPermissions);
+            return logger.error(`[MessageCreate] Missing permissions: ${missing.join(', ')}`);
+        }
 
         // Auto reakcje dla kanalu
         if (!message.attachments.size && !allowedExtensions.test(message.content) && !urlRegex.test(message.content)) {

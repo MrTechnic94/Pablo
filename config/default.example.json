@@ -51,6 +51,12 @@
             "interval": 3600
         }
     },
+    "defaultPermissions": [
+        "ViewChannel",
+        "SendMessages",
+        "EmbedLinks",
+        "ReadMessageHistory"
+    ],
     "roles": {
         "user": "",
         "black": "",
@@ -80,6 +86,9 @@
     },
     "Bible": {
         "id": "1c9761e0230da6e0-01"
+    },
+    "other": {
+        "autoMemesReaction": true
     },
     "developer": {
         "embedUpdaterChannel": "",

@@ -6,6 +6,7 @@ const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
+    ownerOnly: true,
     data: new SlashCommandBuilder()
         .setName('setbanner')
         .setDescription('Ustawia nowy baner bota.')
@@ -16,10 +17,6 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
-        if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await reply.error('ACCESS_DENIED');
-        }
-
         const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
         const attachment = interaction.options.getAttachment('obraz');
         const extension = attachment.url.split('.').pop().toLowerCase().split('?')[0];

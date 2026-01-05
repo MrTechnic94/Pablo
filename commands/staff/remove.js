@@ -6,6 +6,7 @@ const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`📛` Administracja',
+    botPermissions: [PermissionFlagsBits.ManageRoles],
     data: new SlashCommandBuilder()
         .setName('remove')
         .setDescription('Zabierz wybraną rolę użytkownikowi.')
@@ -24,10 +25,6 @@ module.exports = {
     async execute(interaction, logger) {
         const targetUser = interaction.options.getMember('użytkownik');
         const role = interaction.options.getRole('rola');
-
-        if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.ManageRoles)) {
-            return await reply.error(interaction, 'BOT_MANAGE_ROLES_PERMISSION_DENY');
-        }
 
         if (interaction.guild.members.me.roles.highest.position <= role.position) {
             return await reply.error(interaction, 'BOT_HIERARCHY_TOO_LOW');
