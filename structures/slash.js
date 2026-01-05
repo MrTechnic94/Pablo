@@ -131,7 +131,7 @@ module.exports = async (client, logger) => {
         logger.info('[Context] Successfully registered context commands.');
         logger.info('[Interaction] Successfully registered interaction.');
     } catch (err) {
-        logger.error(`[Handler] Error during command registration:\n${err}`);
+        logger.error(`[Handler] Error during registration:\n${err}`);
         process.exit(1);
     }
 };

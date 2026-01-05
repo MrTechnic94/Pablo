@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 const { roles } = require('../../config/default.json');
 const reply = require('../../lib/utils/responder');
@@ -18,7 +18,7 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
-        if (!interaction.member.roles.cache.has(roles.admin) && !interaction.member.roles.cache.has(roles.changeNickname) && interaction.user.id !== process.env.BOT_OWNER_ID) {
+        if (!interaction.member.roles.cache.has(roles.changeNickname) || !interaction.member.permissions.has(PermissionFlagsBits.ManageRoles)) {
             return await reply.error(interaction, 'MISSING_ROLE');
         }
 

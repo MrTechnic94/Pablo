@@ -20,12 +20,9 @@ module.exports = {
                 .setRequired(false)
                 .setMaxLength(450)
         )
-        .setContexts(InteractionContextType.Guild),
+        .setContexts(InteractionContextType.Guild)
+        .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
     async execute(interaction, logger) {
-        if (!interaction.member.permissions.has(PermissionFlagsBits.KickMembers) && interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await reply.error(interaction, 'KICK_MEMBERS_PERMISSION_DENY');
-        }
-
         if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.KickMembers)) {
             return await reply.error(interaction, 'BOT_KICK_MEMBERS_PERMISSION_DENY');
         }

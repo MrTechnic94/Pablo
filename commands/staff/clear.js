@@ -25,12 +25,9 @@ module.exports = {
                     { name: 'Nie', value: 'false' }
                 )
         )
-        .setContexts(InteractionContextType.Guild),
+        .setContexts(InteractionContextType.Guild)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
     async execute(interaction, logger) {
-        if (!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages) && interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await reply.error(interaction, 'MANAGE_MESSAGE_PERMISSION_DENY');
-        }
-
         if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.ManageMessages)) {
             return await reply.error(interaction, 'BOT_MANAGE_MESSAGE_PERMISSION_DENY');
         }

@@ -35,12 +35,9 @@ module.exports = {
                     { name: '7 dni', value: 604800 }
                 )
         )
-        .setContexts(InteractionContextType.Guild),
+        .setContexts(InteractionContextType.Guild)
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction, logger) {
-        if (!interaction.member.permissions.has(PermissionFlagsBits.BanMembers)) {
-            return await reply.error(interaction, 'MANAGE_MESSAGE_PERMISSION_DENY');
-        }
-
         if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.BanMembers)) {
             return await reply.error(interaction, 'BOT_BAN_MEMBERS_PERMISSION_DENY');
         }

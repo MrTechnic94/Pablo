@@ -26,5 +26,4 @@
 
 'use strict';
 
-const logger = require('./lib/core/logger');
-require('./lib/core/startup').startup(logger);
+require('./lib/core/startup').startup();

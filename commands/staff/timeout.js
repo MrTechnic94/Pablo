@@ -26,12 +26,9 @@ module.exports = {
                 .setRequired(false)
                 .setMaxLength(450)
         )
-        .setContexts(InteractionContextType.Guild),
+        .setContexts(InteractionContextType.Guild)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
     async execute(interaction, logger) {
-        if (!interaction.member.permissions.has(PermissionFlagsBits.ModerateMembers) && interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await reply.error(interaction, 'MODERATE_MEMBERS_PERMISSION_DENY');
-        }
-
         if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.ModerateMembers)) {
             return await reply.error(interaction, 'BOT_MODERATE_MEMBERS_PERMISSION_DENY');
         }

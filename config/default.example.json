@@ -52,9 +52,6 @@
         }
     },
     "roles": {
-        "owner": "",
-        "admin": "",
-        "vip": "",
         "user": "",
         "black": "",
         "red": "",
@@ -73,6 +70,7 @@
     },
     "channels": {
         "memy": "",
+        "snitch": "",
         "statystykiSerwera": ""
     },
     "embeds": {

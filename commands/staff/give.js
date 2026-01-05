@@ -2,7 +2,6 @@
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
 const { createEmbed } = require('../../lib/utils/createEmbed');
-const { roles } = require('../../config/default.json');
 const reply = require('../../lib/utils/responder');
 
 module.exports = {
@@ -20,12 +19,9 @@ module.exports = {
                 .setDescription('Rola, którą chcesz nadać użytkownikowi.')
                 .setRequired(true)
         )
-        .setContexts(InteractionContextType.Guild),
+        .setContexts(InteractionContextType.Guild)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles),
     async execute(interaction, logger) {
-        if (!interaction.member.roles.cache.has(roles.admin) && !interaction.member.roles.cache.has(roles.owner) && interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await reply.error(interaction, 'MISSING_ROLE');
-        }
-
         const targetUser = interaction.options.getMember('użytkownik');
         const role = interaction.options.getRole('rola');
 
