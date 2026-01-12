@@ -1,6 +1,7 @@
 'use strict';
 
 const { createEmbed } = require('../../lib/utils/createEmbed');
+const { embeds } = require('../../config/default.json');
 const reply = require('../../lib/utils/responder');
 
 module.exports = {
@@ -31,24 +32,26 @@ module.exports = {
         // Powiadomienie zbanowanego
         const secondEmbedDM = createEmbed({
             title: 'Zostałeś zbanowany',
-            description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${rawReason}`
+            description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${rawReason}`
         });
         await interaction.client.users.send(targetId, { embeds: [secondEmbedDM] }).catch(() => null);
 
         // Ban i czyszczenie
-        await interaction.guild.members.ban(targetId, { reason: auditLogReason });
+        await interaction.guild.bans.create(targetId, { reason: auditLogReason });
 
         // Logika usuwania duplikatow
-        const messages = await interaction.channel.messages.fetch({ limit: 50 });
+        const messages = await interaction.channel.messages.fetch({ limit: 50 }).catch(() => null);
+
         const duplicates = messages.filter(msg =>
             msg.embeds.length > 0 && msg.id !== interaction.message.id &&
             msg.embeds[0].fields.some(f => f.value.includes(targetId))
         );
+
         for (const msg of duplicates.values()) await msg.delete().catch(() => null);
 
         const finishedEmbed = interaction.message.embeds[0].toJSON();
         finishedEmbed.title = 'Zgłoszenie - akcja wykonana';
-        finishedEmbed.color = 0x2b2d31;
+        finishedEmbed.color = embeds.secondaryColor;
 
         await interaction.update({
             content: `\`🔨\` Użytkownik został zbanowany przez ${interaction.user}.`,

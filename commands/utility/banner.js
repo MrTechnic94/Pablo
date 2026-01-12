@@ -18,7 +18,7 @@ module.exports = {
     async execute(interaction) {
         const user = interaction.options.getUser('użytkownik') || interaction.user;
 
-        const userData = await user.fetch();
+        const userData = await user.fetch().catch(() => null);
 
         if (!userData.bannerURL()) {
             return await reply.error(interaction, 'USER_NO_BANNER');

@@ -28,7 +28,7 @@ module.exports = {
         await interaction.deferReply();
 
         try {
-            await interaction.client.user.fetch();
+            await interaction.client.user.fetch().catch(() => null);
 
             const oldBanner = interaction.client.user.bannerURL({ size: 256 })
 

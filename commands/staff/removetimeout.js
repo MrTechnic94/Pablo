@@ -28,7 +28,11 @@ module.exports = {
         const reason = interaction.options.getString('powód') || 'Brak.';
 
         try {
-            const member = await interaction.guild.members.fetch(targetUser.id);
+            const member = await interaction.guild.members.fetch(targetUser.id).catch(() => null);
+
+            if (!member) {
+                return await reply.error(interaction, 'USER_NOT_FOUND');
+            }
 
             if (!member.isCommunicationDisabled()) {
                 return await reply.error(interaction, 'USER_IS_NOT_TIMED_OUT');
@@ -36,7 +40,7 @@ module.exports = {
 
             const embedDM = createEmbed({
                 title: 'Zostałeś odciszony',
-                description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
             });
 
             await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Removetimeout] Failed to send DM to '${targetUser.user.tag}'.`));

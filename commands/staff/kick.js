@@ -24,34 +24,40 @@ module.exports = {
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
     async execute(interaction, logger) {
-        const targetUser = interaction.options.getMember('użytkownik');
+        const targetUser = interaction.options.getUser('użytkownik');
         const reason = interaction.options.getString('powód') || 'Brak.';
 
-        if (!targetUser) {
-            return await reply.error(interaction, 'USER_NOT_FOUND');
-        }
-
-        if (interaction.member.roles.highest.position <= targetUser.roles.highest.position) {
-            return await reply.error(interaction, 'ROLE_TOO_HIGH');
-        }
-
-        if (!targetUser.kickable) {
-            return await reply.error(interaction, 'KICK_USER_NOT_PUNISHABLE');
+        if (targetUser.id === interaction.user.id) {
+            return await reply.error(interaction, 'CANT_KICK_SELF');
         }
 
         try {
+            const targetMember = await interaction.guild.members.fetch(targetUser.id).catch(() => null);
+
+            if (!targetMember) {
+                return await reply.error(interaction, 'USER_NOT_FOUND');
+            }
+
+            if (interaction.member.roles.highest.position <= targetMember.roles.highest.position) {
+                return await reply.error(interaction, 'ROLE_TOO_HIGH');
+            }
+
+            if (!targetMember.kickable) {
+                return await reply.error(interaction, 'USER_NOT_PUNISHABLE');
+            }
+
             const embedDM = createEmbed({
                 title: 'Zostałeś wyrzucony',
-                description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
             });
 
-            await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Kick] Failed to send DM to '${targetUser.user.tag}'.`));
+            await targetMember.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Kick] Failed to send DM to '${targetMember.user.tag}'.`));
 
-            await targetUser.kick(reason);
+            await targetMember.kick(reason);
 
             const successEmbed = createEmbed({
                 title: 'Użytkownik wyrzucony',
-                description: `\`👤\` **Wyrzucono:** ${targetUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                description: `\`👤\` **Wyrzucono:** ${targetMember.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });

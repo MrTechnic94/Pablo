@@ -49,7 +49,7 @@ module.exports = {
                 description: '*Walka zacznie się za 3...*'
             });
 
-            const message = await interaction.reply({ embeds: [countdownEmbed] }).then(sent => sent.fetch());
+            const message = await interaction.reply({ embeds: [countdownEmbed] }).then(sent => sent.fetch()).catch(() => null);
             await new Promise(resolve => setTimeout(resolve, 1000));
 
             for (let i = 2; i > 0; i--) {

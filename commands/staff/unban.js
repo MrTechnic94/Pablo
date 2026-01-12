@@ -28,10 +28,9 @@ module.exports = {
         const reason = interaction.options.getString('powód') || 'Brak.';
 
         try {
-            const banList = await interaction.guild.bans.fetch();
-            const bannedUser = banList.get(userId);
+            const banInfo = await interaction.guild.bans.fetch(userId).catch(() => null);
 
-            if (!bannedUser) {
+            if (!banInfo) {
                 return await reply.error(interaction, 'USER_NOT_BANNED');
             }
 
@@ -39,7 +38,7 @@ module.exports = {
 
             const successEmbed = createEmbed({
                 title: 'Użytkownik odbanowany',
-                description: `\`👤\` **Odbanowano:** ${bannedUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`,
+                description: `\`👤\` **Odbanowano:** ${banInfo.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`,
             });
 
             await interaction.reply({ embeds: [successEmbed] });

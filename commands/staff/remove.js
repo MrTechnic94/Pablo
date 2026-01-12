@@ -26,6 +26,10 @@ module.exports = {
         const targetUser = interaction.options.getMember('użytkownik');
         const role = interaction.options.getRole('rola');
 
+        if (!targetUser) {
+            return await reply.error(interaction, 'USER_NOT_FOUND');
+        }
+
         if (interaction.guild.members.me.roles.highest.position <= role.position) {
             return await reply.error(interaction, 'BOT_HIERARCHY_TOO_LOW');
         }

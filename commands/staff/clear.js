@@ -37,16 +37,16 @@ module.exports = {
 
         const messagesToDelete = removePinned ? fetchedMessages : fetchedMessages.filter(msg => !msg.pinned);
 
-        if (!messagesToDelete.size) {
-            return await reply.error(interaction, 'CLEAR_MESSAGE_NOT_FOUND');
-        }
-
         try {
-            await interaction.channel.bulkDelete(messagesToDelete, true);
+            const deleted = await interaction.channel.bulkDelete(messagesToDelete, true);
+
+            if (!deleted?.size) {
+                return await reply.error(interaction, 'CANT_CLEAR_MESSAGES');
+            }
 
             const successEmbed = createEmbed({
                 title: 'Akcja wykonana',
-                description: `\`💬\` **Usunięto: ** ${messagesToDelete.size > 1 ? `${messagesToDelete.size} wiadomości` : `${messagesToDelete.size} wiadomość`}\n\`📌\` **W tym przypięte:** ${removePinned ? 'Tak.' : 'Nie.'}`
+                description: `\`💬\` **Usunięto:** ${deleted.size > 1 ? `${deleted.size} wiadomości` : `${deleted.size} wiadomość`}\n\`📌\` **W tym przypięte:** ${removePinned ? 'Tak.' : 'Nie.'}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });

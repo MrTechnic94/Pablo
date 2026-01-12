@@ -23,9 +23,9 @@
   "dependencies": {
     "croner": "^9.1.0",
     "discord.js": "^14.25.1",
-    "ioredis": "5.8.2",
-    "pino": "^10.1.0",
-    "undici": "^7.16.0"
+    "ioredis": "5.9.1",
+    "pino": "^10.1.1",
+    "undici": "^7.18.2"
   },
   "optionalDependencies": {
     "bufferutil": "^4.1.0",

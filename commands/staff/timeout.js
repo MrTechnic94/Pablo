@@ -31,9 +31,13 @@ module.exports = {
         .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
     async execute(interaction, logger) {
         const targetUser = interaction.options.getUser('użytkownik');
+
+        if (targetUser.id === interaction.user.id) {
+            return await reply.error(interaction, 'CANT_TIMEOUT_SELF');
+        }
+
         const rawTime = interaction.options.getString('czas');
         const reason = interaction.options.getString('powód') || 'Brak.';
-
         const timeInfo = parseTimeString(rawTime);
 
         if (!timeInfo) {
@@ -41,7 +45,19 @@ module.exports = {
         }
 
         try {
-            const member = await interaction.guild.members.fetch(targetUser.id);
+            const member = await interaction.guild.members.fetch(targetUser.id).catch(() => null);
+
+            if (!member) {
+                return await reply.error(interaction, 'USER_NOT_FOUND');
+            }
+
+            if (interaction.member.roles.highest.position <= member.roles.highest.position) {
+                return await reply.error(interaction, 'ROLE_TOO_HIGH');
+            }
+
+            if (!member.moderatable) {
+                return await reply.error(interaction, 'USER_NOT_PUNISHABLE');
+            }
 
             if (member.isCommunicationDisabled()) {
                 return await reply.error(interaction, 'USER_IS_TIMED_OUT');
@@ -49,7 +65,7 @@ module.exports = {
 
             const embedDM = createEmbed({
                 title: 'Zostałeś wyciszony',
-                description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🕒\` **Czas wyciszenia:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🕒\` **Czas wyciszenia:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
             });
 
             await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed to send DM to '${targetUser.tag}'.`));

@@ -13,7 +13,7 @@ module.exports = {
     async execute(logger, message) {
         const config = getConfig();
 
-        if (!config.other.autoMemesReaction || message.channel.id !== config.channels.memy || message.author.bot) return;
+        if (!config.others.autoMemesReaction || message.channel.id !== config.channels.memy || message.author.bot) return;
 
         const botPermissions = message.channel.permissionsFor(message.guild.members.me);
 

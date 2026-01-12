@@ -1,6 +1,6 @@
 'use strict';
 
-const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { createEmbed } = require('../../lib/utils/createEmbed');
 const { channels } = require('../../config/default.json');
 const reply = require('../../lib/utils/responder');
@@ -15,8 +15,13 @@ module.exports = {
         const message = interaction.targetMessage;
         const target = message.author;
         const reporter = interaction.user;
+        const logChannel = interaction.guild.channels.cache.get(channels.snitch);
 
-        const targetMember = await interaction.guild.members.cache.get(target.id);
+        if (!logChannel?.isTextBased()) {
+            return await reply.error(interaction, 'SNITCH_CHANNEL_NOT_FOUND');
+        }
+
+        const targetMember = await interaction.guild.members.fetch(target.id).catch(() => null);
 
         if (!targetMember) {
             return await reply.error(interaction, 'USER_NOT_FOUND');
@@ -30,10 +35,8 @@ module.exports = {
             return await reply.error(interaction, 'CANT_REPORT_SELF');
         }
 
-        const logChannel = interaction.guild.channels.cache.get(channels.snitch);
-
-        if (!logChannel || !logChannel.isTextBased()) {
-            return await reply.error(interaction, 'SNITCH_CHANNEL_NOT_FOUND');
+        if (targetMember.permissions.has(PermissionFlagsBits.Administrator)) {
+            return await reply.error(interaction, 'USER_NOT_PUNISHABLE');
         }
 
         const reason = message.content || "Wiadomość nie zawiera tekstu.";
@@ -48,7 +51,7 @@ module.exports = {
         ];
 
         const adminEmbed = createEmbed({
-            title: 'Nowe zgłoszenie!',
+            title: 'Nowe zgłoszenie',
             fields: adminFields
         });
 

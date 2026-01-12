@@ -33,7 +33,7 @@ module.exports = {
 
         if (targetId) {
             const logChannel = interaction.channel;
-            const messages = await logChannel.messages.fetch({ limit: 50 });
+            const messages = await logChannel.messages.fetch({ limit: 50 }).catch(() => null);
 
             const duplicates = messages.filter(msg =>
                 msg.embeds.length > 0 &&

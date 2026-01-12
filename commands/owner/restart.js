@@ -114,7 +114,7 @@ module.exports = {
             }
 
             case 'Banner': {
-                const botUser = await interaction.client.user.fetch();
+                const botUser = await interaction.client.user.fetch().catch(() => null);
 
                 if (!botUser.bannerURL()) {
                     return await reply.error(interaction, 'NO_BANNER_FOUND');

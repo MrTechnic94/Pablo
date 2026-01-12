@@ -15,7 +15,7 @@ module.exports = {
         const guild = interaction.guild;
 
         // Wlasciciel
-        const owner = await guild.fetchOwner();
+        const owner = await guild.fetchOwner().catch(() => null);
 
         // Kiedy utworzono
         const createdAt = Math.floor(guild.createdTimestamp / 1000);

@@ -12,7 +12,7 @@ module.exports = {
         .setDescription('Wyświetla listę poleceń.')
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
-        const clientCommands = await interaction.client.application.commands.fetch();
+        const clientCommands = await interaction.client.application.commands.fetch().catch(() => null);
         const localCommands = interaction.client.commands;
         const categories = {};
 

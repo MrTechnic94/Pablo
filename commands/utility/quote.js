@@ -45,7 +45,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Quote] ${err}`);
-            await reply.error(interaction, 'QUOTE_ERROR', title.toLowerCase());
+            await reply.error(interaction, 'FETCH_ERROR', title.toLowerCase());
         }
     },
 };

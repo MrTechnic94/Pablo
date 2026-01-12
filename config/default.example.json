@@ -81,14 +81,15 @@
     },
     "embeds": {
         "defaultColor": 6102251,
-        "autoEmbedUpdate": true,
-        "statisticsEmbed": ""
+        "secondaryColor": 2829617
     },
     "Bible": {
         "id": "1c9761e0230da6e0-01"
     },
     "other": {
-        "autoMemesReaction": true
+        "autoMemesReaction": true,
+        "autoEmbedUpdate": true,
+        "statisticsEmbed": ""
     },
     "developer": {
         "embedUpdaterChannel": "",
