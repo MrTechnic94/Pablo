@@ -6,6 +6,17 @@
  * Znajdziesz mnie i moje projekty tutaj: 'https://github.com/MrTechnic94/'.
  * Jezeli potrzebujesz pomocy, napisz tutaj: 'https://discord.com/users/586543379295240192'.
  *
+ * [i] Szukasz pewnego miejsca dla swojego projektu? Mam kilka wolnych slotow na serwerze VPS.
+ * To idealne rozwiazanie dla malych i srednich botow, które wymagaja stabilnosci bez przeplacania.
+ * Sam rowniez hostuje tam swojego bota. Co oferuje:
+ * - Automatyczne aktualizacje i konfiguracja po mojej stronie,
+ * - Niskie opoznienia i gwarantowany wysoki czas pracy,
+ * - Pomagam w rozwiazywaniu problemow technicznych z botem,
+ * - Udostepniam aktualizacje wczesniej niz innym
+ * Koszt: Jedynie 1,5$ - 2$ / miesiecznie (w zaleznosci ile zasobow bot potrzebuje).
+ * Uwaga: Ze wzgledu na charakter wspoldzielonych zasobow, oferta nie dotyczy botow obslugujących ogromna liczbe serwerow.
+ * Kontakt: Zapraszam do rozmowy na Discordzie. Dane kontaktowe znajdziesz w moim profilu na GitHubie (link powyzej).
+
  * [i] Aby zaczac uzyj polecenia 'pnpm build'.
  * [i] Edytuj nazwe pliku 'default.example.json' -> 'default.json'.
  * [i] Edytuj pod swoje potrzeby plik 'default.json'.
@@ -26,5 +37,4 @@
 
 'use strict';
 
-const logger = require('./lib/core/logger');
-require('./lib/core/startup').startup(logger);
+require('./lib/core/startup').startup();

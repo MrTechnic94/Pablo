@@ -1,12 +1,11 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags, ActivityType } = require('discord.js');
-const { getConfig, syncConfig } = require('../../lib/core/configManipulator');
-const { createEmbed } = require('../../lib/utils/createEmbed');
-const { presence } = require('../../config/lang/messages.json');
+const { SlashCommandBuilder, InteractionContextType, ActivityType } = require('discord.js');
+const { presence } = require('../../locales/pl_PL');
 
 module.exports = {
     index: false,
+    ownerOnly: true,
     data: new SlashCommandBuilder()
         .setName('setstatus')
         .setDescription('Ustawia status bota.')
@@ -29,16 +28,14 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
-        if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
-        }
+        const { utils } = interaction.client;
 
         const status = interaction.options.getString('nazwa');
         const botPresence = interaction.options.getString('status');
 
         if (interaction.client.user.presence?.activities?.[0]?.name === status &&
             interaction.client.user.presence?.status === botPresence) {
-            return await interaction.reply({ content: '`❌` Nie możesz ustawić takiego samego statusu.', flags: MessageFlags.Ephemeral });
+            return await utils.reply.error(interaction, 'STATUS_ALREADY_SET');
         }
 
         try {
@@ -50,19 +47,19 @@ module.exports = {
                 }],
             });
 
-            const config = getConfig();
+            const config = utils.getConfig();
 
             config.botOptions.changedActivityName = status;
             config.botOptions.changedActivityPresence = botPresence;
 
-            syncConfig(config);
+            utils.syncConfig(config);
 
             const presenceData = presence[botPresence];
 
             const presenceEmoji = presenceData?.emoji || '❓';
             const presenceType = presenceData?.name || 'Nieznany';
 
-            const successEmbed = createEmbed({
+            const successEmbed = utils.createEmbed({
                 title: 'Status zmieniony',
                 description: `\`💬\` **Nazwa:** ${status}\n\`${presenceEmoji}\` **Status:** ${presenceType}`
             });
@@ -70,10 +67,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Setstatus] ${err}`);
-            await interaction.reply({
-                content: '`❌` Wystąpił problem podczas zmiany statusu bota.',
-                flags: MessageFlags.Ephemeral
-            });
+            await utils.reply.error(interaction, 'STATUS_ERROR');
         }
     },
 };

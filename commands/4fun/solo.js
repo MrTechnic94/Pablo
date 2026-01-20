@@ -1,7 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags, Collection } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
+const { SlashCommandBuilder, InteractionContextType, Collection } = require('discord.js');
 
 const activeBattles = new Collection();
 const MAX_BATTLES_PER_GUILD = 5;
@@ -19,21 +18,19 @@ module.exports = {
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
         const { guildId } = interaction;
+        const { utils } = interaction.client;
 
         const currentGuildBattles = activeBattles.get(guildId) || 0;
 
         if (currentGuildBattles >= MAX_BATTLES_PER_GUILD) {
-            return await interaction.reply({
-                content: `\`❌\` Trwa już zbyt wiele walk (**${MAX_BATTLES_PER_GUILD}**).`,
-                flags: MessageFlags.Ephemeral
-            });
+            return await utils.reply.error(interaction, 'TOO_MANY_FIGHTS', MAX_BATTLES_PER_GUILD);
         }
 
         const player1 = interaction.user;
         const player2 = interaction.options.getUser('przeciwnik');
 
         if (player1.id === player2.id) {
-            return await interaction.reply({ content: '`❌` Nie możesz walczyć sam ze sobą.', flags: MessageFlags.Ephemeral });
+            return await utils.reply.error(interaction, 'CANT_FIGHT_YOURSELF');
         }
 
         activeBattles.set(guildId, currentGuildBattles + 1);
@@ -46,12 +43,12 @@ module.exports = {
 
             const battleLog = [];
 
-            const countdownEmbed = createEmbed({
+            const countdownEmbed = utils.createEmbed({
                 title: '`💢` SOLÓWA ! `💢`',
                 description: '*Walka zacznie się za 3...*'
             });
 
-            const message = await interaction.reply({ embeds: [countdownEmbed] }).then(sent => sent.fetch());
+            const message = await interaction.reply({ embeds: [countdownEmbed] }).then(sent => sent.fetch()).catch(() => null);
             await new Promise(resolve => setTimeout(resolve, 1000));
 
             for (let i = 2; i > 0; i--) {
@@ -88,7 +85,7 @@ module.exports = {
                 battleLog.push(actionText);
                 if (battleLog.length > 5) battleLog.shift();
 
-                const battleEmbed = createEmbed({
+                const battleEmbed = utils.createEmbed({
                     title: '`💢` TRWA WALKA ! `💢`',
                     description: battleLog.join('\n'),
                     fields: [
@@ -106,7 +103,7 @@ module.exports = {
 
             const winner = players.find(p => p.hp > 0);
 
-            const finalEmbed = createEmbed({
+            const finalEmbed = utils.createEmbed({
                 title: '`🥊` PODSUMOWANIE ! `🥊`',
                 description: `\`👑\` **Zwycięzca:** <@${winner.user.id}>\n\n${battleLog.join('\n')}`,
                 fields: [
@@ -118,6 +115,7 @@ module.exports = {
             await message.edit({ embeds: [finalEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Solo] ${err}`);
+            await utils.reply.error(interaction, 'FIGHT_ERROR');
         } finally {
             const updatedCount = activeBattles.get(guildId) || 1;
             activeBattles.set(guildId, Math.max(0, updatedCount - 1));

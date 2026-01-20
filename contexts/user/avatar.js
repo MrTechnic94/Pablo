@@ -1,7 +1,6 @@
 'use strict';
 
 const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, MessageFlags } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
     index: false,
@@ -10,9 +9,11 @@ module.exports = {
         .setType(ApplicationCommandType.User)
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
+        const { utils } = interaction.client;
+
         const user = interaction.targetUser;
 
-        const successEmbed = createEmbed({
+        const successEmbed = utils.createEmbed({
             title: 'Podgląd avataru',
             description: `\`👤\` **Użytkownik:** ${user}\n\`🖼️\` **Obraz:** [KLIKNIJ🡭](${user.displayAvatarURL({ size: 256 })})`,
             image: user.displayAvatarURL({ size: 256 })

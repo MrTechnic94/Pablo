@@ -1,10 +1,10 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
     category: '`📛` Administracja',
+    botPermissions: [PermissionFlagsBits.ManageMessages],
     data: new SlashCommandBuilder()
         .setName('clear')
         .setDescription('Usuwa wybraną ilość wiadomości z kanału.')
@@ -24,15 +24,10 @@ module.exports = {
                     { name: 'Nie', value: 'false' }
                 )
         )
-        .setContexts(InteractionContextType.Guild),
+        .setContexts(InteractionContextType.Guild)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
     async execute(interaction, logger) {
-        if (!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages) && interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '`❌` Nie masz uprawnień do usuwania wiadomości.', flags: MessageFlags.Ephemeral });
-        }
-
-        if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.ManageMessages)) {
-            return await interaction.reply({ content: '`❌` Nie mam uprawnień do usuwania wiadomości.', flags: MessageFlags.Ephemeral });
-        }
+        const { utils } = interaction.client;
 
         const amount = interaction.options.getInteger('ilość');
         const removePinnedStr = interaction.options.getString('usuń_przypięte') ?? 'false';
@@ -42,22 +37,22 @@ module.exports = {
 
         const messagesToDelete = removePinned ? fetchedMessages : fetchedMessages.filter(msg => !msg.pinned);
 
-        if (!messagesToDelete.size) {
-            return await interaction.reply({ content: '`❌` Nie znaleziono wiadomości do usunięcia z podanymi opcjami.', flags: MessageFlags.Ephemeral });
-        }
-
         try {
-            await interaction.channel.bulkDelete(messagesToDelete, true);
+            const deleted = await interaction.channel.bulkDelete(messagesToDelete, true);
 
-            const successEmbed = createEmbed({
+            if (!deleted?.size) {
+                return await utils.reply.error(interaction, 'CANT_CLEAR_MESSAGES');
+            }
+
+            const successEmbed = utils.createEmbed({
                 title: 'Akcja wykonana',
-                description: `\`💬\` **Usunięto: ** ${messagesToDelete.size > 1 ? `${messagesToDelete.size} wiadomości` : `${messagesToDelete.size} wiadomość`}\n\`📌\` **W tym przypięte:** ${removePinned ? 'Tak.' : 'Nie.'}`
+                description: `\`💬\` **Usunięto:** ${deleted.size > 1 ? `${deleted.size} wiadomości` : `${deleted.size} wiadomość`}\n\`📌\` **W tym przypięte:** ${removePinned ? 'Tak.' : 'Nie.'}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (error) {
             logger.error(`[Slash ▸ Clear] ${error}`);
-            await interaction.reply({ content: '`❌` Wystąpił problem podczas usuwania wiadomości.', flags: MessageFlags.Ephemeral });
+            await utils.reply.error(interaction, 'CLEAR_ERROR');
         }
     },
 };

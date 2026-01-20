@@ -1,11 +1,11 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
+const { SlashCommandBuilder, InteractionContextType, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require('discord.js');
 const { roles } = require('../../config/default.json');
 
 module.exports = {
     index: false,
+    ownerOnly: true,
     data: new SlashCommandBuilder()
         .setName('sendembed')
         .setDescription('Wyślij osadzoną wiadomość.')
@@ -20,15 +20,13 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
-        if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
-        }
+        const { utils } = interaction.client;
 
         const type = interaction.options.getString('rodzaj');
 
         switch (type) {
             case 'weryfikacja': {
-                const verifyEmbed = createEmbed({
+                const verifyEmbed = utils.createEmbed({
                     description: (
                         '> `ℹ️` **OGÓLNE INFORMACJE.**\n\n' +
                         '`🔹` Nie pinguj.\n' +
@@ -56,7 +54,7 @@ module.exports = {
             }
 
             case 'menu-kolory': {
-                const colorsEmbed = createEmbed({
+                const colorsEmbed = utils.createEmbed({
                     description: (
                         '```ansi\n[2;34m🔹Menu kolorów🔹[0m\n```\n``➖ ➖ ➖ ➖ ➖ ``\n' +
                         `\`🖤\` • <@&${roles.black}>\n` +
@@ -105,7 +103,7 @@ module.exports = {
             }
 
             default:
-                await interaction.reply({ content: '`❌` Nieznany parametr.', flags: MessageFlags.Ephemeral });
+                await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
         }
     },
 };

@@ -1,7 +1,6 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -15,9 +14,11 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
+        const { utils } = interaction.client;
+
         const user = interaction.options.getUser('użytkownik') || interaction.user;
 
-        const successEmbed = createEmbed({
+        const successEmbed = utils.createEmbed({
             title: 'Podgląd avataru',
             description: `\`👤\` **Użytkownik:** ${user}\n\`🖼️\` **Obraz:** [KLIKNIJ🡭](${user.displayAvatarURL({ size: 256 })})`,
             image: user.displayAvatarURL({ size: 256 })

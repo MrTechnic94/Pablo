@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -9,6 +9,8 @@ module.exports = {
         .setDescription('Sprawdza opóźnienie bota.')
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
+        const { utils } = interaction.client;
+
         try {
             const start = Date.now();
             await interaction.reply({ content: 'Pingowanie...' });
@@ -17,7 +19,7 @@ module.exports = {
             await interaction.editReply(`\`🏓\` Pong!\nOpóźnienie: ${latency}ms\nWebsocket: ${interaction.client.ws.ping}ms`);
         } catch (err) {
             logger.error(`[Slash ▸ Ping] ${err}`);
-            await interaction.reply({ content: '`❌` Nie udało się uzyskać informacji o połączeniu.', flags: MessageFlags.Ephemeral });
+            await utils.reply.error(interaction, 'API_CONNECTION_ERROR');
         }
     },
 };

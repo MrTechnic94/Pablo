@@ -1,7 +1,7 @@
 'use strict';
 
 const { REST, ApplicationCommandType, Routes } = require('discord.js');
-const { readdirSync } = require('node:fs');
+const { readdirSync, existsSync } = require('node:fs');
 const { resolve } = require('node:path');
 
 module.exports = async (client, logger) => {
@@ -12,6 +12,7 @@ module.exports = async (client, logger) => {
 
     const commands = [];
 
+    // Slash
     for (const category of commandCategories) {
         const categoryPath = resolve(commandsPath, category);
         const commandFiles = readdirSync(categoryPath)
@@ -39,6 +40,7 @@ module.exports = async (client, logger) => {
         }
     }
 
+    // Contexts
     const contextsPath = resolve(__dirname, '../contexts');
     const contextCategories = readdirSync(contextsPath, { withFileTypes: true })
         .filter(dirent => dirent.isDirectory())
@@ -71,6 +73,38 @@ module.exports = async (client, logger) => {
         }
     }
 
+    // Buttony
+    const buttonsPath = resolve(__dirname, '../interactions/buttons');
+    if (existsSync(buttonsPath)) {
+        const buttonFiles = readdirSync(buttonsPath).filter(file => file.endsWith('.js'));
+        for (const file of buttonFiles) {
+            try {
+                const button = require(resolve(buttonsPath, file));
+                if (button.customId) {
+                    client.buttons.set(button.customId, button);
+                }
+            } catch (err) {
+                logger.error(`[Button ▸ ${file}] ${err}`);
+            }
+        }
+    }
+
+    // Select menu
+    const selectMenusPath = resolve(__dirname, '../interactions/selectmenus');
+    if (existsSync(selectMenusPath)) {
+        const menuFiles = readdirSync(selectMenusPath).filter(file => file.endsWith('.js'));
+        for (const file of menuFiles) {
+            try {
+                const menu = require(resolve(selectMenusPath, file));
+                if (menu.customId) {
+                    client.selectMenus.set(menu.customId, menu);
+                }
+            } catch (err) {
+                logger.error(`[SelectMenu ▸ ${file}] ${err}`);
+            }
+        }
+    }
+
     const rest = new REST().setToken(global.isDev ? process.env.DEV_BOT_TOKEN : process.env.BOT_TOKEN);
 
     try {
@@ -95,8 +129,9 @@ module.exports = async (client, logger) => {
 
         logger.info('[Slash] Successfully registered slash commands.');
         logger.info('[Context] Successfully registered context commands.');
+        logger.info('[Interaction] Successfully registered interaction.');
     } catch (err) {
-        logger.error(`[Handler] Error during command registration:\n${err}`);
+        logger.error(`[Handler] Error during registration:\n${err}`);
         process.exit(1);
     }
 };

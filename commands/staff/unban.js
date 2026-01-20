@@ -1,10 +1,10 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
     category: '`📛` Administracja',
+    botPermissions: [PermissionFlagsBits.BanMembers],
     data: new SlashCommandBuilder()
         .setName('unban')
         .setDescription('Odbanuj użytkownika.')
@@ -19,38 +19,32 @@ module.exports = {
                 .setRequired(false)
                 .setMaxLength(450)
         )
-        .setContexts(InteractionContextType.Guild),
+        .setContexts(InteractionContextType.Guild)
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction, logger) {
-        if (!interaction.member.permissions.has(PermissionFlagsBits.BanMembers) && interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '`❌` Nie masz uprawnień do odbanowywania użytkowników.', flags: MessageFlags.Ephemeral });
-        }
-
-        if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.BanMembers)) {
-            return await interaction.reply({ content: '`❌` Nie mam uprawnień do odbanowywania użytkowników.', flags: MessageFlags.Ephemeral });
-        }
+        const { utils } = interaction.client;
 
         const userId = interaction.options.getString('id_użytkownika');
         const reason = interaction.options.getString('powód') || 'Brak.';
 
         try {
-            const banList = await interaction.guild.bans.fetch();
-            const bannedUser = banList.get(userId);
+            const banInfo = await interaction.guild.bans.fetch(userId).catch(() => null);
 
-            if (!bannedUser) {
-                return await interaction.reply({ content: '`❌` Ten użytkownik nie jest zbanowany.', flags: MessageFlags.Ephemeral });
+            if (!banInfo) {
+                return await utils.reply.error(interaction, 'USER_NOT_BANNED');
             }
 
-            await interaction.guild.bans.remove(userId, reason);
+            await interaction.guild.bans.remove(userId, { reason: reason });
 
-            const successEmbed = createEmbed({
+            const successEmbed = utils.createEmbed({
                 title: 'Użytkownik odbanowany',
-                description: `\`👤\` **Odbanowano:** ${bannedUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`,
+                description: `\`👤\` **Odbanowano:** ${banInfo.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`,
             });
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Unban] ${err}`);
-            await interaction.reply({ content: '`❌` Wystąpił problem podczas odbanowywania użytkownika.', flags: MessageFlags.Ephemeral });
+            await utils.reply.error(interaction, 'UNBAN_ERROR');
         }
     },
 };

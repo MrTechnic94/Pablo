@@ -1,7 +1,6 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionsBitField } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -15,6 +14,8 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
+        const { utils } = interaction.client;
+
         const role = interaction.options.getRole('rola');
 
         // Podstawowe informacje
@@ -55,10 +56,10 @@ module.exports = {
         // BitField
         const perms = role.permissions.bitfield;
 
-        const successEmbed = createEmbed({
+        const successEmbed = utils.createEmbed({
             title: 'Podgląd roli',
             fields: [
-                { name: '`🔍` Rola', value: `**•** ${role}`, inline: false },
+                { name: '`🔍` Rola', value: `**•** <@${role.id}>`, inline: false },
                 { name: '`🔑` ID', value: `**•** ${role.id}`, inline: false },
                 { name: '`🔢` Posiadających rolę', value: `**•** ${memberCount}`, inline: false },
                 { name: '`🎨` Kolor (HEX)', value: `**•** ${role.hexColor}`, inline: false },

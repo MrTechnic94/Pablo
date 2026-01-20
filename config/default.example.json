@@ -2,6 +2,7 @@
     "botOptions": {
         "changedAvatar": false,
         "currentAvatar": "default",
+        "bannerDefaultPath": "./assets/banner/default.webp",
         "avatarDefaultPath": "./assets/profiles/default.webp",
         "avatarChrismasPath": "./assets/profiles/christmas.webp",
         "defaultActivityName": "✞ Jesus Forever",
@@ -50,10 +51,13 @@
             "interval": 3600
         }
     },
+    "defaultPermissions": [
+        "ViewChannel",
+        "SendMessages",
+        "EmbedLinks",
+        "ReadMessageHistory"
+    ],
     "roles": {
-        "owner": "",
-        "admin": "",
-        "vip": "",
         "user": "",
         "black": "",
         "red": "",
@@ -72,15 +76,20 @@
     },
     "channels": {
         "memy": "",
+        "snitch": "",
         "statystykiSerwera": ""
     },
     "embeds": {
         "defaultColor": 6102251,
-        "autoEmbedUpdate": true,
-        "statisticsEmbed": ""
+        "secondaryColor": 2829617
     },
     "Bible": {
         "id": "1c9761e0230da6e0-01"
+    },
+    "other": {
+        "autoMemesReaction": true,
+        "autoEmbedUpdate": true,
+        "statisticsEmbed": ""
     },
     "developer": {
         "embedUpdaterChannel": "",

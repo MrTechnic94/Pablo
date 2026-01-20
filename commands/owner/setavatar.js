@@ -1,11 +1,10 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
-const { getConfig, syncConfig } = require('../../lib/core/configManipulator');
-const { createEmbed } = require('../../lib/utils/createEmbed');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 
 module.exports = {
     index: false,
+    ownerOnly: true,
     data: new SlashCommandBuilder()
         .setName('setavatar')
         .setDescription('Ustawia nowy avatar bota.')
@@ -16,26 +15,24 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
-        if (interaction.user.id !== process.env.BOT_OWNER_ID) {
-            return await interaction.reply({ content: '`❌` Nie masz permisji.', flags: MessageFlags.Ephemeral });
-        }
-
-        await interaction.deferReply();
+        const { utils } = interaction.client;
 
         const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
         const attachment = interaction.options.getAttachment('obraz');
         const extension = attachment.url.split('.').pop().toLowerCase().split('?')[0];
 
         if (!allowedExtensions.includes(extension)) {
-            return await interaction.editReply({ content: '`❌` Możesz wgrać tylko pliki: png, jpg, jpeg, gif lub webp.' });
+            return await utils.reply.error(interaction, 'INVALID_EXTENSION');
         }
 
+        await interaction.deferReply();
+
         try {
-            const config = getConfig();
+            const config = utils.getConfig();
 
             config.botOptions.changedAvatar = true;
 
-            syncConfig(config);
+            utils.syncConfig(config);
 
             const oldAvatar = interaction.client.user.displayAvatarURL({ size: 256 });
 
@@ -43,7 +40,7 @@ module.exports = {
 
             const newAvatar = interaction.client.user.displayAvatarURL({ size: 256 });
 
-            const successEmbed = createEmbed({
+            const successEmbed = utils.createEmbed({
                 title: 'Avatar ustawiony',
                 description: `\`📷\` **Wcześniejszy:** [KLIKNIJ🡭](${oldAvatar})\n\`🌟\` **Nowy:** [KLIKNIJ🡭](${newAvatar})`,
                 image: newAvatar
@@ -51,8 +48,12 @@ module.exports = {
 
             await interaction.editReply({ embeds: [successEmbed] });
         } catch (err) {
+            if (err.message.includes('AVATAR_RATE_LIMIT') || err.code === 50035) {
+                return await utils.reply.error(interaction, 'RATE_LIMIT');
+            }
+
             logger.error(`[Slash ▸ Setavatar] ${err}`);
-            await interaction.editReply({ content: '`❌` Wystąpił problem podczas ustawiania avatara.' });
+            await utils.reply.error(interaction, 'AVATAR_ERROR');
         }
     },
 };

@@ -1,8 +1,7 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
-const { presence, device } = require('../../config/lang/messages.json');
-const { createEmbed } = require('../../lib/utils/createEmbed');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
+const { presence, device } = require('../../locales/pl_PL');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -16,10 +15,12 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
+        const { utils } = interaction.client;
+
         const targetMember = interaction.options.getMember('użytkownik') ?? interaction.member;
 
         if (interaction.options.getUser('użytkownik') && !interaction.options.getMember('użytkownik')) {
-            return await interaction.reply({ content: '`❌` Użytkownik nie jest na serwerze.', flags: MessageFlags.Ephemeral });
+            return await utils.reply.error(interaction, 'USER_NOT_FOUND');
         }
 
         // Role
@@ -51,7 +52,7 @@ module.exports = {
         const userStatus = presence[rawStatus]?.name || 'Niedostępny.';
         const statusEmoji = presence[rawStatus]?.emoji || '🎱';
 
-        const successEmbed = createEmbed({
+        const successEmbed = utils.createEmbed(interaction, {
             title: 'Podgląd użytkownika',
             thumbnail: targetMember.user.displayAvatarURL(),
             fields: [

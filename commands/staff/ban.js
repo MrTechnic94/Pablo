@@ -1,11 +1,10 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const { formatDuration } = require('../../lib/utils/parseTime');
-const { createEmbed } = require('../../lib/utils/createEmbed');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
     category: '`📛` Administracja',
+    botPermissions: [PermissionFlagsBits.BanMembers],
     data: new SlashCommandBuilder()
         .setName('ban')
         .setDescription('Zbanuj użytkownika na serwerze.')
@@ -34,51 +33,52 @@ module.exports = {
                     { name: '7 dni', value: 604800 }
                 )
         )
-        .setContexts(InteractionContextType.Guild),
+        .setContexts(InteractionContextType.Guild)
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction, logger) {
-        if (!interaction.member.permissions.has(PermissionFlagsBits.BanMembers)) {
-            return await interaction.reply({ content: '`❌` Nie masz uprawnień do banowania użytkowników.', flags: MessageFlags.Ephemeral });
-        }
+        const { utils } = interaction.client;
 
-        if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.BanMembers)) {
-            return await interaction.reply({ content: '`❌` Nie mam uprawnień do banowania użytkowników.', flags: MessageFlags.Ephemeral });
-        }
-
-        const targetUser = interaction.options.getMember('użytkownik');
+        const targetUser = interaction.options.getUser('użytkownik');
         const reason = interaction.options.getString('powód') || 'Brak.';
         const deleteMessageDuration = interaction.options.getInteger('usuń_wiadomości') || 0;
 
-        if (!targetUser) {
-            return await interaction.reply({ content: '`❌` Nie znaleziono użytkownika.', flags: MessageFlags.Ephemeral });
-        }
-
-        if (interaction.member.roles.highest.position <= targetUser.roles.highest.position) {
-            return await interaction.reply({ content: '`❌` Nie możesz zbanować tego użytkownika, ponieważ jego ranga jest równa lub wyższa od Twojej.', flags: MessageFlags.Ephemeral });
-        }
-
-        if (!targetUser.bannable) {
-            return await interaction.reply({ content: '`❌` Nie mogę zbanować tego użytkownika.', flags: MessageFlags.Ephemeral });
+        if (targetUser.id === interaction.user.id) {
+            return await utils.reply.error(interaction, 'CANT_BAN_SELF');
         }
 
         try {
-            const embedDM = createEmbed({
+            const targetMember = await interaction.guild.members.fetch(targetUser.id).catch(() => null);
+
+            if (!targetMember) {
+                return await utils.reply.error(interaction, 'USER_NOT_FOUND');
+            }
+
+            if (interaction.member.roles.highest.position <= targetMember.roles.highest.position) {
+                return await utils.reply.error(interaction, 'ROLE_TOO_HIGH');
+            }
+
+            if (!targetMember.bannable) {
+                return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
+            }
+
+            const embedDM = utils.createEmbed({
                 title: 'Zostałeś zbanowany',
-                description: `\`👤\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
             });
 
             await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Ban] Failed to send DM to '${targetUser.user.tag}'.`));
 
-            await targetUser.ban({ reason, deleteMessageSeconds: deleteMessageDuration });
+            await interaction.guild.bans.create(targetUser.id, { reason: reason, deleteMessageSeconds: deleteMessageDuration });
 
-            const successEmbed = createEmbed({
+            const successEmbed = utils.createEmbed({
                 title: 'Użytkownik zbanowany',
-                description: `\`👤\` **Wyrzucono:** ${targetUser.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}\n\`🗑️\` **Usunięcie wiadomości:** ${deleteMessageDuration ? formatDuration(deleteMessageDuration * 1000, { fullWords: true }) : 'Nie usuwaj'}`
+                description: `\`👤\` **Wyrzucono:** ${targetUser.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}\n\`🗑️\` **Usunięcie wiadomości:** ${deleteMessageDuration ? utils.formatDuration(deleteMessageDuration * 1000, { fullWords: true }) : 'Nie usuwaj'}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Ban] ${err}`);
-            await interaction.reply({ content: '`❌` Wystąpił problem podczas banowania użytkownika.', flags: MessageFlags.Ephemeral });
+            await utils.reply.error(interaction, 'BAN_ERROR');
         }
     },
 };

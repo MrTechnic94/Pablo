@@ -24,72 +24,74 @@ NC="\033[0m"
 SERVICE_NAME="pablo.service"
 TEMPLATE="service.template"
 DESTINATION="/etc/systemd/system/$SERVICE_NAME"
-BOT_USER="pablo-bot"
 
-printf "${BOLD}${GREEN}GOOD${NC} Starting systemctl service configuration...\n"
+printf "${BOLD}${GREEN}GOOD${NC} Starting automatic systemctl configuration...\n"
 
-# Sprawdzenie czy uzytkownik istnieje
-if ! id "$BOT_USER" >/dev/null 2>&1; then
-    printf "${BOLD}${BRIGHT_GOLD}WARN${NC}${GOLD} User ${BRIGHT_GOLD}$BOT_USER${GOLD} not found${NC}\n"
-    printf "${BOLD}${GREEN}GOOD${NC} Creating system user...\n"
-    sudo adduser --system --group --no-create-home "$BOT_USER" > /dev/null
+# Automatyczne wykrywanie sciezki PNPM (szuka w PATH oraz w folderach lokalnych roota)
+PNPM_DETECTED=$(which pnpm || find /root/.local -name pnpm -type f -executable 2>/dev/null | head -n 1)
+
+if [ -z "$PNPM_DETECTED" ]; then
+    printf "${BOLD}${BRIGHT_RED}ERROR${NC}${RED} pnpm not found!${NC}\n"
+    exit 1
 fi
 
-# Nadanie uprawnien do aktualnego folderu
-CURRENT_DIR=$(pwd)
-printf "${BOLD}${GREEN}GOOD${NC} Setting permissions for $CURRENT_DIR...\n"
-sudo chown -R "$BOT_USER":"$BOT_USER" "$CURRENT_DIR"
-sudo chmod -R 755 "$CURRENT_DIR"
+# Tworzenie linku systemowego dla unikniecia bledow uprawnien w systemd
+if [ ! -x "/usr/bin/pnpm" ]; then
+    printf "${BOLD}${GREEN}GOOD${NC} Creating system symlink for pnpm...\n"
+    sudo ln -s "$PNPM_DETECTED" /usr/bin/pnpm 2>/dev/null
+fi
+PNPM_PATH="/usr/bin/pnpm"
 
-IS_IN_ROOT=false
+# Automatyczne ustawienie uzytkownika na podstawie folderu
+CURRENT_DIR=$(pwd)
 case "$CURRENT_DIR" in
     /root*)
-        printf "${BOLD}${BRIGHT_GOLD}WARN${NC}${GOLD} Bot is in ${BRIGHT_GOLD}/root${GOLD}. Adjusting parent permissions...${NC}\n"
-        sudo chmod +x /root
-        sudo setfacl -m u:"$BOT_USER":x /root > /dev/null 2>&1 || true
+        USER_NAME="root"
+        GROUP_NAME="root"
         IS_IN_ROOT=true
+        printf "${BOLD}${BRIGHT_GOLD}WARN${NC}${GOLD} Root directory detected. Setting service user to ${BRIGHT_GOLD}root${GOLD}.${NC}\n"
+        ;;
+    *)
+        USER_NAME="pablo-bot"
+        GROUP_NAME="pablo-bot"
+        IS_IN_ROOT=false
+        if ! id "$USER_NAME" >/dev/null 2>&1; then
+            printf "${BOLD}${GREEN}GOOD${NC} Creating system user ${USER_NAME}...\n"
+            sudo adduser --system --group --no-create-home "$USER_NAME" > /dev/null
+        fi
+        sudo chown -R "$USER_NAME":"$USER_NAME" "$CURRENT_DIR"
         ;;
 esac
 
 # Sprawdzenie czy plik szablonu istnieje
 if [ ! -f "$TEMPLATE" ]; then
-    printf "${BOLD}${BRIGHT_RED}ERROR${NC}${RED} Template file ${BRIGHT_RED}$TEMPLATE${RED} not found${NC}\n"
+    printf "${BOLD}${BRIGHT_RED}ERROR${NC}${RED} Template file ${BRIGHT_RED}${TEMPLATE}${RED} not found!${NC}\n"
     exit 1
 fi
 
-# Dane do podstawienia
-USER_NAME="$BOT_USER"
-GROUP_NAME="$BOT_USER"
-PNPM_PATH=$(which pnpm)
-
-printf "USER: ${GREEN}$USER_NAME${NC}\n"
-printf "DIRECTORY: ${GREEN}$CURRENT_DIR${NC}\n"
-
-# Tworzenie pliku .service
+# Generowanie pliku uslugi
+printf "${BOLD}${GREEN}GOOD${NC} Generating service file...\n"
 sed -e "s|{{USER}}|$USER_NAME|g" \
     -e "s|{{GROUP}}|$GROUP_NAME|g" \
     -e "s|{{DIR}}|$CURRENT_DIR|g" \
     -e "s|{{PNPM}}|$PNPM_PATH|g" \
-    "$TEMPLATE" > "$SERVICE_NAME" || { printf "${BOLD}${BRIGHT_RED}ERROR${NC}${RED}Failed to create service file${NC}\n"; exit 1; }
+    "$TEMPLATE" > "$SERVICE_NAME"
 
+# Poprawki kompatybilnosci dla katalogu /root (Sandbox escape)
 if [ "$IS_IN_ROOT" = true ]; then
-    printf "${BOLD}${GREEN}GOOD${NC} Injecting ProtectHome=false for /root compatibility...${NC}\n"
+    printf "${BOLD}${GREEN}GOOD${NC} Applying /root compatibility fixes...\n"
     sed -i "/WorkingDirectory/a ProtectHome=false" "$SERVICE_NAME"
+    sed -i "/WorkingDirectory/a ProtectSystem=off" "$SERVICE_NAME"
 fi
 
-# Instalacja w systemie
-printf "${BOLD}${GREEN}GOOD${NC} Installing service to $DESTINATION...\n"
-sudo mv "$SERVICE_NAME" "$DESTINATION" || { printf "${BOLD}${BRIGHT_RED}ERROR${NC}${RED}Failed to move file to ${BRIGHT_RED}$DESTINATION${NC}\n"; exit 1; }
-
-# Odmaskowanie i przeladowanie
-sudo systemctl unmask "$SERVICE_NAME" > /dev/null 2>&1
+# Instalacja i start uslugi
+printf "${BOLD}${GREEN}GOOD${NC} Installing and starting the service...\n"
+sudo mv "$SERVICE_NAME" "$DESTINATION"
 sudo systemctl daemon-reload
+sudo systemctl unmask "$SERVICE_NAME" > /dev/null 2>&1
+sudo systemctl enable "$SERVICE_NAME" --now
 
-# Start uslugi
-sudo systemctl enable "$SERVICE_NAME" || { printf "${BOLD}${BRIGHT_RED}ERROR${NC}${RED}Failed to enable service${NC}\n"; exit 1; }
-sudo systemctl restart "$SERVICE_NAME" || { printf "${BOLD}${BRIGHT_RED}ERROR${NC}${RED}Failed to start service${NC}\n"; exit 1; }
-
-# Sprawdzanie statusu
+# Sprawdzanie statusu koncowego
 printf "Checking service status...\n"
 sleep 2
 
@@ -99,7 +101,7 @@ if systemctl is-active --quiet "$SERVICE_NAME"; then
     printf "TO VIEW LOGS: ${GREEN}journalctl -u $SERVICE_NAME -f${NC}\n"
 else
     printf "STATUS: ${BOLD}${BRIGHT_RED}FAILED${NC}\n"
-    printf "${RED}Service is not running. Check logs:${NC}\n"
-    printf "${GREEN}journalctl -u $SERVICE_NAME -n 50 --no-pager${NC}\n"
+    printf "${RED}Service failed to start. Check recent logs below:${NC}\n"
+    journalctl -u $SERVICE_NAME -n 15 --no-pager
     exit 1
 fi

@@ -1,7 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, MessageFlags } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 
 const emojiRegex = /<?(?:a:)?(?<name>\w+):(?<id>\d+)>?/;
 
@@ -17,19 +16,21 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
+        const { utils } = interaction.client;
+
         const rawEmoji = interaction.options.getString('emoji');
 
         const match = rawEmoji.match(emojiRegex);
 
         if (!match) {
-            return interaction.reply({ content: '`❌` Nie znaleziono poprawnego emoji. Obsługiwane są tylko niestandardowe emoji z serwera.', flags: MessageFlags.Ephemeral });
+            return await utils.reply.error(interaction, 'INVALID_EMOJI');
         }
 
         const emojiId = match.groups.id;
         const emoji = interaction.guild.emojis.cache.get(emojiId);
 
         if (!emoji) {
-            return interaction.reply({ content: '`❌` Nie znaleziono takiego emoji na tym serwerze.', flags: MessageFlags.Ephemeral });
+            return await utils.reply.error(interaction, 'EMOJI_NOT_FOUND');
         }
 
         const createdAt = Math.floor(emoji.createdTimestamp / 1000);
@@ -50,7 +51,7 @@ module.exports = {
             fields.push({ name: '`📦` Integracja', value: '**•** Tak (Zewnętrzna usługa)', inline: false });
         }
 
-        const successEmbed = createEmbed({
+        const successEmbed = utils.createEmbed({
             title: 'Podgląd emoji',
             fields: fields,
             thumbnail: emojiURL

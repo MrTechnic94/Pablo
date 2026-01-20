@@ -1,7 +1,7 @@
 'use strict';
 
-const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, MessageFlags, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
+const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { channels } = require('../../config/default.json');
 
 module.exports = {
     index: false,
@@ -10,28 +10,33 @@ module.exports = {
         .setType(ApplicationCommandType.Message)
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
+        const { utils } = interaction.client;
+
         const message = interaction.targetMessage;
         const target = message.author;
         const reporter = interaction.user;
+        const logChannel = interaction.guild.channels.cache.get(channels.snitch);
 
-        const targetMember = interaction.guild.members.cache.get(target.id);
+        if (!logChannel?.isTextBased()) {
+            return await utils.reply.error(interaction, 'SNITCH_CHANNEL_NOT_FOUND');
+        }
+
+        const targetMember = await interaction.guild.members.fetch(target.id).catch(() => null);
 
         if (!targetMember) {
-            return interaction.reply({ content: '`❌` Nie znaleziono użytkownika.', flags: MessageFlags.Ephemeral });
+            return await utils.reply.error(interaction, 'USER_NOT_FOUND');
         }
 
         if (target.bot) {
-            return interaction.reply({ content: '`❌` Nie możesz zgłosić bota.', flags: MessageFlags.Ephemeral });
+            return await utils.reply.error(interaction, 'REPORT_BOT_ERROR');
         }
 
         if (target.id === reporter.id) {
-            return interaction.reply({ content: '`❌` Nie możesz zgłosić samego siebie.', flags: MessageFlags.Ephemeral });
+            return await utils.reply.error(interaction, 'CANT_REPORT_SELF');
         }
 
-        const logChannel = interaction.guild.channels.cache.get(process.env.SNITCH_CHANNEL_ID);
-
-        if (!logChannel || !logChannel.isTextBased()) {
-            return interaction.reply({ content: '`❌` System zgłoszeń nie został skonfigurowany.', flags: MessageFlags.Ephemeral });
+        if (targetMember.permissions.has(PermissionFlagsBits.Administrator)) {
+            return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
         }
 
         const reason = message.content || "Wiadomość nie zawiera tekstu.";
@@ -45,8 +50,8 @@ module.exports = {
             { name: '`💬` Treść wiadomości', value: `\`\`\`${reason.slice(0, 1000)}\`\`\``, inline: false }
         ];
 
-        const adminEmbed = createEmbed({
-            title: 'Nowe zgłoszenie!',
+        const adminEmbed = utils.createEmbed({
+            title: 'Nowe zgłoszenie',
             fields: adminFields
         });
 
@@ -63,6 +68,10 @@ module.exports = {
                     .setLabel('Zbanuj')
                     .setStyle(ButtonStyle.Danger),
                 new ButtonBuilder()
+                    .setCustomId(`snitch_kick_${target.id}`)
+                    .setLabel('Wyrzuć')
+                    .setStyle(ButtonStyle.Danger),
+                new ButtonBuilder()
                     .setCustomId(`snitch_dismiss_${reporter.id}`)
                     .setLabel('Odrzuć')
                     .setStyle(ButtonStyle.Primary)
@@ -70,9 +79,6 @@ module.exports = {
 
         await logChannel.send({ embeds: [adminEmbed], components: [row] });
 
-        await interaction.reply({
-            content: '`➕` Twoje zgłoszenie wpłyneło do administracji. Dziękujemy za czujność!',
-            flags: MessageFlags.Ephemeral
-        });
+        await utils.reply.success(interaction, 'SNITCH_SENT');
     },
 };
