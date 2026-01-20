@@ -3,12 +3,12 @@
 const { embeds } = require('../../config/default.json');
 
 module.exports = {
-    customId: 'snitch_ban_',
+    customId: 'snitch_kick_',
     isPrefix: true,
     async execute(interaction) {
         const { utils } = interaction.client;
 
-        const targetId = interaction.customId.replace('snitch_ban_', '');
+        const targetId = interaction.customId.replace('snitch_kick_', '');
 
         const reporterField = interaction.message.embeds[0].fields.find(f => f.name.includes('Zgłaszający'));
         const reporterIdMatch = reporterField ? reporterField.value.match(/<@!?(\d+)>/) : null;
@@ -29,15 +29,15 @@ module.exports = {
             await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => null);
         }
 
-        // Powiadomienie zbanowanego
+        // Powiadomienie wyrzuconego
         const secondEmbedDM = utils.createEmbed({
-            title: 'Zostałeś zbanowany',
+            title: 'Zostałeś wyrzucony',
             description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${rawReason}`
         });
         await interaction.client.users.send(targetId, { embeds: [secondEmbedDM] }).catch(() => null);
 
-        // Ban i czyszczenie
-        await interaction.guild.bans.create(targetId, { reason: auditLogReason });
+        // Kick i czyszczenie
+        await interaction.guild.members.kick(targetId, { reason: auditLogReason });
 
         // Usuwania duplikatow
         const messages = await interaction.channel.messages.fetch({ limit: 50 }).catch(() => null);
@@ -54,7 +54,7 @@ module.exports = {
         finishedEmbed.color = embeds.secondaryColor;
 
         await interaction.update({
-            content: `\`🔨\` Użytkownik został zbanowany przez ${interaction.user}.`,
+            content: `\`👢\` Użytkownik został wyrzucony przez ${interaction.user}.`,
             embeds: [finishedEmbed],
             components: []
         });

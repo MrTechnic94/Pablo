@@ -1,8 +1,6 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`📛` Administracja',
@@ -23,25 +21,27 @@ module.exports = {
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles),
     async execute(interaction, logger) {
+        const { utils } = interaction.client;
+
         const targetUser = interaction.options.getMember('użytkownik');
         const role = interaction.options.getRole('rola');
 
         if (!targetUser) {
-            return await reply.error(interaction, 'USER_NOT_FOUND');
+            return await utils.reply.error(interaction, 'USER_NOT_FOUND');
         }
 
         if (interaction.guild.members.me.roles.highest.position <= role.position) {
-            return await reply.error(interaction, 'ROLE_HIGHER_THAN_BOT');
+            return await utils.reply.error(interaction, 'ROLE_HIGHER_THAN_BOT');
         }
 
         if (targetUser.roles.cache.has(role.id)) {
-            return await reply.error(interaction, 'USER_ALREADY_HAS_ROLE', role.id);
+            return await utils.reply.error(interaction, 'USER_ALREADY_HAS_ROLE', role.id);
         }
 
         try {
             await targetUser.roles.add(role);
 
-            const successEmbed = createEmbed({
+            const successEmbed = utils.createEmbed({
                 title: 'Rola nadana',
                 description: `\`🎭\` **Nadano rolę:** ${role}\n\`👤\` **Użytkownikowi:** ${targetUser}\n\`📛\` **Polecenia użył:** ${interaction.user}`
             });
@@ -49,7 +49,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Give] ${err}`);
-            await reply.error(interaction, 'ROLE_GIVE_ERROR');
+            await utils.reply.error(interaction, 'ROLE_GIVE_ERROR');
         }
     },
 };

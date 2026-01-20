@@ -23,8 +23,8 @@
   "dependencies": {
     "croner": "^9.1.0",
     "discord.js": "^14.25.1",
-    "ioredis": "5.9.1",
-    "pino": "^10.1.1",
+    "ioredis": "5.9.2",
+    "pino": "^10.2.0",
     "undici": "^7.18.2"
   },
   "optionalDependencies": {

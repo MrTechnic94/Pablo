@@ -3,11 +3,12 @@
 const { defaultPermissions } = require('../../config/default.json');
 const { permissions } = require('../../locales/pl_PL');
 const { Events } = require('discord.js');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     name: Events.InteractionCreate,
     async execute(logger, interaction) {
+        const { utils } = interaction.client;
+
         if (interaction.isChatInputCommand() || interaction.isUserContextMenuCommand() || interaction.isMessageContextMenuCommand()) {
             const commandType = interaction.isChatInputCommand() ? 'Slash' : 'Context';
 
@@ -15,7 +16,7 @@ module.exports = {
 
             if (!command) {
                 logger.error(`[${commandType}] Command '${interaction.commandName}' not found.`);
-                return await reply.error(interaction, 'COMMAND_NOT_FOUND');
+                return await utils.reply.error(interaction, 'COMMAND_NOT_FOUND');
             }
 
             // Sprawdzanie permisji bota
@@ -30,7 +31,7 @@ module.exports = {
 
                 const missingPol = missing.map(p => `\`${permissions[p] || p}\``);
 
-                return await reply.error(
+                return await utils.reply.error(
                     interaction,
                     missing.length === 1 ? 'BOT_MISSING_PERMISSION' : 'BOT_MISSING_PERMISSIONS',
                     missingPol.join(' ')
@@ -39,7 +40,7 @@ module.exports = {
 
             // Sprawdzanie czy komenda jest tylko dla wlasciciela bota
             if (command.ownerOnly && interaction.user.id !== process.env.BOT_OWNER_ID) {
-                return await reply.error(interaction, 'ACCESS_DENIED');
+                return await utils.reply.error(interaction, 'ACCESS_DENIED');
             }
 
             try {
@@ -51,9 +52,9 @@ module.exports = {
 
                 logger.error(`[${commandType} ▸ ${commandNameBig}] ${err}`);
                 if (interaction.replied || interaction.deferred) {
-                    await reply.error(interaction, 'COMMAND_ERROR');
+                    await utils.reply.error(interaction, 'COMMAND_ERROR');
                 } else {
-                    await reply.error(interaction, 'COMMAND_ERROR');
+                    await utils.reply.error(interaction, 'COMMAND_ERROR');
                 }
             }
         } else if (interaction.isButton()) {
@@ -68,7 +69,7 @@ module.exports = {
                 await button.execute(interaction, logger);
             } catch (err) {
                 logger.error(`[Button ▸ ${interaction.customId}] ${err}`);
-                await reply.error(interaction, 'COMMAND_ERROR');
+                await utils.reply.error(interaction, 'COMMAND_ERROR');
             }
         } else if (interaction.isStringSelectMenu()) {
             // Select Menus
@@ -80,7 +81,7 @@ module.exports = {
                 await menu.execute(interaction, logger);
             } catch (err) {
                 logger.error(`[SelectMenu ▸ ${interaction.customId}] ${err}`);
-                await reply.error(interaction, 'COMMAND_ERROR');
+                await utils.reply.error(interaction, 'COMMAND_ERROR');
             }
         }
     }

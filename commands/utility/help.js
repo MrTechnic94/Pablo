@@ -1,9 +1,6 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
-const { sendPaginatedEmbed } = require('../../lib/utils/buttonPaginator');
-const { createEmbed } = require('../../lib/utils/createEmbed');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
@@ -12,6 +9,8 @@ module.exports = {
         .setDescription('Wyświetla listę poleceń.')
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
+        const { utils } = interaction.client;
+
         const clientCommands = await interaction.client.application.commands.fetch().catch(() => null);
         const localCommands = interaction.client.commands;
         const categories = {};
@@ -35,17 +34,17 @@ module.exports = {
         const categoryKeys = Object.keys(categories);
 
         if (!categoryKeys) {
-            return await reply.error(interaction, 'NO_COMMANDS_AVAILABLE');
+            return await utils.reply.error(interaction, 'NO_COMMANDS_AVAILABLE');
         }
 
         const pages = categoryKeys.map((category, index) => {
-            return createEmbed({
+            return utils.createEmbed({
                 title: 'Menu pomocy',
                 description: `**• Kategoria: ${category}**\n\n ${categories[category].join('\n\n')}`,
                 footer: { text: `Strona ${index + 1} z ${categoryKeys.length} • Poleceń: ${categories[category].length}` }
             });
         });
 
-        await sendPaginatedEmbed(interaction, pages);
+        await utils.sendPaginatedEmbed(interaction, pages);
     },
 };

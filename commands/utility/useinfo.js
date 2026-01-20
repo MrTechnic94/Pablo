@@ -2,8 +2,6 @@
 
 const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const { presence, device } = require('../../locales/pl_PL');
-const { createEmbed } = require('../../lib/utils/createEmbed');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -17,10 +15,12 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
+        const { utils } = interaction.client;
+
         const targetMember = interaction.options.getMember('użytkownik') ?? interaction.member;
 
         if (interaction.options.getUser('użytkownik') && !interaction.options.getMember('użytkownik')) {
-            return await reply.error(interaction, 'USER_NOT_FOUND');
+            return await utils.reply.error(interaction, 'USER_NOT_FOUND');
         }
 
         // Role
@@ -52,7 +52,7 @@ module.exports = {
         const userStatus = presence[rawStatus]?.name || 'Niedostępny.';
         const statusEmoji = presence[rawStatus]?.emoji || '🎱';
 
-        const successEmbed = createEmbed({
+        const successEmbed = utils.createEmbed(interaction, {
             title: 'Podgląd użytkownika',
             thumbnail: targetMember.user.displayAvatarURL(),
             fields: [

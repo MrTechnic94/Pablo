@@ -1,9 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
 const { roles } = require('../../config/default.json');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
@@ -22,11 +20,13 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
+        const { utils } = interaction.client;
+
         const type = interaction.options.getString('rodzaj');
 
         switch (type) {
             case 'weryfikacja': {
-                const verifyEmbed = createEmbed({
+                const verifyEmbed = utils.createEmbed({
                     description: (
                         '> `ℹ️` **OGÓLNE INFORMACJE.**\n\n' +
                         '`🔹` Nie pinguj.\n' +
@@ -54,7 +54,7 @@ module.exports = {
             }
 
             case 'menu-kolory': {
-                const colorsEmbed = createEmbed({
+                const colorsEmbed = utils.createEmbed({
                     description: (
                         '```ansi\n[2;34m🔹Menu kolorów🔹[0m\n```\n``➖ ➖ ➖ ➖ ➖ ``\n' +
                         `\`🖤\` • <@&${roles.black}>\n` +
@@ -103,7 +103,7 @@ module.exports = {
             }
 
             default:
-                await reply.error(interaction, 'PARAMETER_NOT_FOUND');
+                await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
         }
     },
 };

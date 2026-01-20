@@ -1,8 +1,6 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, ChannelType } = require('discord.js');
-const { formatDuration } = require('../../lib/utils/parseTime');
-const { createEmbed } = require('../../lib/utils/createEmbed');
 const { channels } = require('../../locales/pl_PL');
 
 module.exports = {
@@ -17,6 +15,8 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
+        const { utils } = interaction.client;
+
         const channel = interaction.options.getChannel('kanał') ?? interaction.channel;
 
         const channelType = channels[channel.type] || 'Nieznany.';
@@ -26,6 +26,7 @@ module.exports = {
         const topic = channel.topic || 'Brak tematu.';
 
         let channelFieldName = '`🔎` Kanał';
+
         if (channel.type === ChannelType.GuildCategory) {
             channelFieldName = '`🔎` Kategoria';
         } else if (channel.isThread()) {
@@ -59,7 +60,7 @@ module.exports = {
 
         if (channel.isThread()) {
             const autoArchive = channel.autoArchiveDuration
-                ? formatDuration(channel.autoArchiveDuration * 60000, { fullWords: true })
+                ? utils.formatDuration(channel.autoArchiveDuration * 60000, { fullWords: true })
                 : 'Nie ustawiono.';
 
             const archived = channel.archived ? 'Tak.' : 'Nie.';
@@ -73,7 +74,7 @@ module.exports = {
         }
 
         if (channel.rateLimitPerUser && channel.rateLimitPerUser > 0) {
-            const slowmodeValue = formatDuration(channel.rateLimitPerUser * 1000, { fullWords: true });
+            const slowmodeValue = utils.formatDuration(channel.rateLimitPerUser * 1000, { fullWords: true });
 
             fields.push({
                 name: '`⏱️` Tryb powolny',
@@ -82,7 +83,7 @@ module.exports = {
             });
         }
 
-        const successEmbed = createEmbed({
+        const successEmbed = utils.createEmbed({
             title: 'Podgląd kanału',
             fields: fields
         });

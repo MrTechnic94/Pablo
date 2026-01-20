@@ -13,10 +13,10 @@ module.exports = {
         const ramUsage = process.memoryUsage().heapUsed / 1024 / 1024;
         const startDate = new Intl.DateTimeFormat({ dateStyle: 'medium' });
 
-        const mode = global.isDev ? 'Development' : 'Production';
-        const start = startDate.format(new Date());
+        const modeInfo = global.isDev ? 'Development' : 'Production';
+        const startFormatted = startDate.format(new Date());
         const statsInfo = `GUILDS: ${totalGuilds} | USERS: ${totalUsers}`;
-        const ramText = `${ramUsage.toFixed(2)} MB`;
+        const ramInfo = `${ramUsage.toFixed(2)} MB`;
         const shardInfo = client.shard ? `TOTAL: ${client.shard.count} | ID: ${client.shard.ids.join(', ')}` : "";
 
         const rows = [
@@ -24,9 +24,9 @@ module.exports = {
             `[Client] NAME:   ${client.user.tag}`,
             `[Client] ID:     ${client.user.id}`,
             `[Stats]  ${statsInfo}`,
-            `[Stats]  RAM USAGE:  ${ramText}`,
-            `[System] MODE:   ${mode}`,
-            `[System] START:  ${start}`
+            `[Stats]  RAM USAGE:  ${ramInfo}`,
+            `[System] MODE:   ${modeInfo}`,
+            `[System] START:  ${startFormatted}`
         ];
 
         if (client.shard) rows.splice(5, 0, `[Shard]  ${shardInfo}`);

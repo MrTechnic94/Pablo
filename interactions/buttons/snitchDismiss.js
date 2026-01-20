@@ -1,15 +1,12 @@
 'use strict';
 
-const { createEmbed } = require('../../lib/utils/createEmbed');
-const reply = require('../../lib/utils/responder');
-
 module.exports = {
     customId: 'snitch_dismiss_',
     isPrefix: true,
     async execute(interaction, logger) {
-        const { customId } = interaction;
+        const { utils } = interaction.client;
 
-        const reporterId = customId.replace('snitch_dismiss_', '');
+        const reporterId = interaction.replace('snitch_dismiss_', '');
 
         const targetField = interaction.message.embeds[0].fields.find(f => f.name.includes('Zgłoszony'));
         const targetIdMatch = targetField ? targetField.value.match(/<@!?(\d+)>/) : null;
@@ -17,9 +14,9 @@ module.exports = {
 
         const userDisplay = targetId ? `użytkownika <@${targetId}>` : 'wybranego użytkownika';
 
-        const description = reply.getString('error', 'SNITCH_REJECTED_DM', userDisplay, interaction.guild.name);
+        const description = utils.reply.getString('error', 'SNITCH_REJECTED_DM', userDisplay, interaction.guild.name);
 
-        const embedDM = createEmbed({
+        const embedDM = utils.createEmbed({
             title: 'Zgłoszenie odrzucone',
             description: description
         });
@@ -32,8 +29,7 @@ module.exports = {
         let duplicatesDeleted = 0;
 
         if (targetId) {
-            const logChannel = interaction.channel;
-            const messages = await logChannel.messages.fetch({ limit: 50 }).catch(() => null);
+            const messages = await interaction.channel.messages.fetch({ limit: 50 }).catch(() => null);
 
             const duplicates = messages.filter(msg =>
                 msg.embeds.length > 0 &&
@@ -50,12 +46,12 @@ module.exports = {
 
         await interaction.message.delete().catch(() => null);
 
-        let finalContent = reply.getString('success', 'SNITCH_REJECTED');
+        let finalContent = utils.reply.getString('success', 'SNITCH_REJECTED');
 
         if (duplicatesDeleted > 0) {
-            finalContent += reply.getString('success', 'SNITCH_CLEANED', duplicatesDeleted);
+            finalContent += utils.reply.getString('success', 'SNITCH_CLEANED', duplicatesDeleted);
         }
 
-        await reply.error(interaction, finalContent);
+        await utils.reply.error(interaction, finalContent);
     }
 };

@@ -2,8 +2,6 @@
 
 const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, MessageFlags } = require('discord.js');
 const { presence, device } = require('../../locales/pl_PL');
-const { createEmbed } = require('../../lib/utils/createEmbed');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
@@ -12,10 +10,12 @@ module.exports = {
         .setType(ApplicationCommandType.User)
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
+        const { utils } = interaction.client;
+
         const targetMember = interaction.targetMember;
 
         if (!targetMember) {
-            return await reply.error(interaction, 'USER_NOT_FOUND');
+            return await utils.reply.error(interaction, 'USER_NOT_FOUND');
         }
 
         // Role
@@ -47,7 +47,7 @@ module.exports = {
         const userStatus = presence[rawStatus]?.name || 'Niedostępny.';
         const statusEmoji = presence[rawStatus]?.emoji || '🎱';
 
-        const successEmbed = createEmbed({
+        const successEmbed = utils.createEmbed({
             title: 'Podgląd użytkownika',
             thumbnail: targetMember.user.displayAvatarURL(),
             fields: [

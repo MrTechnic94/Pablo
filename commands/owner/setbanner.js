@@ -1,8 +1,6 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
@@ -17,12 +15,14 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
+        const { utils } = interaction.client;
+
         const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
         const attachment = interaction.options.getAttachment('obraz');
         const extension = attachment.url.split('.').pop().toLowerCase().split('?')[0];
 
         if (!allowedExtensions.includes(extension)) {
-            return await reply.error(interaction, 'INVALID_EXTENSION');
+            return await utils.reply.error(interaction, 'INVALID_EXTENSION');
         }
 
         await interaction.deferReply();
@@ -36,7 +36,7 @@ module.exports = {
 
             const newBanner = interaction.client.user.bannerURL({ size: 256 });
 
-            const successEmbed = createEmbed({
+            const successEmbed = utils.createEmbed({
                 title: 'Baner ustawiony',
                 description: `\`🖼️\` **Wcześniejszy:** [KLIKNIJ🡭](${oldBanner})\n\`🌟\` **Nowy:** [KLIKNIJ🡭](${newBanner})`,
                 image: newBanner
@@ -45,11 +45,11 @@ module.exports = {
             await interaction.editReply({ embeds: [successEmbed] });
         } catch (err) {
             if (err.message.includes('BANNER_RATE_LIMIT') || err.code === 50035) {
-                return await reply.error(interaction, 'RATE_LIMIT');
+                return await utils.reply.error(interaction, 'RATE_LIMIT');
             }
 
             logger.error(`[Slash ▸ Setbanner] ${err}`);
-            await reply.error(interaction, 'BANNER_ERROR');
+            await utils.reply.error(interaction, 'BANNER_ERROR');
         }
     },
 };

@@ -1,8 +1,6 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -16,15 +14,17 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
+        const { utils } = interaction.client;
+
         const user = interaction.options.getUser('użytkownik') || interaction.user;
 
         const userData = await user.fetch().catch(() => null);
 
         if (!userData.bannerURL()) {
-            return await reply.error(interaction, 'USER_NO_BANNER');
+            return await utils.reply.error(interaction, 'USER_NO_BANNER');
         }
 
-        const successEmbed = createEmbed({
+        const successEmbed = utils.createEmbed({
             title: 'Podgląd baneru',
             description: `\`👤\` **Użytkownik:** ${user}\n\`🖼️\` **Obraz:** [KLIKNIJ🡭](${userData.bannerURL({ size: 256 })})`,
             image: userData.bannerURL({ size: 256 })

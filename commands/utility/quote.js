@@ -2,8 +2,6 @@
 
 const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const { verseOfTheDay, randomVerse } = require('../../lib/services/verseApi');
-const { createEmbed } = require('../../lib/utils/createEmbed');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -21,6 +19,8 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
+        const { utils } = interaction.client;
+
         const versetType = interaction.options.getString('rodzaj') || 'daily';
 
         const verseFuncs = {
@@ -34,10 +34,10 @@ module.exports = {
             const { reference, content } = await fn(logger);
 
             if (!reference || !content) {
-                return reply.error(interaction, 'FETCH_ERROR', title.toLowerCase());
+                return utils.reply.error(interaction, 'FETCH_ERROR', title.toLowerCase());
             }
 
-            const successEmbed = createEmbed({
+            const successEmbed = utils.createEmbed({
                 title: `\`📜\` ${title} (${reference})`,
                 description: content
             });
@@ -45,7 +45,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Quote] ${err}`);
-            await reply.error(interaction, 'FETCH_ERROR', title.toLowerCase());
+            await utils.reply.error(interaction, 'FETCH_ERROR', title.toLowerCase());
         }
     },
 };

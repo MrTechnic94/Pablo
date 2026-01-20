@@ -1,10 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, ActivityType } = require('discord.js');
-const { getConfig, syncConfig } = require('../../lib/core/configManipulator');
-const { createEmbed } = require('../../lib/utils/createEmbed');
 const { presence } = require('../../locales/pl_PL');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     index: false,
@@ -31,12 +28,14 @@ module.exports = {
         )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction, logger) {
+        const { utils } = interaction.client;
+
         const status = interaction.options.getString('nazwa');
         const botPresence = interaction.options.getString('status');
 
         if (interaction.client.user.presence?.activities?.[0]?.name === status &&
             interaction.client.user.presence?.status === botPresence) {
-            return await reply.error(interaction, 'STATUS_ALREADY_SET');
+            return await utils.reply.error(interaction, 'STATUS_ALREADY_SET');
         }
 
         try {
@@ -48,19 +47,19 @@ module.exports = {
                 }],
             });
 
-            const config = getConfig();
+            const config = utils.getConfig();
 
             config.botOptions.changedActivityName = status;
             config.botOptions.changedActivityPresence = botPresence;
 
-            syncConfig(config);
+            utils.syncConfig(config);
 
             const presenceData = presence[botPresence];
 
             const presenceEmoji = presenceData?.emoji || '❓';
             const presenceType = presenceData?.name || 'Nieznany';
 
-            const successEmbed = createEmbed({
+            const successEmbed = utils.createEmbed({
                 title: 'Status zmieniony',
                 description: `\`💬\` **Nazwa:** ${status}\n\`${presenceEmoji}\` **Status:** ${presenceType}`
             });
@@ -68,7 +67,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Setstatus] ${err}`);
-            await reply.error(interaction, 'STATUS_ERROR');
+            await utils.reply.error(interaction, 'STATUS_ERROR');
         }
     },
 };

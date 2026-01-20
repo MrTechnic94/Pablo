@@ -1,9 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
 const { channels } = require('../../config/default.json');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -26,6 +24,8 @@ module.exports = {
                 .setRequired(false))
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
+        const { utils } = interaction.client;
+
         const target = interaction.options.getUser('użytkownik');
         const reason = interaction.options.getString('powód');
         const evidence = interaction.options.getAttachment('obraz');
@@ -33,25 +33,25 @@ module.exports = {
         const logChannel = interaction.guild.channels.cache.get(channels.snitch);
 
         if (!logChannel?.isTextBased()) {
-            return await reply.error(interaction, 'SNITCH_CHANNEL_NOT_FOUND');
+            return await utils.reply.error(interaction, 'SNITCH_CHANNEL_NOT_FOUND');
         }
 
         if (!target) {
-            return await reply.error(interaction, 'USER_NOT_FOUND');
+            return await utils.reply.error(interaction, 'USER_NOT_FOUND');
         }
 
         if (target.bot) {
-            return await reply.error(interaction, 'REPORT_BOT_ERROR');
+            return await utils.reply.error(interaction, 'REPORT_BOT_ERROR');
         }
 
         if (target.id === reporter.id) {
-            return await reply.error(interaction, 'CANT_REPORT_SELF');
+            return await utils.reply.error(interaction, 'CANT_REPORT_SELF');
         }
 
         const targetMember = await interaction.guild.members.fetch(target.id).catch(() => null);
 
         if (targetMember.permissions.has(PermissionFlagsBits.Administrator)) {
-            return await reply.error(interaction, 'USER_NOT_PUNISHABLE');
+            return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
         }
 
         const adminFields = [
@@ -61,7 +61,7 @@ module.exports = {
             { name: '`💬` Powód', value: `\`\`\`${reason}\`\`\``, inline: false }
         ];
 
-        const adminEmbed = createEmbed({
+        const adminEmbed = utils.createEmbed({
             title: 'Nowe zgłoszenie',
             fields: adminFields
         });
@@ -77,6 +77,10 @@ module.exports = {
                     .setLabel('Zbanuj')
                     .setStyle(ButtonStyle.Danger),
                 new ButtonBuilder()
+                    .setCustomId(`snitch_kick_${target.id}`)
+                    .setLabel('Wyrzuć')
+                    .setStyle(ButtonStyle.Danger),
+                new ButtonBuilder()
                     .setCustomId(`snitch_dismiss_${reporter.id}`)
                     .setLabel('Odrzuć')
                     .setStyle(ButtonStyle.Primary)
@@ -84,6 +88,6 @@ module.exports = {
 
         await logChannel.send({ embeds: [adminEmbed], components: [row] });
 
-        await reply.success(interaction, 'SNITCH_SENT');
+        await utils.reply.success(interaction, 'SNITCH_SENT');
     },
 };

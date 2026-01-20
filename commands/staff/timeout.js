@@ -1,9 +1,6 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
-const { parseTimeString } = require('../../lib/utils/parseTime');
-const { createEmbed } = require('../../lib/utils/createEmbed');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`📛` Administracja',
@@ -30,49 +27,51 @@ module.exports = {
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
     async execute(interaction, logger) {
+        const { utils } = interaction.client;
+
         const targetUser = interaction.options.getUser('użytkownik');
 
         if (targetUser.id === interaction.user.id) {
-            return await reply.error(interaction, 'CANT_TIMEOUT_SELF');
+            return await utils.reply.error(interaction, 'CANT_TIMEOUT_SELF');
         }
 
         const rawTime = interaction.options.getString('czas');
         const reason = interaction.options.getString('powód') || 'Brak.';
-        const timeInfo = parseTimeString(rawTime);
+        const timeInfo = utils.parseTimeString(rawTime);
 
         if (!timeInfo) {
-            return await reply.error(interaction, 'INVALID_TIME_FORMAT');
+            return await utils.reply.error(interaction, 'INVALID_TIME_FORMAT');
         }
 
         try {
             const member = await interaction.guild.members.fetch(targetUser.id).catch(() => null);
 
             if (!member) {
-                return await reply.error(interaction, 'USER_NOT_FOUND');
+                return await utils.reply.error(interaction, 'USER_NOT_FOUND');
             }
 
             if (interaction.member.roles.highest.position <= member.roles.highest.position) {
-                return await reply.error(interaction, 'ROLE_TOO_HIGH');
+                return await utils.reply.error(interaction, 'ROLE_TOO_HIGH');
             }
 
             if (!member.moderatable) {
-                return await reply.error(interaction, 'USER_NOT_PUNISHABLE');
+                return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
             }
 
             if (member.isCommunicationDisabled()) {
-                return await reply.error(interaction, 'USER_IS_TIMED_OUT');
+                return await utils.reply.error(interaction, 'USER_IS_TIMED_OUT');
             }
 
-            const embedDM = createEmbed({
+            const embedDM = utils.createEmbed({
                 title: 'Zostałeś wyciszony',
                 description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🕒\` **Czas wyciszenia:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
             });
 
             await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed to send DM to '${targetUser.tag}'.`));
 
-            await member.timeout(timeInfo.seconds * 1000, reason);
+            await member.timeout(timeInfo.seconds * 1000, { reason: reason });
 
-            const successEmbed = createEmbed({
+            const successEmbed = utils.createEmbed({
                 title: 'Użytkownik wyciszony',
                 description: `\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🕒\` **Czas wyciszenia:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
             });
@@ -80,7 +79,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Timeout] ${err}`);
-            await reply.error(interaction, 'TIMEOUT_ERROR');
+            await utils.reply.error(interaction, 'TIMEOUT_ERROR');
         }
     },
 };

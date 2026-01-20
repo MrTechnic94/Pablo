@@ -1,8 +1,6 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`📛` Administracja',
@@ -24,6 +22,8 @@ module.exports = {
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction, logger) {
+        const { utils } = interaction.client;
+
         const userId = interaction.options.getString('id_użytkownika');
         const reason = interaction.options.getString('powód') || 'Brak.';
 
@@ -31,12 +31,12 @@ module.exports = {
             const banInfo = await interaction.guild.bans.fetch(userId).catch(() => null);
 
             if (!banInfo) {
-                return await reply.error(interaction, 'USER_NOT_BANNED');
+                return await utils.reply.error(interaction, 'USER_NOT_BANNED');
             }
 
-            await interaction.guild.bans.remove(userId, reason);
+            await interaction.guild.bans.remove(userId, { reason: reason });
 
-            const successEmbed = createEmbed({
+            const successEmbed = utils.createEmbed({
                 title: 'Użytkownik odbanowany',
                 description: `\`👤\` **Odbanowano:** ${banInfo.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`,
             });
@@ -44,7 +44,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Unban] ${err}`);
-            await reply.error(interaction, 'UNBAN_ERROR');
+            await utils.reply.error(interaction, 'UNBAN_ERROR');
         }
     },
 };

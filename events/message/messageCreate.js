@@ -1,9 +1,7 @@
 'use strict';
 
 const { defaultPermissions } = require('../../config/default.json');
-const { getConfig } = require('../../lib/core/configManipulator');
 const { Events } = require('discord.js');
-const reply = require('../../lib/utils/responder');
 
 const allowedExtensions = /\.(jpg|jpeg|png|gif|webp|mp4|webm|mov)$/i;
 const urlRegex = /https?:\/\/(?:www\.)?[\w.-]{1,256}\.[a-zA-Z]{1,6}\b[\w\-@:%_+.~#?&//=]*/;
@@ -11,7 +9,9 @@ const urlRegex = /https?:\/\/(?:www\.)?[\w.-]{1,256}\.[a-zA-Z]{1,6}\b[\w\-@:%_+.
 module.exports = {
     name: Events.MessageCreate,
     async execute(logger, message) {
-        const config = getConfig();
+        const { utils } = message.client;
+
+        const config = utils.getConfig();
 
         if (!config.others.autoMemesReaction || message.channel.id !== config.channels.memy || message.author.bot) return;
 
@@ -24,7 +24,7 @@ module.exports = {
 
         // Auto reakcje dla kanalu
         if (!message.attachments.size && !allowedExtensions.test(message.content) && !urlRegex.test(message.content)) {
-            const warningMessage = await reply.error(message, 'ONLY_MEMES_ALLOWED');
+            const warningMessage = await utils.reply.error(message, 'ONLY_MEMES_ALLOWED');
             setTimeout(() => {
                 warningMessage.delete().catch(() => null);
                 message.delete().catch(() => null);

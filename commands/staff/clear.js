@@ -1,8 +1,6 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`📛` Administracja',
@@ -29,6 +27,8 @@ module.exports = {
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
     async execute(interaction, logger) {
+        const { utils } = interaction.client;
+
         const amount = interaction.options.getInteger('ilość');
         const removePinnedStr = interaction.options.getString('usuń_przypięte') ?? 'false';
         const removePinned = removePinnedStr === 'true';
@@ -41,10 +41,10 @@ module.exports = {
             const deleted = await interaction.channel.bulkDelete(messagesToDelete, true);
 
             if (!deleted?.size) {
-                return await reply.error(interaction, 'CANT_CLEAR_MESSAGES');
+                return await utils.reply.error(interaction, 'CANT_CLEAR_MESSAGES');
             }
 
-            const successEmbed = createEmbed({
+            const successEmbed = utils.createEmbed({
                 title: 'Akcja wykonana',
                 description: `\`💬\` **Usunięto:** ${deleted.size > 1 ? `${deleted.size} wiadomości` : `${deleted.size} wiadomość`}\n\`📌\` **W tym przypięte:** ${removePinned ? 'Tak.' : 'Nie.'}`
             });
@@ -52,7 +52,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (error) {
             logger.error(`[Slash ▸ Clear] ${error}`);
-            await reply.error(interaction, 'CLEAR_ERROR');
+            await utils.reply.error(interaction, 'CLEAR_ERROR');
         }
     },
 };

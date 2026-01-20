@@ -1,8 +1,6 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
-const { createEmbed } = require('../../lib/utils/createEmbed');
-const reply = require('../../lib/utils/responder');
 
 module.exports = {
     category: '`📛` Administracja',
@@ -24,6 +22,8 @@ module.exports = {
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
     async execute(interaction, logger) {
+        const { utils } = interaction.client;
+
         const targetUser = interaction.options.getUser('użytkownik');
         const reason = interaction.options.getString('powód') || 'Brak.';
 
@@ -31,23 +31,23 @@ module.exports = {
             const member = await interaction.guild.members.fetch(targetUser.id).catch(() => null);
 
             if (!member) {
-                return await reply.error(interaction, 'USER_NOT_FOUND');
+                return await utils.reply.error(interaction, 'USER_NOT_FOUND');
             }
 
             if (!member.isCommunicationDisabled()) {
-                return await reply.error(interaction, 'USER_IS_NOT_TIMED_OUT');
+                return await utils.reply.error(interaction, 'USER_IS_NOT_TIMED_OUT');
             }
 
-            const embedDM = createEmbed({
+            const embedDM = utils.createEmbed({
                 title: 'Zostałeś odciszony',
                 description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
             });
 
             await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Removetimeout] Failed to send DM to '${targetUser.user.tag}'.`));
 
-            await member.timeout(null, reason);
+            await member.timeout(null, { reason: reason });
 
-            const successEmbed = createEmbed({
+            const successEmbed = utils.createEmbed({
                 title: 'Użytkownik odciszony',
                 description: `\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
             });
@@ -55,7 +55,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Removetimeout] ${err}`);
-            await reply.error(interaction, 'TIMEOUT_REMOVE_ERROR');
+            await utils.reply.error(interaction, 'TIMEOUT_REMOVE_ERROR');
         }
     },
 };

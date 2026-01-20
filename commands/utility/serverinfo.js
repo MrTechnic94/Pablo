@@ -1,9 +1,7 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, ChannelType } = require('discord.js');
-const { formatDuration } = require('../../lib/utils/parseTime');
+const { SlashCommandBuilder, InteractionContextType, PresenceUpdateStatus, ChannelType } = require('discord.js');
 const { verification } = require('../../locales/pl_PL');
-const { createEmbed } = require('../../lib/utils/createEmbed');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -12,6 +10,8 @@ module.exports = {
         .setDescription('Wyświetla informacje o serwerze.')
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
+        const { utils } = interaction.client;
+
         const guild = interaction.guild;
 
         // Wlasciciel
@@ -22,7 +22,7 @@ module.exports = {
 
         // Uzytkownicy
         const onlineMembers = guild.members.cache.filter(m =>
-            ['online', 'idle', 'dnd'].includes(m.presence?.status)
+            m.presence?.status && ![PresenceUpdateStatus.Offline, PresenceUpdateStatus.Invisible].includes(m.presence?.status)
         ).size;
 
         // Emotki
@@ -48,14 +48,14 @@ module.exports = {
 
         // AFK
         const afkChannelName = guild.afkChannel ? `${guild.afkChannel}` : 'Brak.';
-        const afkTimeout = guild.afkTimeout ? formatDuration(guild.afkTimeout * 1000, { fullWords: true }) : 'Brak.';
+        const afkTimeout = guild.afkTimeout ? utils.formatDuration(guild.afkTimeout * 1000, { fullWords: true }) : 'Brak.';
         const afkInfo = `**• Kanał:** ${afkChannelName}\n**• Limit czasu:** ${afkTimeout}`;
 
         // Nitro boost
         const boostLevel = guild.premiumTier;
         const boostCount = guild.premiumSubscriptionCount;
 
-        const successEmbed = createEmbed({
+        const successEmbed = utils.createEmbed({
             title: 'Podgląd serwera',
             thumbnail: guild.iconURL(),
             fields: [
