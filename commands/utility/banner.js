@@ -7,12 +7,12 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('banner')
         .setDescription('Wyświetla baner użytkownika.')
+        .setContexts(InteractionContextType.Guild)
         .addUserOption(option =>
             option.setName('użytkownik')
                 .setDescription('Wybierz użytkownika, którego baner chcesz zobaczyć.')
                 .setRequired(false)
-        )
-        .setContexts(InteractionContextType.Guild),
+        ),
     async execute(interaction) {
         const { utils } = interaction.client;
 

@@ -8,12 +8,12 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('userinfo')
         .setDescription('Wyświetla informacje o użytkowniku.')
+        .setContexts(InteractionContextType.Guild)
         .addUserOption(option =>
             option.setName('użytkownik')
                 .setDescription('Użytkownik, o którym chcesz zobaczyć informacje.')
                 .setRequired(false)
-        )
-        .setContexts(InteractionContextType.Guild),
+        ),
     async execute(interaction) {
         const { utils } = interaction.client;
 

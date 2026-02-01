@@ -8,12 +8,12 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('setavatar')
         .setDescription('Ustawia nowy avatar bota.')
+        .setContexts(InteractionContextType.Guild)
         .addAttachmentOption(option =>
             option.setName('obraz')
                 .setDescription('Nowy avatar. Zalecane 1024x1024.')
                 .setRequired(true)
-        )
-        .setContexts(InteractionContextType.Guild),
+        ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;
 
@@ -52,7 +52,7 @@ module.exports = {
                 return await utils.reply.error(interaction, 'RATE_LIMIT');
             }
 
-            logger.error(`[Slash ▸ Setavatar] ${err}`);
+            logger.error(`[Slash ▸ Setavatar] An error occurred for '${interaction.guild.id}':\n${err}`);
             await utils.reply.error(interaction, 'AVATAR_ERROR');
         }
     },

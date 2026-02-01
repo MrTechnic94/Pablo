@@ -1,10 +1,10 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { channels } = require('../../config/default.json');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
+    botPermissions: [PermissionFlagsBits.BanMembers, PermissionFlagsBits.KickMembers],
     data: new SlashCommandBuilder()
         .setName('snitch')
         .setDescription('Zgłoś przewinienie użytkownika.')
@@ -30,10 +30,11 @@ module.exports = {
         const reason = interaction.options.getString('powód');
         const evidence = interaction.options.getAttachment('obraz');
         const reporter = interaction.user;
-        const logChannel = interaction.guild.channels.cache.get(channels.snitch);
+        const requiredChannel = await utils.db.hGet(`guild:${interaction.guild.id}`, 'snitchChannel');
+        const logChannel = interaction.guild.channels.cache.get(requiredChannel);
 
-        if (!logChannel?.isTextBased()) {
-            return await utils.reply.error(interaction, 'SNITCH_CHANNEL_NOT_FOUND');
+        if (!logChannel) {
+            return await utils.reply.error(interaction, 'RECORD_NOT_FOUND');
         }
 
         if (!target) {

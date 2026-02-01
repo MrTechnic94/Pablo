@@ -8,6 +8,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('give')
         .setDescription('Nadaje wybraną rolę użytkownikowi.')
+        .setContexts(InteractionContextType.Guild)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
         .addUserOption(option =>
             option.setName('użytkownik')
                 .setDescription('Użytkownik, któremu chcesz nadać rolę.')
@@ -17,9 +19,7 @@ module.exports = {
             option.setName('rola')
                 .setDescription('Rola, którą chcesz nadać użytkownikowi.')
                 .setRequired(true)
-        )
-        .setContexts(InteractionContextType.Guild)
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles),
+        ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;
 
@@ -48,7 +48,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Slash ▸ Give] ${err}`);
+            logger.error(`[Slash ▸ Give] An error occurred for '${interaction.guild.id}':\n${err}`);
             await utils.reply.error(interaction, 'ROLE_GIVE_ERROR');
         }
     },

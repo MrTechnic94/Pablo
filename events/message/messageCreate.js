@@ -11,15 +11,15 @@ module.exports = {
     async execute(logger, message) {
         const { utils } = message.client;
 
-        const config = utils.getConfig();
+        const requiredChannel = await utils.db.hGet(`guild:${message.guild.id}`, 'memesChannel');
 
-        if (!config.others.autoMemesReaction || message.channel.id !== config.channels.memy || message.author.bot) return;
+        if (!requiredChannel || message.channel.id !== requiredChannel || message.author.bot) return;
 
         const botPermissions = message.channel.permissionsFor(message.guild.members.me);
 
         if (!botPermissions.has(defaultPermissions)) {
             const missing = botPermissions.missing(defaultPermissions);
-            return logger.error(`[MessageCreate] Missing permissions: ${missing.join(', ')}`);
+            return logger.error(`[MessageCreate] Missing permissions '${missing.join(', ')}' for '${message.guild.id}'.`);
         }
 
         // Auto reakcje dla kanalu
@@ -36,7 +36,7 @@ module.exports = {
                     message.react('👎')
                 ]);
             } catch (err) {
-                logger.error(`[MessageCreate] Failed to add reaction:\n${err}`);
+                logger.error(`[MessageCreate] Failed to add reaction in '${message.guild.id}':\n${err}`);
             }
         }
     },

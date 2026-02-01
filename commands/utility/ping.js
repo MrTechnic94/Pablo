@@ -18,7 +18,7 @@ module.exports = {
             const latency = Date.now() - start;
             await interaction.editReply(`\`🏓\` Pong!\nOpóźnienie: ${latency}ms\nWebsocket: ${interaction.client.ws.ping}ms`);
         } catch (err) {
-            logger.error(`[Slash ▸ Ping] ${err}`);
+            logger.error(`[Slash ▸ Ping] An error occurred for '${interaction.guild.id}':\n${err}`);
             await utils.reply.error(interaction, 'API_CONNECTION_ERROR');
         }
     },

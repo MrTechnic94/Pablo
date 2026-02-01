@@ -1,29 +1,29 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, Collection } = require('discord.js');
+const { others } = require('../../config/default.json');
 
 const activeBattles = new Collection();
-const MAX_BATTLES_PER_GUILD = 5;
 
 module.exports = {
     category: '`💎` 4Fun',
     data: new SlashCommandBuilder()
         .setName('solo')
         .setDescription('Stocz walkę 1v1 z innym użytkownikiem.')
+        .setContexts(InteractionContextType.Guild)
         .addUserOption(option =>
             option.setName('przeciwnik')
                 .setDescription('Wybierz użytkownika do walki.')
                 .setRequired(true)
-        )
-        .setContexts(InteractionContextType.Guild),
+        ),
     async execute(interaction, logger) {
         const { guildId } = interaction;
         const { utils } = interaction.client;
 
         const currentGuildBattles = activeBattles.get(guildId) || 0;
 
-        if (currentGuildBattles >= MAX_BATTLES_PER_GUILD) {
-            return await utils.reply.error(interaction, 'TOO_MANY_FIGHTS', MAX_BATTLES_PER_GUILD);
+        if (currentGuildBattles >= others.maxBattlesPerGuild) {
+            return await utils.reply.error(interaction, 'TOO_MANY_FIGHTS', others.maxBattlesPerGuild);
         }
 
         const player1 = interaction.user;
@@ -114,7 +114,7 @@ module.exports = {
 
             await message.edit({ embeds: [finalEmbed] });
         } catch (err) {
-            logger.error(`[Slash ▸ Solo] ${err}`);
+            logger.error(`[Slash ▸ Solo] An error occurred for '${interaction.guild.id}':\n${err}`);
             await utils.reply.error(interaction, 'FIGHT_ERROR');
         } finally {
             const updatedCount = activeBattles.get(guildId) || 1;

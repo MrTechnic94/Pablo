@@ -8,6 +8,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('ban')
         .setDescription('Zbanuj użytkownika na serwerze.')
+        .setContexts(InteractionContextType.Guild)
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .addUserOption(option =>
             option.setName('użytkownik')
                 .setDescription('Użytkownik do zbanowania.')
@@ -32,9 +34,7 @@ module.exports = {
                     { name: '3 dni', value: 259200 },
                     { name: '7 dni', value: 604800 }
                 )
-        )
-        .setContexts(InteractionContextType.Guild)
-        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
+        ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;
 
@@ -77,7 +77,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Slash ▸ Ban] ${err}`);
+            logger.error(`[Slash ▸ Ban] An error occurred for '${interaction.guild.id}':\n${err}`);
             await utils.reply.error(interaction, 'BAN_ERROR');
         }
     },

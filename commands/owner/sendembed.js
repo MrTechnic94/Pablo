@@ -9,6 +9,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('sendembed')
         .setDescription('Wyślij osadzoną wiadomość.')
+        .setContexts(InteractionContextType.Guild)
         .addStringOption(option =>
             option.setName('rodzaj')
                 .setDescription('Rodzaj embedu.')
@@ -17,8 +18,7 @@ module.exports = {
                     { name: 'Weryfikacja', value: 'weryfikacja' },
                     { name: 'Menu - Kolory', value: 'menu-kolory' }
                 )
-        )
-        .setContexts(InteractionContextType.Guild),
+        ),
     async execute(interaction) {
         const { utils } = interaction.client;
 

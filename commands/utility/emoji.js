@@ -9,12 +9,12 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('emoji')
         .setDescription('Wyświetla informacje o wybranym emoji.')
+        .setContexts(InteractionContextType.Guild)
         .addStringOption(option =>
             option.setName('emoji')
                 .setDescription('Wklej emoji, o którym chcesz uzyskać informacje.')
                 .setRequired(true)
-        )
-        .setContexts(InteractionContextType.Guild),
+        ),
     async execute(interaction) {
         const { utils } = interaction.client;
 

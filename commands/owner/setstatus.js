@@ -9,6 +9,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('setstatus')
         .setDescription('Ustawia status bota.')
+        .setContexts(InteractionContextType.Guild)
         .addStringOption(option =>
             option.setName('nazwa')
                 .setDescription('Nowy status bota.')
@@ -25,8 +26,7 @@ module.exports = {
                     { name: 'Niewidoczny', value: 'invisible' },
                     { name: 'Nie przeszkadzać', value: 'dnd' }
                 )
-        )
-        .setContexts(InteractionContextType.Guild),
+        ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;
 
@@ -66,7 +66,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Slash ▸ Setstatus] ${err}`);
+            logger.error(`[Slash ▸ Setstatus] An error occurred for '${interaction.guild.id}':\n${err}`);
             await utils.reply.error(interaction, 'STATUS_ERROR');
         }
     },

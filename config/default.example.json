@@ -14,8 +14,6 @@
         "restRequestTimeout": 60000,
         "messageEditHistoryMaxSize": 0,
         "messageCacheMaxSize": 25,
-        "messageSweepInterval": 43200,
-        "messageCacheLifetime": 21600,
         "intents": [
             "Guilds",
             "GuildMembers",
@@ -44,10 +42,16 @@
     },
     "clientSweepers": {
         "messages": {
-            "interval": 1800,
-            "lifetime": 108000
+            "interval": 3600,
+            "lifetime": 1800
         },
         "user": {
+            "interval": 3600
+        },
+        "voiceStates": {
+            "interval": 3600
+        },
+        "guildMembers": {
             "interval": 3600
         }
     },
@@ -63,8 +67,7 @@
         "red": "",
         "blue": "",
         "magenta": "",
-        "green": "",
-        "changeNickname": ""
+        "green": ""
     },
     "emojis": {
         "stage": "PORADNIK ZNAJDZIESZ TUTAJ: index.js",
@@ -74,11 +77,6 @@
         "serverMute": "PORADNIK ZNAJDZIESZ TUTAJ: index.js",
         "serverDeaf": "PORADNIK ZNAJDZIESZ TUTAJ: index.js"
     },
-    "channels": {
-        "memy": "",
-        "snitch": "",
-        "statystykiSerwera": ""
-    },
     "embeds": {
         "defaultColor": 6102251,
         "secondaryColor": 2829617
@@ -87,12 +85,6 @@
         "id": "1c9761e0230da6e0-01"
     },
     "other": {
-        "autoMemesReaction": true,
-        "autoEmbedUpdate": true,
-        "statisticsEmbed": ""
-    },
-    "developer": {
-        "embedUpdaterChannel": "",
-        "embedUpdaterEmbed": ""
+        "maxBattlesPerGuild": 2
     }
 }

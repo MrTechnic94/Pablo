@@ -8,12 +8,12 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('channelinfo')
         .setDescription('Wyświetla informacje o kanale.')
+        .setContexts(InteractionContextType.Guild)
         .addChannelOption(option =>
             option.setName('kanał')
                 .setDescription('Kanał, o którym chcesz uzyskać informacje.')
                 .setRequired(false)
-        )
-        .setContexts(InteractionContextType.Guild),
+        ),
     async execute(interaction) {
         const { utils } = interaction.client;
 
