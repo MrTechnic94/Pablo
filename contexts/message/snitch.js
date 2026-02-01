@@ -1,10 +1,10 @@
 'use strict';
 
 const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { channels } = require('../../config/default.json');
 
 module.exports = {
     index: false,
+    botPermissions: [PermissionFlagsBits.BanMembers, PermissionFlagsBits.KickMembers],
     data: new ContextMenuCommandBuilder()
         .setName('Zgłoś wiadomość')
         .setType(ApplicationCommandType.Message)
@@ -15,10 +15,11 @@ module.exports = {
         const message = interaction.targetMessage;
         const target = message.author;
         const reporter = interaction.user;
-        const logChannel = interaction.guild.channels.cache.get(channels.snitch);
+        const requiredChannel = await utils.db.hGet(`guild:${interaction.guild.id}`, 'snitchChannel');
+        const logChannel = interaction.guild.channels.cache.get(requiredChannel);
 
-        if (!logChannel?.isTextBased()) {
-            return await utils.reply.error(interaction, 'SNITCH_CHANNEL_NOT_FOUND');
+        if (!logChannel) {
+            return await utils.reply.error(interaction, 'RECORD_NOT_FOUND');
         }
 
         const targetMember = await interaction.guild.members.fetch(target.id).catch(() => null);

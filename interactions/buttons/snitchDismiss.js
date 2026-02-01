@@ -6,7 +6,7 @@ module.exports = {
     async execute(interaction, logger) {
         const { utils } = interaction.client;
 
-        const reporterId = interaction.replace('snitch_dismiss_', '');
+        const reporterId = interaction.customId.replace('snitch_dismiss_', '');
 
         const targetField = interaction.message.embeds[0].fields.find(f => f.name.includes('Zgłoszony'));
         const targetIdMatch = targetField ? targetField.value.match(/<@!?(\d+)>/) : null;

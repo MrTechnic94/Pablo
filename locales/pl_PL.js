@@ -138,7 +138,6 @@ module.exports = {
         CANT_BAN_SELF: '`❌` Nie możesz zbanować samego siebie.',
         CANT_TIMEOUT_SELF: '`❌` Nie możesz wyciszyć samego siebie.',
         CANT_KICK_SELF: '`❌` Nie możesz wyrzucić samego siebie.',
-        SNITCH_CHANNEL_NOT_FOUND: '`❌` Kanał systemu zgłoszeń nie został skonfigurowany.',
         NICKNAME_NOT_SET: '`❌` Nie masz ustawionego pseudonimu.',
         SAME_NICKNAME_ERROR: '`❌` Nie możesz ustawić takiego samego pseudonimu.',
         NICKNAME_ERROR: '`❌` Nie udało się zmienić Twojego pseudonimu.',
@@ -151,7 +150,13 @@ module.exports = {
         MENU_ERROR: '`❌` To nie jest Twoje menu.',
         BOT_MISSING_PERMISSION: '`❌` Nie mam uprawnienia %s.',
         BOT_MISSING_PERMISSIONS: '`❌` Nie mam uprawnień %s.',
-        CANT_CLEAR_MESSAGES: '`❌` Wiadomości są starsze niż `14 dni` i nie mogą zostać usunięte.'
+        CANT_CLEAR_MESSAGES: '`❌` Wiadomości są starsze niż `14 dni` i nie mogą zostać usunięte.',
+        RECORD_NOT_FOUND: '`❌` Polecenie nie zostało skonfigurowane.',
+        SETTINGS_ERROR: '`❌` Wystąpił problem z bazą danych.',
+        NOT_TEXT_CHANNEL: '`❌` Wybrany kanał nie jest kanałem tekstowym.',
+        ROLE_NOT_SET: '`❌` Rola nie została ustawiona.',
+        CHANNE_NOT_SET: '`❌` Kanał nie został ustawiony.',
+        SAME_RECORD: '`❌` Nie możesz ustawić takiej samej wartości.'
     },
 
     // KOMUNIKATY
@@ -162,6 +167,8 @@ module.exports = {
         SNITCH_ACCEPTED: '`🤩` Dziękujemy za czujność! Użytkownik, którego zgłosiłeś, został zbanowany na serwerze `%s`.',
         NEW_COLOR: '`➕` Twój nowy kolor to <@&%s>.',
         SNITCH_REJECTED: '`➖` Zgłoszenie zostało odrzucone.',
-        SNITCH_CLEANED: '\nWyczyszczono powiązane zgłoszenia (Łącznie: `%s`).'
+        SNITCH_CLEANED: '\nWyczyszczono powiązane zgłoszenia (Łącznie: `%s`).',
+        ROLE_REMOVED: '`➖` Pomyślnie usunięto rolę.',
+        CHANNEL_REMOVED: '`➖` Pomyślnie usunięto kanał.'
     }
 };

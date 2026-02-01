@@ -8,6 +8,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('clear')
         .setDescription('Usuwa wybraną ilość wiadomości z kanału.')
+        .setContexts(InteractionContextType.Guild)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
         .addIntegerOption(option =>
             option.setName('ilość')
                 .setDescription('Ilość wiadomości do usunięcia.')
@@ -23,9 +25,7 @@ module.exports = {
                     { name: 'Tak', value: 'true' },
                     { name: 'Nie', value: 'false' }
                 )
-        )
-        .setContexts(InteractionContextType.Guild)
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
+        ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;
 
@@ -51,7 +51,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (error) {
-            logger.error(`[Slash ▸ Clear] ${error}`);
+            logger.error(`[Slash ▸ Clear] An error occurred for '${interaction.guild.id}':\n${error}`);
             await utils.reply.error(interaction, 'CLEAR_ERROR');
         }
     },

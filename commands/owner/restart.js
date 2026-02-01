@@ -10,6 +10,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('restart')
         .setDescription('Restart bota lub jego funkcji.')
+        .setContexts(InteractionContextType.Guild)
         .addStringOption(option =>
             option.setName('rodzaj')
                 .setDescription('Rodzaj restartu.')
@@ -20,8 +21,7 @@ module.exports = {
                     { name: 'Avatar', value: 'Avatar' },
                     { name: 'Banner', value: 'Banner' }
                 )
-        )
-        .setContexts(InteractionContextType.Guild),
+        ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;
 
@@ -34,7 +34,7 @@ module.exports = {
 
                     process.exit(0);
                 } catch (err) {
-                    logger.error(`[Slash ▸ Restart] ${err}`);
+                    logger.error(`[Slash ▸ Restart] An error occurred for '${interaction.guild.id}':\n${err}`);
                     await utils.reply.error(interaction, 'RESTART_ERROR');
                 }
                 break;
@@ -74,7 +74,7 @@ module.exports = {
 
                     await interaction.reply({ embeds: [successEmbed] });
                 } catch (err) {
-                    logger.error(`[Slash ▸ Restart] ${err}`);
+                    logger.error(`[Slash ▸ Restart] An error occurred for '${interaction.guild.id}':\n${err}`);
                     await utils.reply.error(interaction, 'STATUS_ERROR');
                 }
                 break;
@@ -106,7 +106,7 @@ module.exports = {
                         return await utils.reply.error(interaction, 'RATE_LIMIT');
                     }
 
-                    logger.error(`[Slash ▸ Restart] ${err}`);
+                    logger.error(`[Slash ▸ Restart] An error occurred for '${interaction.guild.id}':\n${err}`);
                     await utils.reply.error(interaction, 'AVATAR_ERROR');
                 }
                 break;
@@ -136,7 +136,7 @@ module.exports = {
                         return await utils.reply.error(interaction, 'RATE_LIMIT');
                     }
 
-                    logger.error(`[Slash ▸ Restart] ${err}`);
+                    logger.error(`[Slash ▸ Restart] An error occurred for '${interaction.guild.id}':\n${err}`);
                     await utils.reply.error(interaction, 'BANNER_ERROR');
                 }
                 break;

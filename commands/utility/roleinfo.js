@@ -7,12 +7,12 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('roleinfo')
         .setDescription('Wyświetla informacje o wybranej roli.')
+        .setContexts(InteractionContextType.Guild)
         .addRoleOption(option =>
             option.setName('rola')
                 .setDescription('Rola, o którym chcesz uzyskać informacje.')
                 .setRequired(true)
-        )
-        .setContexts(InteractionContextType.Guild),
+        ),
     async execute(interaction) {
         const { utils } = interaction.client;
 

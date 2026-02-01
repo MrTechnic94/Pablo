@@ -15,7 +15,7 @@ module.exports = {
             const command = interaction.client.commands.get(interaction.commandName);
 
             if (!command) {
-                logger.error(`[${commandType}] Command '${interaction.commandName}' not found.`);
+                logger.error(`[${commandType}] Trying to execute '${interaction.commandName}' which is not found for '${interaction.guild.id}'.`);
                 return await utils.reply.error(interaction, 'COMMAND_NOT_FOUND');
             }
 

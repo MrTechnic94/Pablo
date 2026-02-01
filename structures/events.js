@@ -35,7 +35,6 @@ module.exports = (client, logger) => {
                         break;
 
                     case 'database':
-                        if (!global.isDev) return;
                         db[event.once ? 'once' : 'on'](eventName, eventHandler);
                         break;
 
@@ -48,4 +47,7 @@ module.exports = (client, logger) => {
             }
         }
     });
+
+    // Polaczenie sie z baza danych
+    db.connect();
 };

@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, ApplicationCommandOptionType } = require('discord.js');
 
 module.exports = {
     index: false,
@@ -25,10 +25,21 @@ module.exports = {
             if (!categories[cat]) categories[cat] = [];
 
             const registered = clientCommands.find(c => c.name === name);
-            const commandLink = registered ? `</${name}:${registered.id}>` : `\`/${name}\``;
             const description = cmd.data.description || 'Brak opisu.';
 
-            categories[cat].push(`\`🔹\` ${commandLink}\n> ${description}`);
+            const subcommands = cmd.data.options?.filter(opt => opt.toJSON().type === ApplicationCommandOptionType.Subcommand)
+
+            if (subcommands && subcommands.length > 0 && registered) {
+                subcommands.forEach(sub => {
+                    const subName = sub.name;
+                    const subDesc = sub.description || 'Brak opisu.';
+                    const fullLink = `</${name} ${subName}:${registered.id}>`;
+                    categories[cat].push(`\`🔹\` ${fullLink}\n> ${subDesc}`);
+                });
+            } else {
+                const commandLink = registered ? `</${name}:${registered.id}>` : `\`/${name}\``;
+                categories[cat].push(`\`🔹\` ${commandLink}\n> ${description}`);
+            }
         });
 
         const categoryKeys = Object.keys(categories);

@@ -8,6 +8,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('kick')
         .setDescription('Wyrzuć użytkownika z serwera.')
+        .setContexts(InteractionContextType.Guild)
+        .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
         .addUserOption(option =>
             option.setName('użytkownik')
                 .setDescription('Użytkownik do wyrzucenia.')
@@ -18,9 +20,7 @@ module.exports = {
                 .setDescription('Powód wyrzucenia.')
                 .setRequired(false)
                 .setMaxLength(450)
-        )
-        .setContexts(InteractionContextType.Guild)
-        .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
+        ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;
 
@@ -62,7 +62,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Slash ▸ Kick] ${err}`);
+            logger.error(`[Slash ▸ Kick] An error occurred for '${interaction.guild.id}':\n${err}`);
             await utils.reply.error(interaction, 'KICK_ERROR');
         }
     },

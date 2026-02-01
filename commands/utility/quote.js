@@ -8,6 +8,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('quote')
         .setDescription('Wyświetla werset z Biblii.')
+        .setContexts(InteractionContextType.Guild)
         .addStringOption(option =>
             option.setName('rodzaj')
                 .setDescription('Wybierz werset z Biblii który chcesz zobaczyć.')
@@ -16,8 +17,7 @@ module.exports = {
                     { name: 'Werset na dzień', value: 'daily' },
                     { name: 'Losowy werset', value: 'random' }
                 )
-        )
-        .setContexts(InteractionContextType.Guild),
+        ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;
 
@@ -44,7 +44,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
-            logger.error(`[Slash ▸ Quote] ${err}`);
+            logger.error(`[Slash ▸ Quote] An error occurred for '${interaction.guild.id}':\n${err}`);
             await utils.reply.error(interaction, 'FETCH_ERROR', title.toLowerCase());
         }
     },
