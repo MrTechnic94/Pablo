@@ -8,7 +8,10 @@ module.exports = {
         try {
             const { utils } = guild.client;
 
-            await utils.db.del(`guild:${guild.id}`);
+            const dbKey = await utils.db.del(`guild:${guild.id}`);
+
+            if (!dbKey) return;
+
             await utils.db.sRem('statistics:activeGuilds', guild.id);
 
             logger.info(`[Client] Deleted data from database for '${guild.id}'.`);

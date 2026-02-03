@@ -15,41 +15,41 @@ module.exports = {
         )
         .addSubcommand(sub =>
             sub.setName('nickname')
-                .setDescription('Ustawia/Usuwa rolę do zmiany pseudonimu.')
+                .setDescription('Ustawia lub usuwa rolę zmiany pseudonimu.')
                 .addRoleOption(option =>
                     option.setName('rola')
-                        .setDescription('Rola zmiany pseudonium.')
+                        .setDescription('Rola zmiany pseudonimu.')
                         .setRequired(false)
                 )
         )
         .addSubcommand(sub =>
             sub.setName('snitch')
-                .setDescription('Ustawia/Usuwa kanał do systemu zgłoszeń.')
+                .setDescription('Ustawia lub usuwa kanał systemu zgłoszeń.')
                 .addChannelOption(option =>
                     option.setName('kanał')
                         .setDescription('Kanał zgłoszeń.')
                         .setRequired(false)
-                        .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
+                        .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.AnnouncementThread)
                 )
         )
         .addSubcommand(sub =>
             sub.setName('memes')
-                .setDescription('Ustawia/Usuwa kanał memy do automatycznych reakcji.')
+                .setDescription('Ustawia lub usuwa kanał z memami (automatyczne reakcje).')
                 .addChannelOption(option =>
                     option.setName('kanał')
                         .setDescription('Kanał memy.')
                         .setRequired(false)
-                        .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
+                        .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.AnnouncementThread)
                 )
         )
         .addSubcommand(sub =>
             sub.setName('statistics')
-                .setDescription('Ustawia/Usuwa kanał statystyk do automatycznych statystyk.')
+                .setDescription('Ustawia lub usuwa kanał do wyświetlania statystyk.')
                 .addChannelOption(option =>
                     option.setName('kanał')
                         .setDescription('Kanał statystyk.')
                         .setRequired(false)
-                        .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
+                        .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.AnnouncementThread)
                 )
         ),
     async execute(interaction, logger) {
