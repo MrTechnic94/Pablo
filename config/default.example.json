@@ -60,8 +60,7 @@
         "SendMessages",
         "EmbedLinks",
         "AddReactions",
-        "ReadMessageHistory",
-        "SendMessagesInThreads"
+        "ReadMessageHistory"
     ],
     "roles": {
         "user": "",
