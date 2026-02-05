@@ -167,7 +167,7 @@ module.exports = {
         SNITCH_ACCEPTED: '`🤩` Dziękujemy za czujność! Użytkownik, którego zgłosiłeś, został zbanowany na serwerze `%s`.',
         NEW_COLOR: '`➕` Twój nowy kolor to <@&%s>.',
         SNITCH_REJECTED: '`➖` Zgłoszenie zostało odrzucone.',
-        SNITCH_CLEANED: '\nWyczyszczono powiązane zgłoszenia (Łącznie: `%s`).',
+        SNITCH_CLEANED: '\nWyczyszczono powiązane zgłoszenia (`%s`).',
         ROLE_REMOVED: '`➖` Pomyślnie usunięto rolę.',
         CHANNEL_REMOVED: '`➖` Pomyślnie usunięto kanał.'
     }

@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
+const { PermissionFlagsBits, SlashCommandBuilder, InteractionContextType } = require('discord.js');
 
 module.exports = {
     category: '`📛` Administracja',
@@ -31,11 +31,10 @@ module.exports = {
 
         const amount = interaction.options.getInteger('ilość');
         const removePinnedStr = interaction.options.getString('usuń_przypięte') ?? 'false';
-        const removePinned = removePinnedStr === 'true';
 
         const fetchedMessages = await interaction.channel.messages.fetch({ limit: amount });
 
-        const messagesToDelete = removePinned ? fetchedMessages : fetchedMessages.filter(msg => !msg.pinned);
+        const messagesToDelete = removePinnedStr === 'true' ? fetchedMessages : fetchedMessages.filter(msg => !msg.pinned);
 
         try {
             const deleted = await interaction.channel.bulkDelete(messagesToDelete, true);
@@ -46,7 +45,7 @@ module.exports = {
 
             const successEmbed = utils.createEmbed({
                 title: 'Akcja wykonana',
-                description: `\`💬\` **Usunięto:** ${deleted.size > 1 ? `${deleted.size} wiadomości` : `${deleted.size} wiadomość`}\n\`📌\` **W tym przypięte:** ${removePinned ? 'Tak.' : 'Nie.'}`
+                description: `\`💬\` **Usunięto:** ${deleted.size > 1 ? `${deleted.size} wiadomości` : `${deleted.size} wiadomość`}\n\`📌\` **W tym przypięte:** ${removePinnedStr === 'true' ? 'Tak.' : 'Nie.'}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });

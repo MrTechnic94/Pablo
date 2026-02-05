@@ -59,7 +59,9 @@
         "ViewChannel",
         "SendMessages",
         "EmbedLinks",
-        "ReadMessageHistory"
+        "AddReactions",
+        "ReadMessageHistory",
+        "SendMessagesInThreads"
     ],
     "roles": {
         "user": "",

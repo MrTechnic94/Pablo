@@ -20,9 +20,9 @@ module.exports = {
             }
 
             // Sprawdzanie permisji bota
-            const commandPermissions = command.botPermissions || [];
-
-            const requiredPermissions = [...new Set([...defaultPermissions, ...commandPermissions])];
+            const requiredPermissions = command.botPermissions
+                ? defaultPermissions.concat(command.botPermissions)
+                : defaultPermissions;
 
             const botPermissions = interaction.channel.permissionsFor(interaction.guild.members.me);
 
@@ -50,12 +50,9 @@ module.exports = {
 
                 const commandNameBig = commandName.charAt(0).toUpperCase() + commandName.slice(1);
 
-                logger.error(`[${commandType} ▸ ${commandNameBig}] ${err}`);
-                if (interaction.replied || interaction.deferred) {
-                    await utils.reply.error(interaction, 'COMMAND_ERROR');
-                } else {
-                    await utils.reply.error(interaction, 'COMMAND_ERROR');
-                }
+                logger.error(`[${commandType} ▸ ${commandNameBig}] An error occurred for '${interaction.guild.id}':\n${err}`);
+
+                await utils.reply.error(interaction, 'COMMAND_ERROR');
             }
         } else if (interaction.isButton()) {
             // Buttons
@@ -68,7 +65,7 @@ module.exports = {
             try {
                 await button.execute(interaction, logger);
             } catch (err) {
-                logger.error(`[Button ▸ ${interaction.customId}] ${err}`);
+                logger.error(`[Button ▸ ${interaction.customId}] An error occurred for '${interaction.guild.id}':\n${err}`);
                 await utils.reply.error(interaction, 'COMMAND_ERROR');
             }
         } else if (interaction.isStringSelectMenu()) {
@@ -80,7 +77,7 @@ module.exports = {
             try {
                 await menu.execute(interaction, logger);
             } catch (err) {
-                logger.error(`[SelectMenu ▸ ${interaction.customId}] ${err}`);
+                logger.error(`[Selectmenu ▸ ${interaction.customId}] An error occurred for '${interaction.guild.id}':\n${err}`);
                 await utils.reply.error(interaction, 'COMMAND_ERROR');
             }
         }

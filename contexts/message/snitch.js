@@ -1,6 +1,6 @@
 'use strict';
 
-const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { PermissionFlagsBits, ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
     index: false,

@@ -1,9 +1,9 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, Collection } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const { others } = require('../../config/default.json');
 
-const activeBattles = new Collection();
+const activeBattles = new Map();
 
 module.exports = {
     category: '`💎` 4Fun',
@@ -48,12 +48,14 @@ module.exports = {
                 description: '*Walka zacznie się za 3...*'
             });
 
-            const message = await interaction.reply({ embeds: [countdownEmbed] }).then(sent => sent.fetch()).catch(() => null);
+            await interaction.reply({ embeds: [countdownEmbed] });
+            const message = await interaction.fetchReply();
+
             await new Promise(resolve => setTimeout(resolve, 1000));
 
             for (let i = 2; i > 0; i--) {
                 countdownEmbed.setDescription(`*Walka zacznie się za ${i}...*`);
-                await message.edit({ embeds: [countdownEmbed] });
+                await message.edit({ embeds: [countdownEmbed] }).catch(() => null);
                 await new Promise(resolve => setTimeout(resolve, 1000));
             }
 
@@ -83,6 +85,7 @@ module.exports = {
                 }
 
                 battleLog.push(actionText);
+
                 if (battleLog.length > 5) battleLog.shift();
 
                 const battleEmbed = utils.createEmbed({
@@ -91,14 +94,15 @@ module.exports = {
                     fields: [
                         { name: `\`🩸\` ${players[0].user.username}`, value: `${players[0].hp} / 100 HP`, inline: true },
                         { name: `\`🩸\` ${players[1].user.username}`, value: `${players[1].hp} / 100 HP`, inline: true }
-                    ],
+                    ]
                 });
 
-                await message.edit({ embeds: [battleEmbed] });
+                await message.edit({ embeds: [battleEmbed] }).catch(() => null);
+
                 if (defender.hp <= 0) break;
 
                 round++;
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                await new Promise(resolve => setTimeout(resolve, 2000));
             }
 
             const winner = players.find(p => p.hp > 0);
@@ -112,13 +116,17 @@ module.exports = {
                 ]
             });
 
-            await message.edit({ embeds: [finalEmbed] });
+            await message.edit({ embeds: [finalEmbed] }).catch(() => null);
         } catch (err) {
             logger.error(`[Slash ▸ Solo] An error occurred for '${interaction.guild.id}':\n${err}`);
             await utils.reply.error(interaction, 'FIGHT_ERROR');
         } finally {
-            const updatedCount = activeBattles.get(guildId) || 1;
-            activeBattles.set(guildId, Math.max(0, updatedCount - 1));
+            const current = activeBattles.get(guildId) || 1;
+            if (current <= 1) {
+                activeBattles.delete(guildId);
+            } else {
+                activeBattles.set(guildId, current - 1);
+            }
         }
     },
 };
