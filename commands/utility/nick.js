@@ -3,7 +3,7 @@
 const { PermissionFlagsBits, SlashCommandBuilder, InteractionContextType } = require('discord.js');
 
 module.exports = {
-    category: '`⭐` V.I.P',
+    category: '`ℹ️` Przydatne',
     botPermissions: [PermissionFlagsBits.ManageNicknames],
     data: new SlashCommandBuilder()
         .setName('nick')

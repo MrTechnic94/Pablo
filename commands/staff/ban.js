@@ -19,7 +19,7 @@ module.exports = {
             option.setName('powód')
                 .setDescription('Powód zbanowania.')
                 .setRequired(false)
-                .setMaxLength(450)
+                .setMaxLength(500)
         )
         .addIntegerOption(option =>
             option.setName('usuń_wiadomości')

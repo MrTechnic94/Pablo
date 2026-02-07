@@ -4,6 +4,17 @@ const { defaultPermissions } = require('../../config/default.json');
 const { permissions } = require('../../locales/pl_PL');
 const { Events } = require('discord.js');
 
+async function handleError(err, type, name, interaction, logger, utils) {
+    logger.error(`[${type} ▸ ${name}] Error for '${interaction.guild.id}':\n${err}`);
+
+    if (err.status === 429 || err.code === 429 || err.code === 4008) {
+        logger.warn(`[${type}] Rate limit hit for '${interaction.guild.id}'.`);
+        return await utils.reply.error(interaction, 'RATE_LIMIT');
+    }
+
+    return await utils.reply.error(interaction, 'COMMAND_ERROR');
+}
+
 module.exports = {
     name: Events.InteractionCreate,
     async execute(logger, interaction) {
@@ -11,34 +22,26 @@ module.exports = {
 
         if (interaction.isChatInputCommand() || interaction.isUserContextMenuCommand() || interaction.isMessageContextMenuCommand()) {
             const commandType = interaction.isChatInputCommand() ? 'Slash' : 'Context';
-
             const command = interaction.client.commands.get(interaction.commandName);
 
             if (!command) {
-                logger.error(`[${commandType}] Trying to execute '${interaction.commandName}' which is not found for '${interaction.guild.id}'.`);
+                logger.error(`[${commandType}] Command '${interaction.commandName}' not found.`);
                 return await utils.reply.error(interaction, 'COMMAND_NOT_FOUND');
             }
 
-            // Sprawdzanie permisji bota
+            // Permisje bota
             const requiredPermissions = command.botPermissions
-                ? defaultPermissions.concat(command.botPermissions)
+                ? [...defaultPermissions, ...command.botPermissions]
                 : defaultPermissions;
 
             const botPermissions = interaction.channel.permissionsFor(interaction.guild.members.me);
 
             if (!botPermissions.has(requiredPermissions)) {
-                const missing = botPermissions.missing(requiredPermissions);
-
-                const missingPol = missing.map(p => `\`${permissions[p] || p}\``);
-
-                return await utils.reply.error(
-                    interaction,
-                    missing.length === 1 ? 'BOT_MISSING_PERMISSION' : 'BOT_MISSING_PERMISSIONS',
-                    missingPol.join(' ')
-                );
+                const missing = botPermissions.missing(requiredPermissions).map(p => `\`${permissions[p] || p}\``);
+                return await utils.reply.error(interaction, missing.length === 1 ? 'BOT_MISSING_PERMISSION' : 'BOT_MISSING_PERMISSIONS', missing.join(' '));
             }
 
-            // Sprawdzanie czy komenda jest tylko dla wlasciciela bota
+            // Komendy tylko dla wlasciciela bota
             if (command.ownerOnly && interaction.user.id !== process.env.BOT_OWNER_ID) {
                 return await utils.reply.error(interaction, 'ACCESS_DENIED');
             }
@@ -46,30 +49,21 @@ module.exports = {
             try {
                 await command.execute(interaction, logger);
             } catch (err) {
-                const commandName = command.__fileName || command.data?.name || interaction.commandName;
-
-                const commandNameBig = commandName.charAt(0).toUpperCase() + commandName.slice(1);
-
-                logger.error(`[${commandType} ▸ ${commandNameBig}] An error occurred for '${interaction.guild.id}':\n${err}`);
-
-                await utils.reply.error(interaction, 'COMMAND_ERROR');
+                await handleError(err, commandType, command.data?.name || interaction.commandName);
             }
-        } else if (interaction.isButton()) {
-            // Buttons
-            const { buttons } = interaction.client;
 
-            const button = buttons.get(interaction.customId) || buttons.find(b => b.isPrefix && interaction.customId.startsWith(b.customId));
+        } else if (interaction.isButton()) {
+            const button = interaction.client.buttons.get(interaction.customId) || interaction.client.buttons.find(b => b.isPrefix && interaction.customId.startsWith(b.customId));
 
             if (!button) return;
 
             try {
                 await button.execute(interaction, logger);
             } catch (err) {
-                logger.error(`[Button ▸ ${interaction.customId}] An error occurred for '${interaction.guild.id}':\n${err}`);
-                await utils.reply.error(interaction, 'COMMAND_ERROR');
+                await handleError(err, 'Button', interaction.customId);
             }
+
         } else if (interaction.isStringSelectMenu()) {
-            // Select Menus
             const menu = interaction.client.selectMenus.get(interaction.customId);
 
             if (!menu) return;
@@ -77,8 +71,7 @@ module.exports = {
             try {
                 await menu.execute(interaction, logger);
             } catch (err) {
-                logger.error(`[Selectmenu ▸ ${interaction.customId}] An error occurred for '${interaction.guild.id}':\n${err}`);
-                await utils.reply.error(interaction, 'COMMAND_ERROR');
+                await handleError(err, 'SelectMenu', interaction.customId);
             }
         }
     }

@@ -39,7 +39,7 @@ module.exports = {
         const emojiURL = emoji.imageURL({ animated: emoji.animated });
 
         const fields = [
-            { name: '`🔎` Nazwa', value: `**•** \`:${emoji.name}:\``, inline: false },
+            { name: '`🔎` Nazwa', value: `**•** ${emoji.name}`, inline: false },
             { name: '`🔑` ID', value: `**•** ${emoji.id}`, inline: false },
             { name: '`✨` Animowana', value: `**•** ${animated}`, inline: false },
             { name: '`📅` Utworzono', value: `**•** <t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },

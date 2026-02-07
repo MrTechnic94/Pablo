@@ -19,7 +19,7 @@ module.exports = {
             option.setName('powód')
                 .setDescription('Powód wyrzucenia.')
                 .setRequired(false)
-                .setMaxLength(450)
+                .setMaxLength(500)
         ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;

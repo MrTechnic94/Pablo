@@ -220,6 +220,9 @@ module.exports = {
                     await interaction.reply({ embeds: [successEmbed] });
                     break;
                 }
+
+                default:
+                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Settings] An error occurred for '${interaction.guild.id}':\n${err}`);

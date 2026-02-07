@@ -52,7 +52,7 @@ module.exports = {
         const userStatus = presence[rawStatus]?.name || 'Niedostępny.';
         const statusEmoji = presence[rawStatus]?.emoji || '🎱';
 
-        const successEmbed = utils.createEmbed(interaction, {
+        const successEmbed = utils.createEmbed({
             title: 'Podgląd użytkownika',
             thumbnail: targetMember.user.displayAvatarURL(),
             fields: [

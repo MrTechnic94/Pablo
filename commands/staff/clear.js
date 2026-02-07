@@ -32,11 +32,11 @@ module.exports = {
         const amount = interaction.options.getInteger('ilość');
         const removePinnedStr = interaction.options.getString('usuń_przypięte') ?? 'false';
 
-        const fetchedMessages = await interaction.channel.messages.fetch({ limit: amount });
-
-        const messagesToDelete = removePinnedStr === 'true' ? fetchedMessages : fetchedMessages.filter(msg => !msg.pinned);
-
         try {
+            const fetchedMessages = await interaction.channel.messages.fetch({ limit: amount }).catch(() => null);
+
+            const messagesToDelete = removePinnedStr === 'true' ? fetchedMessages : fetchedMessages.filter(msg => !msg.pinned);
+
             const deleted = await interaction.channel.bulkDelete(messagesToDelete, true);
 
             if (!deleted?.size) {

@@ -156,7 +156,11 @@ module.exports = {
         NOT_TEXT_CHANNEL: '`❌` Wybrany kanał nie jest kanałem tekstowym.',
         ROLE_NOT_SET: '`❌` Rola nie została ustawiona.',
         CHANNE_NOT_SET: '`❌` Kanał nie został ustawiony.',
-        SAME_RECORD: '`❌` Nie możesz ustawić takiej samej wartości.'
+        SAME_RECORD: '`❌` Nie możesz ustawić takiej samej wartości.',
+        INVALID_STEAL_EMOJI: '`❌` Nieprawidłowe emoji.',
+        EMOJI_ERROR: '`❌` Wystąpił problem podczas dodawania emoji.',
+        EMOJI_FULL_SLOT: '`❌` Miejsca na emoji są pełne.',
+        INVALID_FILE: '`❌` Nieprawidłowy format lub rozmiar.'
     },
 
     // KOMUNIKATY
