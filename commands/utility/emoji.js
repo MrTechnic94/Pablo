@@ -2,8 +2,6 @@
 
 const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 
-const emojiRegex = /<?(?:a:)?(?<name>\w+):(?<id>\d+)>?/;
-
 module.exports = {
     category: '`ℹ️` Przydatne',
     data: new SlashCommandBuilder()
@@ -20,13 +18,12 @@ module.exports = {
 
         const rawEmoji = interaction.options.getString('emoji');
 
-        const match = rawEmoji.match(emojiRegex);
+        const emojiId = utils.parseEmojiId(rawEmoji);
 
-        if (!match) {
+        if (!emojiId) {
             return await utils.reply.error(interaction, 'INVALID_EMOJI');
         }
 
-        const emojiId = match.groups.id;
         const emoji = interaction.guild.emojis.cache.get(emojiId);
 
         if (!emoji) {

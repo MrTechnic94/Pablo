@@ -44,7 +44,7 @@ module.exports = {
                 activities: [{
                     name: status,
                     type: ActivityType.Custom
-                }],
+                }]
             });
 
             const config = utils.getConfig();

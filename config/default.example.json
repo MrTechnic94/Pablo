@@ -19,9 +19,7 @@
             "GuildVoiceStates",
             "MessageContent"
         ],
-        "repliedUser": false,
-        "restRequestTimeout": 15000,
-        "restRequestRetries": 3
+        "repliedUser": false
     },
     "clientCache": {
         "messageManager": 0,

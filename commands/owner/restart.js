@@ -52,7 +52,7 @@ module.exports = {
                         activities: [{
                             name: botOptions.defaultActivityName,
                             type: ActivityType.Custom
-                        }],
+                        }]
                     });
 
                     const config = utils.getConfig();

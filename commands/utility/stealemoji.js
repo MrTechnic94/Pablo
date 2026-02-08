@@ -2,8 +2,6 @@
 
 const { PermissionFlagsBits, SlashCommandBuilder, InteractionContextType } = require('discord.js');
 
-const EMOJI_REGEX = /<?(a)?:?(\w{2,32}):(\d{17,19})>?/;
-
 module.exports = {
     category: '`ℹ️` Przydatne',
     botPermissions: [PermissionFlagsBits.ManageGuildExpressions],
@@ -28,21 +26,10 @@ module.exports = {
 
         const emojiInput = interaction.options.getString('emoji');
         const name = interaction.options.getString('nazwa');
+        const url = utils.parseEmojiUrl(emojiInput);
 
-        let url = null;
-
-        if (emojiInput.startsWith('http')) {
-            url = emojiInput;
-        } else {
-            const match = EMOJI_REGEX.exec(emojiInput);
-
-            if (match) {
-                const [, isAnimated, , id] = match;
-                const type = isAnimated ? 'gif' : 'webp';
-                url = `https://cdn.discordapp.com/emojis/${id}.${type}`;
-            } else if (/^\d{17,19}$/.test(emojiInput)) {
-                url = `https://cdn.discordapp.com/emojis/${emojiInput}.webp`;
-            }
+        if (!url) {
+            return await utils.reply.error(interaction, 'INVALID_FILE');
         }
 
         try {
@@ -76,7 +63,7 @@ module.exports = {
                 return await utils.reply.error(interaction, 'EMOJI_FULL_SLOT');
             }
 
-            if (err.code === 50035) {
+            if (err.code === 50035 || err.code === 50046) {
                 return await utils.reply.error(interaction, 'INVALID_FILE');
             }
 

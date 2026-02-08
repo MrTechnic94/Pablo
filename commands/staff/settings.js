@@ -68,22 +68,22 @@ module.exports = {
                         fields: [
                             {
                                 name: '`✏️` Rola zmiany pseudonium',
-                                value: settings.changeNicknameRole ? `**•** <@&${settings.changeNicknameRole}>` : '**•** Nie ustawiono.',
+                                value: settings.changeNicknameRoleId ? `**•** <@&${settings.changeNicknameRoleId}>` : '**•** Nie ustawiono.',
                                 inline: false
                             },
                             {
                                 name: '`🔎` Kanał zgłoszeń',
-                                value: settings.snitchChannel ? `**•** <#${settings.snitchChannel}>` : '**•** Nie ustawiono.',
+                                value: settings.snitchChannelId ? `**•** <#${settings.snitchChannelId}>` : '**•** Nie ustawiono.',
                                 inline: false
                             },
                             {
                                 name: '`😎` Kanał memów',
-                                value: settings.memesChannel ? `**•** <#${settings.memesChannel}>` : '**•** Nie ustawiono.',
+                                value: settings.memesChannelId ? `**•** <#${settings.memesChannelId}>` : '**•** Nie ustawiono.',
                                 inline: false
                             },
                             {
                                 name: '`📈` Kanał statystyk',
-                                value: settings.statisticsEmbed ? `**•** <#${settings.statisticsEmbed}>` : '**•** Nie ustawiono.',
+                                value: settings.statisticsChannelId ? `**•** <#${settings.statisticsChannelId}>` : '**•** Nie ustawiono.',
                                 inline: false
                             }
                         ],
@@ -94,11 +94,11 @@ module.exports = {
 
                 case 'nickname': {
                     const role = interaction.options.getRole('rola');
-                    const currentRole = await utils.db.hGet(dbKey, 'changeNicknameRole');
+                    const currentRole = await utils.db.hGet(dbKey, 'changeNicknameRoleId');
 
                     if (!role) {
                         if (currentRole) {
-                            await utils.db.hDel(dbKey, 'changeNicknameRole');
+                            await utils.db.hDel(dbKey, 'changeNicknameRoleId');
 
                             logger.info(`[Slash ▸ Settings] Nickname role removed for '${interaction.guild.id}'.`);
                             return await utils.reply.success(interaction, 'ROLE_REMOVED');
@@ -111,7 +111,7 @@ module.exports = {
                         return await utils.reply.error(interaction, 'SAME_RECORD');
                     }
 
-                    await utils.db.hSet(dbKey, 'changeNicknameRole', role.id);
+                    await utils.db.hSet(dbKey, 'changeNicknameRoleId', role.id);
 
                     const successEmbed = utils.createEmbed({
                         title: 'Akcja wykonana',
@@ -125,11 +125,11 @@ module.exports = {
 
                 case 'snitch': {
                     const channel = interaction.options.getChannel('kanał');
-                    const currentChannel = await utils.db.hGet(dbKey, 'snitchChannel');
+                    const currentChannel = await utils.db.hGet(dbKey, 'snitchChannelId');
 
                     if (!channel) {
                         if (currentChannel) {
-                            await utils.db.hDel(dbKey, 'snitchChannel');
+                            await utils.db.hDel(dbKey, 'snitchChannelId');
 
                             logger.info(`[Slash ▸ Settings] Snitch channel removed for '${interaction.guild.id}'.`);
                             return await utils.reply.success(interaction, 'CHANNEL_REMOVED');
@@ -142,7 +142,7 @@ module.exports = {
                         return await utils.reply.error(interaction, 'SAME_RECORD');
                     }
 
-                    await utils.db.hSet(dbKey, 'snitchChannel', channel.id);
+                    await utils.db.hSet(dbKey, 'snitchChannelId', channel.id);
 
                     const successEmbed = utils.createEmbed({
                         title: 'Akcja wykonana',
@@ -156,11 +156,11 @@ module.exports = {
 
                 case 'memes': {
                     const channel = interaction.options.getChannel('kanał');
-                    const currentChannel = await utils.db.hGet(dbKey, 'memesChannel');
+                    const currentChannel = await utils.db.hGet(dbKey, 'memesChannelId');
 
                     if (!channel) {
                         if (currentChannel) {
-                            await utils.db.hDel(dbKey, 'memesChannel');
+                            await utils.db.hDel(dbKey, 'memesChannelId');
 
                             logger.info(`[Slash ▸ Settings] Memes channel removed for '${interaction.guild.id}'.`);
                             return await utils.reply.success(interaction, 'CHANNEL_REMOVED');
@@ -174,7 +174,7 @@ module.exports = {
                         return await utils.reply.error(interaction, 'SAME_RECORD');
                     }
 
-                    await utils.db.hSet(dbKey, 'memesChannel', channel.id);
+                    await utils.db.hSet(dbKey, 'memesChannelId', channel.id);
 
                     const successEmbed = utils.createEmbed({
                         title: 'Akcja wykonana',
@@ -188,11 +188,11 @@ module.exports = {
 
                 case 'statistics': {
                     const channel = interaction.options.getChannel('kanał');
-                    const currentChannel = await utils.db.hGet(dbKey, 'statisticsChannel');
+                    const currentChannel = await utils.db.hGet(dbKey, 'statisticsChannelId');
 
                     if (!channel) {
                         if (currentChannel) {
-                            await utils.db.hDel(dbKey, 'statisticsChannel');
+                            await utils.db.hDel(dbKey, 'statisticsChannelId');
                             await utils.db.sRem('statistics:activeGuilds', interaction.guild.id);
 
                             logger.info(`[Slash ▸ Settings] Statistics channel removed for '${interaction.guild.id}'.`);
@@ -207,7 +207,7 @@ module.exports = {
                         return await utils.reply.error(interaction, 'SAME_RECORD');
                     }
 
-                    await utils.db.hSet(dbKey, 'statisticsChannel', channel.id);
+                    await utils.db.hSet(dbKey, 'statisticsChannelId', channel.id);
 
                     await utils.db.sAdd('statistics:activeGuilds', interaction.guild.id);
 
