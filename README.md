@@ -4,7 +4,7 @@
 
 ### 🔗 Przydatne linki.
 
-[👉 **Kliknij🡭**, aby dodać bota.](https://top.gg/bot/1333036494881034311/invite)
+[👉 **Kliknij🡭**](https://top.gg/bot/1333036494881034311/invite), aby dodać bota.
 <br>
-[👉 **Kliknij🡭**, aby zobaczyć stronę bota.](https://top.gg/bot/1333036494881034311)
+[👉 **Kliknij🡭**](https://top.gg/bot/1333036494881034311), aby zobaczyć stronę bota.
 </div>
