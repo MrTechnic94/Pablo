@@ -10,7 +10,7 @@ module.exports = {
         // Informacja podczas zalogowania sie bota do Discord
         const totalGuilds = client.guilds.cache.size;
         const totalUsers = client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
-        const ramUsage = process.memoryUsage().heapUsed / 1024 / 1024;
+        const ramUsage = process.memoryUsage().rss / 1024 / 1024;
         const startDate = new Intl.DateTimeFormat({ dateStyle: 'medium' });
 
         const modeInfo = global.isDev ? 'Development' : 'Production';
