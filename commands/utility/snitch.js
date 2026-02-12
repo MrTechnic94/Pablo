@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { PermissionFlagsBits, SlashCommandBuilder, InteractionContextType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -11,17 +11,20 @@ module.exports = {
         .addUserOption(option =>
             option.setName('użytkownik')
                 .setDescription('Użytkownik którego chcesz zgłosić.')
-                .setRequired(true))
+                .setRequired(true)
+        )
         .addStringOption(option =>
             option.setName('powód')
                 .setDescription('Powód zgłoszenia.')
                 .setRequired(true)
                 .setMinLength(5)
-                .setMaxLength(450))
+                .setMaxLength(450)
+        )
         .addAttachmentOption(option =>
             option.setName('obraz')
                 .setDescription('Zdjęcie albo zrzut ekranu przewinienia.')
-                .setRequired(false))
+                .setRequired(false)
+        )
         .setContexts(InteractionContextType.Guild),
     async execute(interaction) {
         const { utils } = interaction.client;
@@ -30,7 +33,7 @@ module.exports = {
         const reason = interaction.options.getString('powód');
         const evidence = interaction.options.getAttachment('obraz');
         const reporter = interaction.user;
-        const requiredChannel = await utils.db.hGet(`guild:${interaction.guild.id}`, 'snitchChannel');
+        const requiredChannel = await utils.db.hGet(`guild:${interaction.guild.id}`, 'snitchChannelId');
         const logChannel = interaction.guild.channels.cache.get(requiredChannel);
 
         if (!logChannel) {

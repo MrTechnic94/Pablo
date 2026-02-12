@@ -44,7 +44,7 @@ module.exports = {
 
             await interaction.editReply({ embeds: [successEmbed] });
         } catch (err) {
-            if (err.message.includes('BANNER_RATE_LIMIT') || err.code === 50035) {
+            if (err.code === 50035) {
                 return await utils.reply.error(interaction, 'RATE_LIMIT');
             }
 

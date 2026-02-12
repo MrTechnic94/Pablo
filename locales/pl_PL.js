@@ -36,9 +36,9 @@ module.exports = {
     verification: {
         [GuildVerificationLevel.None]: "**Brak:** Bez ograniczeń.",
         [GuildVerificationLevel.Low]: "**Niski:** Wymaga potwierdzenia adresu e-mail konta Discord.",
-        [GuildVerificationLevel.Medium]: "**Średni:** Wymaga rejestracji na Discordzie przez co najmniej 5 minut.",
-        [GuildVerificationLevel.High]: "**Wysoki:** Wymaga członkostwa na serwerze przez co najmniej 10 minut.",
-        [GuildVerificationLevel.VeryHigh]: "**Bardzo wysoki:** Wymaga potwierdzenia numeru telefonu."
+        [GuildVerificationLevel.Medium]: "**Średni:** Wymaga dodatkowo rejestracji na Discordzie przez dłużej niż 5 minut.",
+        [GuildVerificationLevel.High]: "**Wysoki:** Wymaga dodatkowo członkostwa na tym serwerze przez dłużej niż 10 minut.",
+        [GuildVerificationLevel.VeryHigh]: "**Najwyższy:** Wymaga potwierdzenia numeru telefonu na koncie Discorda."
     },
 
     permissions: {
@@ -76,7 +76,7 @@ module.exports = {
         [PermissionFlagsBits.Video]: 'Wideo',
         [PermissionFlagsBits.UseSoundboard]: 'Użyj panelu dźwięków',
         [PermissionFlagsBits.UseExternalSounds]: 'Użyj zewnętrznych dźwięków',
-        [PermissionFlagsBits.UseVAD]: 'Używanie Aktywności Głosowej',
+        [PermissionFlagsBits.UseVAD]: 'Używanie aktywności głosowej',
         [PermissionFlagsBits.PrioritySpeaker]: 'Priorytetowy rozmówca',
         [PermissionFlagsBits.MuteMembers]: 'Wyciszanie członków',
         [PermissionFlagsBits.DeafenMembers]: 'Wyłączanie dźwięku członkom',
@@ -156,7 +156,11 @@ module.exports = {
         NOT_TEXT_CHANNEL: '`❌` Wybrany kanał nie jest kanałem tekstowym.',
         ROLE_NOT_SET: '`❌` Rola nie została ustawiona.',
         CHANNE_NOT_SET: '`❌` Kanał nie został ustawiony.',
-        SAME_RECORD: '`❌` Nie możesz ustawić takiej samej wartości.'
+        SAME_RECORD: '`❌` Nie możesz ustawić takiej samej wartości.',
+        INVALID_STEAL_EMOJI: '`❌` Nieprawidłowe emoji.',
+        EMOJI_ERROR: '`❌` Wystąpił problem podczas dodawania emoji.',
+        EMOJI_FULL_SLOT: '`❌` Miejsca na emoji są pełne.',
+        INVALID_FILE: '`❌` Nieprawidłowy format lub rozmiar.'
     },
 
     // KOMUNIKATY
@@ -167,7 +171,7 @@ module.exports = {
         SNITCH_ACCEPTED: '`🤩` Dziękujemy za czujność! Użytkownik, którego zgłosiłeś, został zbanowany na serwerze `%s`.',
         NEW_COLOR: '`➕` Twój nowy kolor to <@&%s>.',
         SNITCH_REJECTED: '`➖` Zgłoszenie zostało odrzucone.',
-        SNITCH_CLEANED: '\nWyczyszczono powiązane zgłoszenia (Łącznie: `%s`).',
+        SNITCH_CLEANED: '\nWyczyszczono powiązane zgłoszenia (`%s`).',
         ROLE_REMOVED: '`➖` Pomyślnie usunięto rolę.',
         CHANNEL_REMOVED: '`➖` Pomyślnie usunięto kanał.'
     }

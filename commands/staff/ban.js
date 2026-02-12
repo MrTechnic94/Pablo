@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
+const { PermissionFlagsBits, SlashCommandBuilder, InteractionContextType } = require('discord.js');
 
 module.exports = {
     category: '`📛` Administracja',
@@ -19,7 +19,7 @@ module.exports = {
             option.setName('powód')
                 .setDescription('Powód zbanowania.')
                 .setRequired(false)
-                .setMaxLength(450)
+                .setMaxLength(500)
         )
         .addIntegerOption(option =>
             option.setName('usuń_wiadomości')
@@ -28,11 +28,11 @@ module.exports = {
                 .addChoices(
                     { name: 'Nie usuwaj', value: 0 },
                     { name: 'Ostatnia godzina', value: 3600 },
-                    { name: '6 godzin', value: 21600 },
-                    { name: '12 godzin', value: 43200 },
-                    { name: '24 godziny', value: 86400 },
-                    { name: '3 dni', value: 259200 },
-                    { name: '7 dni', value: 604800 }
+                    { name: 'Ostatnie 6 godzin', value: 21600 },
+                    { name: 'Ostatnie 12 godzin', value: 43200 },
+                    { name: 'Ostatnie 24 godziny', value: 86400 },
+                    { name: 'Ostatnie 3 dni', value: 259200 },
+                    { name: 'Ostatnie 7 dni', value: 604800 }
                 )
         ),
     async execute(interaction, logger) {

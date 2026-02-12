@@ -21,9 +21,21 @@ module.exports = {
         const createdAt = Math.floor(guild.createdTimestamp / 1000);
 
         // Uzytkownicy
-        const onlineMembers = guild.members.cache.filter(m =>
-            m.presence?.status && ![PresenceUpdateStatus.Offline, PresenceUpdateStatus.Invisible].includes(m.presence?.status)
-        ).size;
+        let members = guild.members.cache;
+
+        if (members.size <= 1) {
+            members = await guild.members.fetch().catch(() => null);
+        }
+
+        let onlineCount = 0;
+
+        if (members) {
+            onlineCount = members.filter(m =>
+                m.presence &&
+                m.presence.status !== PresenceUpdateStatus.Offline &&
+                m.presence.status !== PresenceUpdateStatus.Invisible
+            ).size;
+        }
 
         // Emotki
         const emojiCount = guild.emojis.cache.size;
@@ -41,7 +53,6 @@ module.exports = {
                     break;
                 case ChannelType.GuildCategory:
                     acc.category++;
-                    break;
             }
             return acc;
         }, { text: 0, voice: 0, category: 0 });
@@ -63,7 +74,7 @@ module.exports = {
                 { name: '`🔑` ID', value: `**•** ${guild.id}`, inline: false },
                 { name: '`👑` Właściciel', value: `**•** <@${owner.id}>`, inline: false },
                 { name: '`📅` Utworzono', value: `**•** <t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },
-                { name: '`👥` Użytkownicy', value: `**• Łącznie:** ${guild.memberCount}\n**• Online:** ${onlineMembers}`, inline: false },
+                { name: '`👥` Użytkownicy', value: `**• Łącznie:** ${guild.memberCount}\n**• Online:** ${onlineCount}`, inline: false },
                 { name: '`🎭` Role', value: `**• Łącznie:** ${guild.roles.cache.size - 1}`, inline: false },
                 { name: '`#️⃣` Kanały', value: `**• Tekstowe:** ${channelCounts.text}\n**• Głosowe:** ${channelCounts.voice}\n**• Kategorie:** ${channelCounts.category}`, inline: false },
                 { name: '`💜` Nitro boost', value: `**• Poziom:** ${boostLevel}\n**• Boosty:** ${boostCount || 0}`, inline: false },

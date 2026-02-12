@@ -77,7 +77,7 @@ sed -e "s|{{USER}}|$USER_NAME|g" \
     -e "s|{{PNPM}}|$PNPM_PATH|g" \
     "$TEMPLATE" > "$SERVICE_NAME"
 
-# Poprawki kompatybilnosci dla katalogu /root (Sandbox escape)
+# Poprawki kompatybilnosci dla katalogu /root
 if [ "$IS_IN_ROOT" = true ]; then
     printf "${BOLD}${GREEN}GOOD${NC} Applying /root compatibility fixes...\n"
     sed -i "/WorkingDirectory/a ProtectHome=false" "$SERVICE_NAME"

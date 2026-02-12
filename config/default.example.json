@@ -11,9 +11,6 @@
         "changedActivityPresence": ""
     },
     "clientOptions": {
-        "restRequestTimeout": 60000,
-        "messageEditHistoryMaxSize": 0,
-        "messageCacheMaxSize": 25,
         "intents": [
             "Guilds",
             "GuildMembers",
@@ -25,11 +22,11 @@
         "repliedUser": false
     },
     "clientCache": {
-        "guildInviteManager": 0,
+        "messageManager": 0,
         "reactionManager": 0,
+        "guildInviteManager": 0,
         "reactionUserManager": 0,
         "threadMemberManager": 0,
-        "messageManager": 50,
         "guildScheduledEventManager": 0,
         "guildTextThreadManager": 0,
         "guildForumThreadManager": 0,
@@ -41,14 +38,7 @@
         }
     },
     "clientSweepers": {
-        "messages": {
-            "interval": 3600,
-            "lifetime": 1800
-        },
         "user": {
-            "interval": 3600
-        },
-        "voiceStates": {
             "interval": 3600
         },
         "guildMembers": {
@@ -59,6 +49,7 @@
         "ViewChannel",
         "SendMessages",
         "EmbedLinks",
+        "AddReactions",
         "ReadMessageHistory"
     ],
     "roles": {

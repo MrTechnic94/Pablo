@@ -11,7 +11,7 @@ module.exports = {
     async execute(logger, message) {
         const { utils } = message.client;
 
-        const requiredChannel = await utils.db.hGet(`guild:${message.guild.id}`, 'memesChannel');
+        const requiredChannel = await utils.db.hGet(`guild:${message.guild.id}`, 'memesChannelId');
 
         if (!requiredChannel || message.channel.id !== requiredChannel || message.author.bot) return;
 

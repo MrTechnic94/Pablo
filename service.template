@@ -1,6 +1,7 @@
 [Unit]
 Description=Pablo NodeJS Service
 After=network.target
+StartLimitIntervalSec=0
 
 [Service]
 Type=simple
@@ -9,8 +10,8 @@ Group={{GROUP}}
 WorkingDirectory={{DIR}}
 ExecStart={{PNPM}} start
 
-Restart=on-failure
-RestartSec=5
+Restart=always
+RestartSec=5s
 Environment=NODE_ENV=production
 
 [Install]

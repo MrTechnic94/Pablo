@@ -1,53 +1,38 @@
 'use strict';
 
-const db = require('../lib/core/database');
-const { readdirSync } = require('node:fs');
+const { getFiles } = require('../lib/utils/explorer');
 const { resolve } = require('node:path');
+const db = require('../lib/core/database');
 
 module.exports = (client, logger) => {
     const eventsDir = resolve(__dirname, '../events');
+    const eventFiles = getFiles(eventsDir);
 
-    readdirSync(eventsDir, { withFileTypes: true }).forEach((directory) => {
-        if (!directory.isDirectory()) return;
+    for (const item of eventFiles) {
+        const eventName = item.fileName.slice(0, item.fileName.lastIndexOf('.'));
+        const eventNameBig = eventName.charAt(0).toUpperCase() + eventName.slice(1);
 
-        const eventFiles = readdirSync(resolve(eventsDir, directory.name))
-            .filter((file) => file.endsWith('.js'));
+        try {
+            const event = require(item.fullPath);
 
-        for (const file of eventFiles) {
-            const eventName = file.slice(0, file.lastIndexOf('.'));
-            const eventNameBig = eventName.charAt(0).toUpperCase() + eventName.slice(1);
-
-            try {
-                const event = require(resolve(eventsDir, directory.name, file));
-
-                if (typeof event.execute !== 'function') {
-                    logger.error(`[Event ▸ ${eventNameBig}] Event is missing 'execute'.`);
-                    process.exit(1);
-                }
-
-                logger.info(`[Event] Event ${eventName} has been loaded.`);
-
-                const eventHandler = (...args) => event.execute(logger, ...args);
-
-                switch (directory.name) {
-                    case 'process':
-                        process[event.once ? 'once' : 'on'](eventName, eventHandler);
-                        break;
-
-                    case 'database':
-                        db[event.once ? 'once' : 'on'](eventName, eventHandler);
-                        break;
-
-                    default:
-                        client[event.once ? 'once' : 'on'](eventName, eventHandler);
-                }
-            } catch (err) {
-                logger.error(`[Event ▸ ${eventNameBig}] ${err}`);
+            if (typeof event.execute !== 'function') {
+                logger.error(`[Event ▸ ${eventNameBig}] Event is missing 'execute'.`);
                 process.exit(1);
             }
-        }
-    });
 
-    // Polaczenie sie z baza danych
+            const emitter = {
+                process: process,
+                database: db
+            }[item.category] || client;
+
+            emitter[event.once ? 'once' : 'on'](eventName, (...args) => event.execute(logger, ...args));
+
+            logger.info(`[Event] Event ${eventName} has been loaded.`);
+        } catch (err) {
+            logger.error(`[Event ▸ ${eventNameBig}] ${err}`);
+            process.exit(1);
+        }
+    }
+
     db.connect();
 };

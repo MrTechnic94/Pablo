@@ -1,9 +1,9 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
+const { PermissionFlagsBits, SlashCommandBuilder, InteractionContextType } = require('discord.js');
 
 module.exports = {
-    category: '`⭐` V.I.P',
+    category: '`ℹ️` Przydatne',
     botPermissions: [PermissionFlagsBits.ManageNicknames],
     data: new SlashCommandBuilder()
         .setName('nick')
@@ -19,7 +19,7 @@ module.exports = {
         const { utils } = interaction.client;
 
         try {
-            const requiredRole = await utils.db.hGet(`guild:${interaction.guild.id}`, 'changeNicknameRole');
+            const requiredRole = await utils.db.hGet(`guild:${interaction.guild.id}`, 'changeNicknameRoleId');
 
             if (!requiredRole) {
                 return await utils.reply.error(interaction, 'RECORD_NOT_FOUND');

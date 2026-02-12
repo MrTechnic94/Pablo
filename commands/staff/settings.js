@@ -15,41 +15,41 @@ module.exports = {
         )
         .addSubcommand(sub =>
             sub.setName('nickname')
-                .setDescription('Ustawia/Usuwa rolę do zmiany pseudonimu.')
+                .setDescription('Ustawia lub usuwa rolę zmiany pseudonimu.')
                 .addRoleOption(option =>
                     option.setName('rola')
-                        .setDescription('Rola zmiany pseudonium.')
+                        .setDescription('Rola zmiany pseudonimu.')
                         .setRequired(false)
                 )
         )
         .addSubcommand(sub =>
             sub.setName('snitch')
-                .setDescription('Ustawia/Usuwa kanał do systemu zgłoszeń.')
+                .setDescription('Ustawia lub usuwa kanał systemu zgłoszeń.')
                 .addChannelOption(option =>
                     option.setName('kanał')
                         .setDescription('Kanał zgłoszeń.')
                         .setRequired(false)
-                        .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
+                        .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.AnnouncementThread)
                 )
         )
         .addSubcommand(sub =>
             sub.setName('memes')
-                .setDescription('Ustawia/Usuwa kanał memy do automatycznych reakcji.')
+                .setDescription('Ustawia lub usuwa kanał z memami (automatyczne reakcje).')
                 .addChannelOption(option =>
                     option.setName('kanał')
                         .setDescription('Kanał memy.')
                         .setRequired(false)
-                        .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
+                        .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.AnnouncementThread)
                 )
         )
         .addSubcommand(sub =>
             sub.setName('statistics')
-                .setDescription('Ustawia/Usuwa kanał statystyk do automatycznych statystyk.')
+                .setDescription('Ustawia lub usuwa kanał do wyświetlania statystyk.')
                 .addChannelOption(option =>
                     option.setName('kanał')
                         .setDescription('Kanał statystyk.')
                         .setRequired(false)
-                        .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
+                        .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.AnnouncementThread)
                 )
         ),
     async execute(interaction, logger) {
@@ -67,38 +67,39 @@ module.exports = {
                         title: 'Ustawienia serwera',
                         fields: [
                             {
-                                name: '`✏️` Rola zmiany pseudonium',
-                                value: settings.changeNicknameRole ? `**•** <@&${settings.changeNicknameRole}>` : '**•** Nie ustawiono.',
+                                name: '`✏️` Rola zmiany pseudonimu',
+                                value: settings.changeNicknameRoleId ? `**•** <@&${settings.changeNicknameRoleId}>` : '**•** Nie ustawiono.',
                                 inline: false
                             },
                             {
                                 name: '`🔎` Kanał zgłoszeń',
-                                value: settings.snitchChannel ? `**•** <#${settings.snitchChannel}>` : '**•** Nie ustawiono.',
+                                value: settings.snitchChannelId ? `**•** <#${settings.snitchChannelId}>` : '**•** Nie ustawiono.',
                                 inline: false
                             },
                             {
                                 name: '`😎` Kanał memów',
-                                value: settings.memesChannel ? `**•** <#${settings.memesChannel}>` : '**•** Nie ustawiono.',
+                                value: settings.memesChannelId ? `**•** <#${settings.memesChannelId}>` : '**•** Nie ustawiono.',
                                 inline: false
                             },
                             {
                                 name: '`📈` Kanał statystyk',
-                                value: settings.statisticsEmbed ? `**•** <#${settings.statisticsEmbed}>` : '**•** Nie ustawiono.',
+                                value: settings.statisticsChannelId ? `**•** <#${settings.statisticsChannelId}>` : '**•** Nie ustawiono.',
                                 inline: false
                             }
                         ],
                     });
+
                     await interaction.reply({ embeds: [successEmbed] });
                     break;
                 }
 
                 case 'nickname': {
                     const role = interaction.options.getRole('rola');
-                    const currentRole = await utils.db.hGet(dbKey, 'changeNicknameRole');
+                    const currentRole = await utils.db.hGet(dbKey, 'changeNicknameRoleId');
 
                     if (!role) {
                         if (currentRole) {
-                            await utils.db.hDel(dbKey, 'changeNicknameRole');
+                            await utils.db.hDel(dbKey, 'changeNicknameRoleId');
 
                             logger.info(`[Slash ▸ Settings] Nickname role removed for '${interaction.guild.id}'.`);
                             return await utils.reply.success(interaction, 'ROLE_REMOVED');
@@ -111,7 +112,7 @@ module.exports = {
                         return await utils.reply.error(interaction, 'SAME_RECORD');
                     }
 
-                    await utils.db.hSet(dbKey, 'changeNicknameRole', role.id);
+                    await utils.db.hSet(dbKey, 'changeNicknameRoleId', role.id);
 
                     const successEmbed = utils.createEmbed({
                         title: 'Akcja wykonana',
@@ -119,17 +120,18 @@ module.exports = {
                     });
 
                     logger.info(`[Slash ▸ Settings] Nickname role set to '${role.id}' for '${interaction.guild.id}'.`);
+
                     await interaction.reply({ embeds: [successEmbed] });
                     break;
                 }
 
                 case 'snitch': {
                     const channel = interaction.options.getChannel('kanał');
-                    const currentChannel = await utils.db.hGet(dbKey, 'snitchChannel');
+                    const currentChannel = await utils.db.hGet(dbKey, 'snitchChannelId');
 
                     if (!channel) {
                         if (currentChannel) {
-                            await utils.db.hDel(dbKey, 'snitchChannel');
+                            await utils.db.hDel(dbKey, 'snitchChannelId');
 
                             logger.info(`[Slash ▸ Settings] Snitch channel removed for '${interaction.guild.id}'.`);
                             return await utils.reply.success(interaction, 'CHANNEL_REMOVED');
@@ -142,7 +144,7 @@ module.exports = {
                         return await utils.reply.error(interaction, 'SAME_RECORD');
                     }
 
-                    await utils.db.hSet(dbKey, 'snitchChannel', channel.id);
+                    await utils.db.hSet(dbKey, 'snitchChannelId', channel.id);
 
                     const successEmbed = utils.createEmbed({
                         title: 'Akcja wykonana',
@@ -150,17 +152,18 @@ module.exports = {
                     });
 
                     logger.info(`[Slash ▸ Settings] Snitch channel set to '${channel.id}' for '${interaction.guild.id}'.`);
+
                     await interaction.reply({ embeds: [successEmbed] });
                     break;
                 }
 
                 case 'memes': {
                     const channel = interaction.options.getChannel('kanał');
-                    const currentChannel = await utils.db.hGet(dbKey, 'memesChannel');
+                    const currentChannel = await utils.db.hGet(dbKey, 'memesChannelId');
 
                     if (!channel) {
                         if (currentChannel) {
-                            await utils.db.hDel(dbKey, 'memesChannel');
+                            await utils.db.hDel(dbKey, 'memesChannelId');
 
                             logger.info(`[Slash ▸ Settings] Memes channel removed for '${interaction.guild.id}'.`);
                             return await utils.reply.success(interaction, 'CHANNEL_REMOVED');
@@ -174,7 +177,7 @@ module.exports = {
                         return await utils.reply.error(interaction, 'SAME_RECORD');
                     }
 
-                    await utils.db.hSet(dbKey, 'memesChannel', channel.id);
+                    await utils.db.hSet(dbKey, 'memesChannelId', channel.id);
 
                     const successEmbed = utils.createEmbed({
                         title: 'Akcja wykonana',
@@ -182,17 +185,18 @@ module.exports = {
                     });
 
                     logger.info(`[Slash ▸ Settings] Memes channel set to '${channel.id}' for '${interaction.guild.id}'.`);
+
                     await interaction.reply({ embeds: [successEmbed] });
                     break;
                 }
 
                 case 'statistics': {
                     const channel = interaction.options.getChannel('kanał');
-                    const currentChannel = await utils.db.hGet(dbKey, 'statisticsChannel');
+                    const currentChannel = await utils.db.hGet(dbKey, 'statisticsChannelId');
 
                     if (!channel) {
                         if (currentChannel) {
-                            await utils.db.hDel(dbKey, 'statisticsChannel');
+                            await utils.db.hDel(dbKey, 'statisticsChannelId');
                             await utils.db.sRem('statistics:activeGuilds', interaction.guild.id);
 
                             logger.info(`[Slash ▸ Settings] Statistics channel removed for '${interaction.guild.id}'.`);
@@ -207,7 +211,7 @@ module.exports = {
                         return await utils.reply.error(interaction, 'SAME_RECORD');
                     }
 
-                    await utils.db.hSet(dbKey, 'statisticsChannel', channel.id);
+                    await utils.db.hSet(dbKey, 'statisticsChannelId', channel.id);
 
                     await utils.db.sAdd('statistics:activeGuilds', interaction.guild.id);
 
@@ -217,9 +221,13 @@ module.exports = {
                     });
 
                     logger.info(`[Slash ▸ Settings] Statistics channel set to '${channel.id}' for '${interaction.guild.id}'.`);
+
                     await interaction.reply({ embeds: [successEmbed] });
                     break;
                 }
+
+                default:
+                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Settings] An error occurred for '${interaction.guild.id}':\n${err}`);
