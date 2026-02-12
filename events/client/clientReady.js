@@ -20,7 +20,7 @@ module.exports = {
         const shardInfo = client.shard ? `TOTAL: ${client.shard.count} | ID: ${client.shard.ids.join(', ')}` : "";
 
         const rows = [
-            `[Client] STATUS: Connected`,
+            '[Client] STATUS: Connected',
             `[Client] NAME:   ${client.user.tag}`,
             `[Client] ID:     ${client.user.id}`,
             `[Stats]  ${statsInfo}`,

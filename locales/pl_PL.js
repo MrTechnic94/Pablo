@@ -36,9 +36,9 @@ module.exports = {
     verification: {
         [GuildVerificationLevel.None]: "**Brak:** Bez ograniczeń.",
         [GuildVerificationLevel.Low]: "**Niski:** Wymaga potwierdzenia adresu e-mail konta Discord.",
-        [GuildVerificationLevel.Medium]: "**Średni:** Wymaga rejestracji na Discordzie przez co najmniej 5 minut.",
-        [GuildVerificationLevel.High]: "**Wysoki:** Wymaga członkostwa na serwerze przez co najmniej 10 minut.",
-        [GuildVerificationLevel.VeryHigh]: "**Bardzo wysoki:** Wymaga potwierdzenia numeru telefonu."
+        [GuildVerificationLevel.Medium]: "**Średni:** Wymaga dodatkowo rejestracji na Discordzie przez dłużej niż 5 minut.",
+        [GuildVerificationLevel.High]: "**Wysoki:** Wymaga dodatkowo członkostwa na tym serwerze przez dłużej niż 10 minut.",
+        [GuildVerificationLevel.VeryHigh]: "**Najwyższy:** Wymaga potwierdzenia numeru telefonu na koncie Discorda."
     },
 
     permissions: {
@@ -76,7 +76,7 @@ module.exports = {
         [PermissionFlagsBits.Video]: 'Wideo',
         [PermissionFlagsBits.UseSoundboard]: 'Użyj panelu dźwięków',
         [PermissionFlagsBits.UseExternalSounds]: 'Użyj zewnętrznych dźwięków',
-        [PermissionFlagsBits.UseVAD]: 'Używanie Aktywności Głosowej',
+        [PermissionFlagsBits.UseVAD]: 'Używanie aktywności głosowej',
         [PermissionFlagsBits.PrioritySpeaker]: 'Priorytetowy rozmówca',
         [PermissionFlagsBits.MuteMembers]: 'Wyciszanie członków',
         [PermissionFlagsBits.DeafenMembers]: 'Wyłączanie dźwięku członkom',

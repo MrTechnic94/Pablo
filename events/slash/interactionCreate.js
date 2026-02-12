@@ -44,6 +44,7 @@ module.exports = {
 
         } else if (interaction.isButton()) {
             const button = interaction.client.buttons.get(interaction.customId) || interaction.client.buttons.find(b => b.isPrefix && interaction.customId.startsWith(b.customId));
+
             if (!button) return;
 
             try {
@@ -54,6 +55,7 @@ module.exports = {
 
         } else if (interaction.isStringSelectMenu()) {
             const menu = interaction.client.selectMenus.get(interaction.customId);
+
             if (!menu) return;
 
             try {

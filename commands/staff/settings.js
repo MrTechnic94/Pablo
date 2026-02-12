@@ -67,7 +67,7 @@ module.exports = {
                         title: 'Ustawienia serwera',
                         fields: [
                             {
-                                name: '`✏️` Rola zmiany pseudonium',
+                                name: '`✏️` Rola zmiany pseudonimu',
                                 value: settings.changeNicknameRoleId ? `**•** <@&${settings.changeNicknameRoleId}>` : '**•** Nie ustawiono.',
                                 inline: false
                             },
@@ -88,6 +88,7 @@ module.exports = {
                             }
                         ],
                     });
+
                     await interaction.reply({ embeds: [successEmbed] });
                     break;
                 }
@@ -119,6 +120,7 @@ module.exports = {
                     });
 
                     logger.info(`[Slash ▸ Settings] Nickname role set to '${role.id}' for '${interaction.guild.id}'.`);
+
                     await interaction.reply({ embeds: [successEmbed] });
                     break;
                 }
@@ -150,6 +152,7 @@ module.exports = {
                     });
 
                     logger.info(`[Slash ▸ Settings] Snitch channel set to '${channel.id}' for '${interaction.guild.id}'.`);
+
                     await interaction.reply({ embeds: [successEmbed] });
                     break;
                 }
@@ -182,6 +185,7 @@ module.exports = {
                     });
 
                     logger.info(`[Slash ▸ Settings] Memes channel set to '${channel.id}' for '${interaction.guild.id}'.`);
+
                     await interaction.reply({ embeds: [successEmbed] });
                     break;
                 }
@@ -217,6 +221,7 @@ module.exports = {
                     });
 
                     logger.info(`[Slash ▸ Settings] Statistics channel set to '${channel.id}' for '${interaction.guild.id}'.`);
+
                     await interaction.reply({ embeds: [successEmbed] });
                     break;
                 }
