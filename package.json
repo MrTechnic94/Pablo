@@ -1,6 +1,6 @@
 {
   "name": "pablo",
-  "version": "2.0.1",
+  "version": "2.0.1.HotFix",
   "description": "Just a useful bot.",
   "main": "index.js",
   "scripts": {
