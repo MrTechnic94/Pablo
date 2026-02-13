@@ -21,11 +21,15 @@ module.exports = (client, logger) => {
             }
 
             const emitter = {
-                process: process,
+                process,
                 database: db
             }[item.category] || client;
 
-            emitter[event.once ? 'once' : 'on'](eventName, (...args) => event.execute(logger, ...args));
+            const isExternalEmitter = (item.category === 'process' || item.category === 'database');
+
+            emitter[event.once ? 'once' : 'on'](eventName, (...args) => {
+                return isExternalEmitter ? event.execute(logger, client, ...args) : event.execute(logger, ...args)
+            });
 
             logger.info(`[Event] Event ${eventName} has been loaded.`);
         } catch (err) {

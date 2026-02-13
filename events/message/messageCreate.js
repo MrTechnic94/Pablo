@@ -29,6 +29,8 @@ module.exports = {
                 warningMessage.delete().catch(() => null);
                 message.delete().catch(() => null);
             }, 5000);
+
+            return;
         } else {
             try {
                 await Promise.all([

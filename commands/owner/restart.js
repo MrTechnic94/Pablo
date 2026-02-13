@@ -32,7 +32,7 @@ module.exports = {
                 try {
                     await utils.reply.success(interaction, 'RESTART_BOT');
 
-                    process.exit(0);
+                    process.emit('SIGINT');
                 } catch (err) {
                     logger.error(`[Slash ▸ Restart] An error occurred for '${interaction.guild.id}':\n${err}`);
                     await utils.reply.error(interaction, 'RESTART_ERROR');

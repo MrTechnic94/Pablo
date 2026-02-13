@@ -14,7 +14,7 @@ const colorRoleIds = Object.values(roleMap);
 
 module.exports = {
     customId: 'colors_menu',
-    async execute(interaction) {
+    async execute(interaction, logger) {
         const { utils } = interaction.client;
 
         const roleId = roleMap[interaction.values[0]];
@@ -23,10 +23,15 @@ module.exports = {
             return await utils.reply.error(interaction, 'ROLE_ALREADY_OWNED');
         }
 
-        const currentRoles = Array.from(interaction.member.roles.cache.keys());
-        const newRoles = currentRoles.filter(id => !colorRoleIds.includes(id)).concat(roleId);
+        try {
+            const currentRoles = Array.from(interaction.member.roles.cache.keys());
+            const newRoles = currentRoles.filter(id => !colorRoleIds.includes(id)).concat(roleId);
 
-        await interaction.member.roles.set(newRoles);
-        await utils.reply.success(interaction, 'NEW_COLOR', roleId);
-    }
+            await interaction.member.roles.set(newRoles);
+            await utils.reply.success(interaction, 'NEW_COLOR', roleId);
+        } catch (err) {
+            logger.error(`[SelectMenu ▸ ColorsMenu] An error occurred for '${interaction.guild.id}':\n${err}`);
+            await utils.reply.error(interaction, 'COMMAND_ERROR');
+        }
+    },
 };

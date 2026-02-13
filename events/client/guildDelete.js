@@ -5,9 +5,9 @@ const { Events } = require('discord.js');
 module.exports = {
     name: Events.GuildDelete,
     async execute(logger, guild) {
-        try {
-            const { utils } = guild.client;
+        const { utils } = guild.client;
 
+        try {
             const dbKey = await utils.db.del(`guild:${guild.id}`);
 
             if (!dbKey) return;
