@@ -16,8 +16,8 @@ module.exports = {
             await interaction.member.roles.add(roles.user);
             await utils.reply.success(interaction, 'VERIFIED');
         } catch (err) {
-            logger.error(`[Button ▸ AcceptRules] Failed to add role to ${interaction.user.tag}: ${err}`);
+            logger.error(`[Button ▸ AcceptRules] Failed to add role to '${interaction.user.tag}':\n${err}`);
             await utils.reply.error(interaction, 'COMMAND_ERROR');
         }
-    }
+    },
 };

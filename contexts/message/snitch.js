@@ -1,10 +1,9 @@
 'use strict';
 
-const { PermissionFlagsBits, ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
     index: false,
-    botPermissions: [PermissionFlagsBits.BanMembers, PermissionFlagsBits.KickMembers],
     data: new ContextMenuCommandBuilder()
         .setName('Zgłoś wiadomość')
         .setType(ApplicationCommandType.Message)
@@ -36,7 +35,7 @@ module.exports = {
             return await utils.reply.error(interaction, 'CANT_REPORT_SELF');
         }
 
-        if (targetMember.permissions.has(PermissionFlagsBits.Administrator)) {
+        if (!targetMember.bannable && !targetMember.kickable) {
             return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
         }
 

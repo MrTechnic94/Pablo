@@ -1,10 +1,9 @@
 'use strict';
 
-const { PermissionFlagsBits, SlashCommandBuilder, InteractionContextType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
-    botPermissions: [PermissionFlagsBits.BanMembers, PermissionFlagsBits.KickMembers],
     data: new SlashCommandBuilder()
         .setName('snitch')
         .setDescription('Zgłoś przewinienie użytkownika.')
@@ -54,7 +53,7 @@ module.exports = {
 
         const targetMember = await interaction.guild.members.fetch(target.id).catch(() => null);
 
-        if (targetMember.permissions.has(PermissionFlagsBits.Administrator)) {
+        if (!targetMember.bannable && !targetMember.kickable) {
             return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
         }
 

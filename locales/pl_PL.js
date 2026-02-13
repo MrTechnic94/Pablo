@@ -35,7 +35,7 @@ module.exports = {
 
     verification: {
         [GuildVerificationLevel.None]: "**Brak:** Bez ograniczeń.",
-        [GuildVerificationLevel.Low]: "**Niski:** Wymaga potwierdzenia adresu e-mail konta Discord.",
+        [GuildVerificationLevel.Low]: "**Niski:** Wymaga potwierdzenia adresu e-mail konta Discorda.",
         [GuildVerificationLevel.Medium]: "**Średni:** Wymaga dodatkowo rejestracji na Discordzie przez dłużej niż 5 minut.",
         [GuildVerificationLevel.High]: "**Wysoki:** Wymaga dodatkowo członkostwa na tym serwerze przez dłużej niż 10 minut.",
         [GuildVerificationLevel.VeryHigh]: "**Najwyższy:** Wymaga potwierdzenia numeru telefonu na koncie Discorda."

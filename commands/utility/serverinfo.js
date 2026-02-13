@@ -21,21 +21,17 @@ module.exports = {
         const createdAt = Math.floor(guild.createdTimestamp / 1000);
 
         // Uzytkownicy
-        let members = guild.members.cache;
+        let membersToCount = guild.members.cache;
 
-        if (members.size <= 1) {
-            members = await guild.members.fetch().catch(() => null);
+        if (membersToCount.size <= 1) {
+            membersToCount = await guild.members.fetch().catch(() => null);
         }
 
-        let onlineCount = 0;
-
-        if (members) {
-            onlineCount = members.filter(m =>
-                m.presence &&
-                m.presence.status !== PresenceUpdateStatus.Offline &&
-                m.presence.status !== PresenceUpdateStatus.Invisible
-            ).size;
-        }
+        const onlineCount = membersToCount.filter(m =>
+            m.presence?.status &&
+            m.presence.status !== PresenceUpdateStatus.Offline &&
+            m.presence.status !== PresenceUpdateStatus.Invisible
+        ).size;
 
         // Emotki
         const emojiCount = guild.emojis.cache.size;
