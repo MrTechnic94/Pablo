@@ -33,16 +33,16 @@ module.exports = {
             if (reporterId) {
                 const description = utils.reply.getString('success', 'SNITCH_ACCEPTED', 'wyrzucony', interaction.guild.name);
                 const firstEmbedDM = utils.createEmbed({ title: 'Zgłoszenie zaakceptowane', description });
-                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchKick] Failed to send DM to reporter: '${reporterId}'`));
+                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchKick] Failed to send DM to '${reporterId}'`));
             }
 
             // Powiadomienie wyrzuconego
             const secondEmbedDM = utils.createEmbed({
                 title: 'Zostałeś wyrzucony',
-                description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${rawReason}`
+                description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${rawReason}`
             });
 
-            await interaction.client.users.send(targetId, { embeds: [secondEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchKick] Failed to send DM to reporter: '${reporterId}'`));
+            await interaction.client.users.send(targetId, { embeds: [secondEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchKick] Failed to send DM to '${reporterId}'`));
 
             // Kick
             await interaction.guild.members.kick(targetId, { reason: auditLogReason });
@@ -62,7 +62,7 @@ module.exports = {
             finishedEmbed.color = embeds.secondaryColor;
 
             return await interaction.update({
-                content: `\`👢\` Użytkownik został wyrzucony przez ${interaction.user}.`,
+                content: `\`👢\` Użytkownik został wyrzucony przez <@${interaction.user.id}>.`,
                 embeds: [finishedEmbed],
                 components: []
             });

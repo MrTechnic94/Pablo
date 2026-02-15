@@ -23,10 +23,10 @@ module.exports = {
     async execute(interaction, logger) {
         const { utils } = interaction.client;
 
-        const targetUser = interaction.options.getMember('użytkownik');
+        const targetMember = interaction.options.getMember('użytkownik');
         const role = interaction.options.getRole('rola');
 
-        if (!targetUser) {
+        if (!targetMember) {
             return await utils.reply.error(interaction, 'USER_NOT_FOUND');
         }
 
@@ -34,16 +34,16 @@ module.exports = {
             return await utils.reply.error(interaction, 'ROLE_HIGHER_THAN_BOT');
         }
 
-        if (targetUser.roles.cache.has(role.id)) {
+        if (targetMember.roles.cache.has(role.id)) {
             return await utils.reply.error(interaction, 'USER_ALREADY_HAS_ROLE', role.id);
         }
 
         try {
-            await targetUser.roles.add(role);
+            await targetMember.roles.add(role);
 
             const successEmbed = utils.createEmbed({
                 title: 'Rola nadana',
-                description: `\`🎭\` **Nadano rolę:** ${role}\n\`👤\` **Użytkownikowi:** ${targetUser}\n\`📛\` **Polecenia użył:** ${interaction.user}`
+                description: `\`🎭\` **Nadano rolę:** <@&${role.id}>\n\`👤\` **Użytkownikowi:** <@${targetMember.id}>\n\`📛\` **Polecenia użył:** <@${interaction.user.id}>`
             });
 
             await interaction.reply({ embeds: [successEmbed] });

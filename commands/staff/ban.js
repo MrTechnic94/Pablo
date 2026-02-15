@@ -49,21 +49,19 @@ module.exports = {
         try {
             const targetMember = await interaction.guild.members.fetch(targetUser.id).catch(() => null);
 
-            if (!targetMember) {
-                return await utils.reply.error(interaction, 'USER_NOT_FOUND');
-            }
+            if (targetMember) {
+                if (interaction.member.roles.highest.position <= targetMember.roles.highest.position) {
+                    return await utils.reply.error(interaction, 'ROLE_TOO_HIGH');
+                }
 
-            if (interaction.member.roles.highest.position <= targetMember.roles.highest.position) {
-                return await utils.reply.error(interaction, 'ROLE_TOO_HIGH');
-            }
-
-            if (!targetMember.bannable) {
-                return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
+                if (!targetMember.bannable) {
+                    return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
+                }
             }
 
             const embedDM = utils.createEmbed({
                 title: 'Zostałeś zbanowany',
-                description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
             });
 
             await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Ban] Failed to send DM to '${targetUser.id}'.`));
@@ -72,7 +70,7 @@ module.exports = {
 
             const successEmbed = utils.createEmbed({
                 title: 'Użytkownik zbanowany',
-                description: `\`👤\` **Wyrzucono:** ${targetUser.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}\n\`🗑️\` **Usunięcie wiadomości:** ${deleteMessageDuration ? utils.formatDuration(deleteMessageDuration * 1000, { fullWords: true }) : 'Nie usuwaj'}`
+                description: `\`👤\` **Wyrzucono:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}\n\`🗑️\` **Usunięcie wiadomości:** ${deleteMessageDuration ? utils.formatDuration(deleteMessageDuration * 1000, { fullWords: true }) : 'Nie usuwaj'}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });

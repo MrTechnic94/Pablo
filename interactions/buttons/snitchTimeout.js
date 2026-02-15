@@ -34,16 +34,16 @@ module.exports = {
             if (reporterId) {
                 const description = utils.reply.getString('success', 'SNITCH_ACCEPTED', 'wyciszony', interaction.guild.name);
                 const firstEmbedDM = utils.createEmbed({ title: 'Zgłoszenie zaakceptowane', description });
-                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchTimeout] Failed to send DM to reporter: '${reporterId}'`));
+                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchTimeout] Failed to send DM to '${reporterId}'`));
             }
 
             // Powiadomienie wyciszonego
             const secondEmbedDM = utils.createEmbed({
                 title: 'Zostałeś wyciszony',
-                description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${rawReason}`
+                description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${rawReason}`
             });
 
-            await interaction.client.users.send(targetId, { embeds: [secondEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchTimeout] Failed to send DM to reporter: '${reporterId}'`));
+            await interaction.client.users.send(targetId, { embeds: [secondEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchTimeout] Failed to send DM to '${reporterId}'`));
 
             // Wyrzucenie (domyslnie 2h)
             await targetMember.timeout(7200000, { reason: auditLogReason });
@@ -63,7 +63,7 @@ module.exports = {
             finishedEmbed.color = embeds.secondaryColor;
 
             return await interaction.update({
-                content: `\`🔇\` Użytkownik został wyciszony przez ${interaction.user}.`,
+                content: `\`🔇\` Użytkownik został wyciszony przez <@${interaction.user.id}>.`,
                 embeds: [finishedEmbed],
                 components: []
             });

@@ -33,16 +33,16 @@ module.exports = {
             if (reporterId) {
                 const description = utils.reply.getString('success', 'SNITCH_ACCEPTED', 'zbanowany', interaction.guild.name);
                 const firstEmbedDM = utils.createEmbed({ title: 'Zgłoszenie zaakceptowane', description });
-                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchBan] Failed to send DM to reporter: '${reporterId}'`));
+                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchBan] Failed to send DM to '${reporterId}'`));
             }
 
             // Powiadomienie zbanowanego
             const secondEmbedDM = utils.createEmbed({
                 title: 'Zostałeś zbanowany',
-                description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${rawReason}`
+                description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${rawReason}`
             });
 
-            await interaction.client.users.send(targetId, { embeds: [secondEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchBan] Failed to send DM to reporter: '${reporterId}'`));
+            await interaction.client.users.send(targetId, { embeds: [secondEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchBan] Failed to send DM to '${reporterId}'`));
 
             // Ban
             await interaction.guild.bans.create(targetId, { reason: auditLogReason });
@@ -62,7 +62,7 @@ module.exports = {
             finishedEmbed.color = embeds.secondaryColor;
 
             return await interaction.update({
-                content: `\`🔨\` Użytkownik został zbanowany przez ${interaction.user}.`,
+                content: `\`🔨\` Użytkownik został zbanowany przez <@${interaction.user.id}>.`,
                 embeds: [finishedEmbed],
                 components: []
             });

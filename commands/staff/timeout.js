@@ -107,7 +107,7 @@ module.exports = {
 
                     const embedDM = utils.createEmbed({
                         title: 'Zostałeś wyciszony',
-                        description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🕒\` **Czas:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                        description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Czas:** ${timeInfo.formatted}\n\`💬\` **Powód:** ${reason}`
                     });
 
                     await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed to send DM to '${targetUser.id}'.`));
@@ -116,7 +116,7 @@ module.exports = {
 
                     const successEmbed = utils.createEmbed({
                         title: 'Użytkownik wyciszony',
-                        description: `\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🕒\` **Czas:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                        description: `\`👤\` **Użytkownik:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Czas:** ${timeInfo.formatted}\n\`💬\` **Powód:** ${reason}`
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });
@@ -147,7 +147,7 @@ module.exports = {
 
                     const embedDM = utils.createEmbed({
                         title: 'Czas wyciszenia został zmieniony',
-                        description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🕒\` **Nowy czas:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                        description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Nowy czas:** ${timeInfo.formatted}\n\`💬\` **Powód:** ${reason}`
                     });
 
                     await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed to send DM to '${targetUser.id}'.`));
@@ -156,7 +156,7 @@ module.exports = {
 
                     const successEmbed = utils.createEmbed({
                         title: 'Zaktualizowano czas wyciszenia',
-                        description: `\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🕒\` **Nowy czas:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                        description: `\`👤\` **Użytkownik:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Nowy czas:** ${timeInfo.formatted}\n\`💬\` **Powód:** ${reason}`
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });
@@ -170,7 +170,7 @@ module.exports = {
 
                     const embedDM = utils.createEmbed({
                         title: 'Zostałeś odciszony',
-                        description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                        description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
                     });
 
                     await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed to send DM to '${targetUser.id}'.`));
@@ -179,7 +179,7 @@ module.exports = {
 
                     const successEmbed = utils.createEmbed({
                         title: 'Użytkownik odciszony',
-                        description: `\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                        description: `\`👤\` **Użytkownik:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
                     });
 
                     return await interaction.reply({ embeds: [successEmbed] });

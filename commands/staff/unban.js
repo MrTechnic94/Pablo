@@ -38,7 +38,7 @@ module.exports = {
 
             const successEmbed = utils.createEmbed({
                 title: 'Użytkownik odbanowany',
-                description: `\`👤\` **Odbanowano:** ${banInfo.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                description: `\`👤\` **Odbanowano:** <@${banInfo.user.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });

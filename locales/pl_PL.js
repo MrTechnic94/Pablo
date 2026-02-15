@@ -145,7 +145,7 @@ module.exports = {
         COMMAND_NOT_FOUND: '`❌` Polecenie które próbujesz wykonać nie istnieje.',
         COMMAND_ERROR: '`❌` Wystąpił problem podczas wykonywania polecenia.',
         USER_ALREADY_VERIFIED: '`❌` Już zaakceptowałeś regulamin.',
-        SNITCH_REJECTED_DM: '`❌` Twoje zgłoszenie %s na serwerze `%s` zostało odrzucone.',
+        SNITCH_REJECTED_DM: '`❌` Twoje zgłoszenie użytkownika %s na serwerze `%s` zostało odrzucone.',
         ROLE_ALREADY_OWNED: '`❌` Posiadasz już taką rolę.',
         MENU_ERROR: '`❌` To nie jest Twoje menu.',
         BOT_MISSING_PERMISSION: '`❌` Nie mam uprawnienia %s.',
@@ -171,8 +171,6 @@ module.exports = {
         VERIFIED: '`🔹` Dziękujemy za akceptację regulaminu.',
         SNITCH_ACCEPTED: '`🤩` Dziękujemy za czujność! Użytkownik, którego zgłosiłeś, został `%s` na serwerze `%s`.',
         NEW_COLOR: '`➕` Twój nowy kolor to <@&%s>.',
-        SNITCH_REJECTED: '`➖` Zgłoszenie zostało odrzucone.',
-        SNITCH_CLEANED: '\nWyczyszczono powiązane zgłoszenia (`%s`).',
         ROLE_REMOVED: '`➖` Pomyślnie usunięto rolę.',
         CHANNEL_REMOVED: '`➖` Pomyślnie usunięto kanał.'
     }
