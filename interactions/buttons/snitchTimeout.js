@@ -4,16 +4,17 @@ const { PermissionFlagsBits } = require('discord.js');
 const { embeds } = require('../../config/default.json');
 
 module.exports = {
-    customId: 'snitch_kick_',
+    customId: 'snitch_timeout_',
     isPrefix: true,
-    botPermissions: [PermissionFlagsBits.KickMembers],
+    botPermissions: [PermissionFlagsBits.ModerateMembers],
     async execute(interaction, logger) {
         const { utils } = interaction.client;
 
         try {
-            const targetId = interaction.customId.replace('snitch_kick_', '');
+            const targetId = interaction.customId.replace('snitch_timeout_', '');
+            const targetMember = await interaction.guild.members.fetch(targetId).catch(() => null);
 
-            if (!targetId.kickable) {
+            if (!targetMember.isCommunicationDisabled()) {
                 return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
             }
 
@@ -31,21 +32,21 @@ module.exports = {
 
             // Powiadomienie zglaszajacego
             if (reporterId) {
-                const description = utils.reply.getString('success', 'SNITCH_ACCEPTED', 'wyrzucony', interaction.guild.name);
+                const description = utils.reply.getString('success', 'SNITCH_ACCEPTED', 'wyciszony', interaction.guild.name);
                 const firstEmbedDM = utils.createEmbed({ title: 'Zgłoszenie zaakceptowane', description });
-                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchKick] Failed to send DM to reporter: '${reporterId}'`));
+                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchTimeout] Failed to send DM to reporter: '${reporterId}'`));
             }
 
-            // Powiadomienie wyrzuconego
+            // Powiadomienie wyciszonego
             const secondEmbedDM = utils.createEmbed({
-                title: 'Zostałeś wyrzucony',
+                title: 'Zostałeś wyciszony',
                 description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${rawReason}`
             });
 
-            await interaction.client.users.send(targetId, { embeds: [secondEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchKick] Failed to send DM to reporter: '${reporterId}'`));
+            await interaction.client.users.send(targetId, { embeds: [secondEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchTimeout] Failed to send DM to reporter: '${reporterId}'`));
 
-            // Kick
-            await interaction.guild.members.kick(targetId, { reason: auditLogReason });
+            // Wyrzucenie (domyslnie 2h)
+            await targetMember.timeout(7200000, { reason: auditLogReason });
 
             // Usuwania duplikatow
             const messages = await interaction.channel.messages.fetch({ limit: 50 }).catch(() => null);
@@ -62,12 +63,12 @@ module.exports = {
             finishedEmbed.color = embeds.secondaryColor;
 
             return await interaction.update({
-                content: `\`👢\` Użytkownik został wyrzucony przez ${interaction.user}.`,
+                content: `\`🔇\` Użytkownik został wyciszony przez ${interaction.user}.`,
                 embeds: [finishedEmbed],
                 components: []
             });
         } catch (err) {
-            logger.error(`[Button ▸ SnitchKick] An error occurred for '${interaction.guild.id}':\n${err}`);
+            logger.error(`[Button ▸ SnitchTimeout] An error occurred for '${interaction.guild.id}':\n${err}`);
             await utils.reply.error(interaction, 'COMMAND_ERROR');
         }
     },

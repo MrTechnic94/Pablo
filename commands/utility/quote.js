@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
+const { SlashCommandBuilder, ApplicationIntegrationType, InteractionContextType } = require('discord.js');
 const { verseOfTheDay, randomVerse } = require('../../lib/services/verseApi');
 
 module.exports = {
@@ -8,7 +8,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('quote')
         .setDescription('Wyświetla werset z Biblii.')
-        .setContexts(InteractionContextType.Guild)
+        .setIntegrationTypes([ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall])
+        .setContexts([InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel])
         .addStringOption(option =>
             option.setName('rodzaj')
                 .setDescription('Wybierz werset z Biblii który chcesz zobaczyć.')

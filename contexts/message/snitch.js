@@ -35,7 +35,7 @@ module.exports = {
             return await utils.reply.error(interaction, 'CANT_REPORT_SELF');
         }
 
-        if (!targetMember.bannable && !targetMember.kickable) {
+        if (!targetMember.bannable && !targetMember.kickable && !targetMember.isCommunicationDisabled()) {
             return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
         }
 
@@ -70,6 +70,10 @@ module.exports = {
                 new ButtonBuilder()
                     .setCustomId(`snitch_kick_${target.id}`)
                     .setLabel('Wyrzuć')
+                    .setStyle(ButtonStyle.Danger),
+                new ButtonBuilder()
+                    .setCustomId(`snitch_timeout_${target.id}`)
+                    .setLabel('Wycisz')
                     .setStyle(ButtonStyle.Danger),
                 new ButtonBuilder()
                     .setCustomId(`snitch_dismiss_${reporter.id}`)

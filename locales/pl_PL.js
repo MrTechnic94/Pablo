@@ -168,7 +168,7 @@ module.exports = {
         RESTART_BOT: '`💤` Restart w toku. Spróbuj ponownie za kilka chwil...',
         SNITCH_SENT: '`➕` Twoje zgłoszenie wpłyneło do administracji. Dziękujemy za czujność!',
         VERIFIED: '`🔹` Dziękujemy za akceptację regulaminu.',
-        SNITCH_ACCEPTED: '`🤩` Dziękujemy za czujność! Użytkownik, którego zgłosiłeś, został zbanowany na serwerze `%s`.',
+        SNITCH_ACCEPTED: '`🤩` Dziękujemy za czujność! Użytkownik, którego zgłosiłeś, został `%s` na serwerze `%s`.',
         NEW_COLOR: '`➕` Twój nowy kolor to <@&%s>.',
         SNITCH_REJECTED: '`➖` Zgłoszenie zostało odrzucone.',
         SNITCH_CLEANED: '\nWyczyszczono powiązane zgłoszenia (`%s`).',

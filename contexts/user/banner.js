@@ -1,13 +1,14 @@
 'use strict';
 
-const { ContextMenuCommandBuilder, ApplicationCommandType, InteractionContextType, MessageFlags } = require('discord.js');
+const { ContextMenuCommandBuilder, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, MessageFlags } = require('discord.js');
 
 module.exports = {
     index: false,
     data: new ContextMenuCommandBuilder()
         .setName('Pokaż baner')
         .setType(ApplicationCommandType.User)
-        .setContexts(InteractionContextType.Guild),
+        .setIntegrationTypes([ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall])
+        .setContexts([InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel]),
     async execute(interaction) {
         const { utils } = interaction.client;
 

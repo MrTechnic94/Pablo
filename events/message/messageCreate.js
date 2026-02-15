@@ -25,12 +25,10 @@ module.exports = {
         // Auto reakcje dla kanalu
         if (!message.attachments.size && !allowedExtensions.test(message.content) && !urlRegex.test(message.content)) {
             const warningMessage = await utils.reply.error(message, 'ONLY_MEMES_ALLOWED');
-            setTimeout(() => {
+            return setTimeout(() => {
                 warningMessage.delete().catch(() => null);
                 message.delete().catch(() => null);
             }, 5000);
-
-            return;
         } else {
             try {
                 await Promise.all([

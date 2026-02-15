@@ -31,7 +31,7 @@ module.exports = {
 
             // Powiadomienie zglaszajacego
             if (reporterId) {
-                const description = utils.reply.getString('success', 'SNITCH_ACCEPTED', interaction.guild.name);
+                const description = utils.reply.getString('success', 'SNITCH_ACCEPTED', 'zbanowany', interaction.guild.name);
                 const firstEmbedDM = utils.createEmbed({ title: 'Zgłoszenie zaakceptowane', description });
                 await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchBan] Failed to send DM to reporter: '${reporterId}'`));
             }
@@ -44,7 +44,7 @@ module.exports = {
 
             await interaction.client.users.send(targetId, { embeds: [secondEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchBan] Failed to send DM to reporter: '${reporterId}'`));
 
-            // Ban i czyszczenie
+            // Ban
             await interaction.guild.bans.create(targetId, { reason: auditLogReason });
 
             // Usuwania duplikatow
