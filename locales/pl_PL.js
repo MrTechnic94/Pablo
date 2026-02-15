@@ -160,7 +160,8 @@ module.exports = {
         INVALID_STEAL_EMOJI: '`❌` Nieprawidłowe emoji.',
         EMOJI_ERROR: '`❌` Wystąpił problem podczas dodawania emoji.',
         EMOJI_FULL_SLOT: '`❌` Miejsca na emoji są pełne.',
-        INVALID_FILE: '`❌` Nieprawidłowy format lub rozmiar.'
+        INVALID_FILE: '`❌` Nieprawidłowy format lub rozmiar.',
+        USER_TIMEOUT_SAME_TIME: '`❌` Nowy czas wyciszenia jest identyczny z obecnym.'
     },
 
     // KOMUNIKATY

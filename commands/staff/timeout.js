@@ -31,6 +31,26 @@ module.exports = {
                 )
         )
         .addSubcommand(sub =>
+            sub.setName('edit')
+                .setDescription('Zmienia czas trwania aktywnego wyciszenia.')
+                .addUserOption(option =>
+                    option.setName('użytkownik')
+                        .setDescription('Użytkownik, którego wyciszenie chcesz edytować.')
+                        .setRequired(true)
+                )
+                .addStringOption(option =>
+                    option.setName('czas')
+                        .setDescription('Nowy czas trwania. Przykład: 1d, 1h, 30m.')
+                        .setRequired(true)
+                )
+                .addStringOption(option =>
+                    option.setName('powód')
+                        .setDescription('Powód zmiany czasu.')
+                        .setRequired(false)
+                        .setMaxLength(500)
+                )
+        )
+        .addSubcommand(sub =>
             sub.setName('remove')
                 .setDescription('Odcisza użytkownika przed czasem.')
                 .addUserOption(option =>
@@ -58,25 +78,27 @@ module.exports = {
                 return await utils.reply.error(interaction, 'USER_NOT_FOUND');
             }
 
+            if (subcommand === 'add' || subcommand === 'edit') {
+                if (targetUser.id === interaction.user.id) {
+                    return await utils.reply.error(interaction, 'CANT_TIMEOUT_SELF');
+                }
+
+                if (interaction.member.roles.highest.position <= member.roles.highest.position) {
+                    return await utils.reply.error(interaction, 'ROLE_TOO_HIGH');
+                }
+
+                if (!member.moderatable) {
+                    return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
+                }
+            }
+
             switch (subcommand) {
                 case 'add': {
-                    if (targetUser.id === interaction.user.id) {
-                        return await utils.reply.error(interaction, 'CANT_TIMEOUT_SELF');
-                    }
-
                     const rawTime = interaction.options.getString('czas');
                     const timeInfo = utils.parseTimeString(rawTime);
 
                     if (!timeInfo) {
                         return await utils.reply.error(interaction, 'INVALID_TIME_FORMAT');
-                    }
-
-                    if (interaction.member.roles.highest.position <= member.roles.highest.position) {
-                        return await utils.reply.error(interaction, 'ROLE_TOO_HIGH');
-                    }
-
-                    if (!member.moderatable) {
-                        return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
                     }
 
                     if (member.isCommunicationDisabled()) {
@@ -88,13 +110,53 @@ module.exports = {
                         description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🕒\` **Czas:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
                     });
 
-                    await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed DM to '${targetUser.tag}'.`));
+                    await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed to send DM to '${targetUser.id}'.`));
 
                     await member.timeout(timeInfo.seconds * 1000, { reason: reason });
 
                     const successEmbed = utils.createEmbed({
                         title: 'Użytkownik wyciszony',
                         description: `\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🕒\` **Czas:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                    });
+
+                    await interaction.reply({ embeds: [successEmbed] });
+                    break;
+                }
+
+                case 'edit': {
+                    if (!member.isCommunicationDisabled()) {
+                        return await utils.reply.error(interaction, 'USER_IS_NOT_TIMED_OUT');
+                    }
+
+                    const rawTime = interaction.options.getString('czas');
+                    const timeInfo = utils.parseTimeString(rawTime);
+
+                    const now = Date.now();
+                    const currentTimeoutEnd = member.communicationDisabledUntilTimestamp;
+                    const newTimeoutEnd = now + (timeInfo.seconds * 1000);
+
+                    const diff = Math.abs(newTimeoutEnd - currentTimeoutEnd);
+
+                    if (diff < 10000) {
+                        return await utils.reply.error(interaction, 'USER_TIMEOUT_SAME_TIME');
+                    }
+
+                    if (!timeInfo) {
+                        return await utils.reply.error(interaction, 'INVALID_TIME_FORMAT');
+                    }
+
+                    const embedDM = utils.createEmbed({
+                        title: 'Czas wyciszenia został zmieniony',
+                        description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🕒\` **Nowy czas:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                    });
+
+                    await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed to send DM to '${targetUser.id}'.`));
+
+                    await member.timeout(timeInfo.seconds * 1000, { reason: reason });
+
+                    const successEmbed = utils.createEmbed({
+                        title: 'Zaktualizowano czas wyciszenia',
+                        description: `\`👤\` **Użytkownik:** ${targetUser.tag}\n\`🕒\` **Nowy czas:** ${timeInfo.formatted}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });
@@ -111,7 +173,7 @@ module.exports = {
                         description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
                     });
 
-                    await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed DM to '${targetUser.tag}'.`));
+                    await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed to send DM to '${targetUser.id}'.`));
 
                     await member.timeout(null, { reason: reason });
 
@@ -125,7 +187,10 @@ module.exports = {
             }
         } catch (err) {
             logger.error(`[Slash ▸ Timeout] An error occurred for '${interaction.guild.id}':\n${err}`);
-            const errorKey = subcommand === 'add' ? 'TIMEOUT_ERROR' : 'TIMEOUT_REMOVE_ERROR';
+            let errorKey = 'TIMEOUT_ERROR';
+
+            if (subcommand === 'remove') errorKey = 'TIMEOUT_REMOVE_ERROR';
+
             await utils.reply.error(interaction, errorKey);
         }
     },

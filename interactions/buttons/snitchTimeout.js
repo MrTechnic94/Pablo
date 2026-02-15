@@ -14,7 +14,7 @@ module.exports = {
             const targetId = interaction.customId.replace('snitch_timeout_', '');
             const targetMember = await interaction.guild.members.fetch(targetId).catch(() => null);
 
-            if (!targetMember.isCommunicationDisabled()) {
+            if (!targetMember.moderatable) {
                 return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
             }
 

@@ -35,7 +35,7 @@ module.exports = {
             return await utils.reply.error(interaction, 'CANT_REPORT_SELF');
         }
 
-        if (!targetMember.bannable && !targetMember.kickable && !targetMember.isCommunicationDisabled()) {
+        if (!targetMember.bannable && !targetMember.kickable && !targetMember.moderatable) {
             return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
         }
 
