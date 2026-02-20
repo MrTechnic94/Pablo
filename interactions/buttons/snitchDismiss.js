@@ -9,7 +9,7 @@ module.exports = {
         const { utils } = interaction.client;
 
         try {
-            if (interaction.message.components.length === 0) return;
+            if (!interaction.message.components.length) return;
 
             const reporterId = interaction.customId.replace('snitch_dismiss_', '');
             const targetField = interaction.message.embeds[0].fields.find(f => f.name.includes('Zgłoszony'));
@@ -27,11 +27,11 @@ module.exports = {
 
             if (reporterId) {
                 await interaction.client.users.send(reporterId, { embeds: [embedDM] })
-                    .catch(() => logger.warn(`[Button ▸ SnitchDismiss] Failed to send DM to '${reporterId}'`));
+                    .catch(() => logger.warn(`[Button ▸ SnitchDismiss] Failed to send DM to '${reporterId}'.`));
             }
 
             const finishedEmbed = interaction.message.embeds[0].toJSON();
-            finishedEmbed.title = 'Zgłoszenie - odrzucone';
+            finishedEmbed.title = 'Zgłoszenie - akcja wykonana';
             finishedEmbed.color = embeds.secondaryColor;
 
             let duplicatesProcessed = 0;
@@ -51,7 +51,7 @@ module.exports = {
 
                     for (const msg of duplicates.values()) {
                         const dupEmbed = msg.embeds[0].toJSON();
-                        dupEmbed.title = 'Zgłoszenie - odrzucone (duplikat)';
+                        dupEmbed.title = 'Zgłoszenie - akcja wykonana (duplikat)';
                         dupEmbed.color = embeds.secondaryColor;
 
                         await msg.edit({

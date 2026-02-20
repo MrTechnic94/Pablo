@@ -20,7 +20,7 @@ module.exports = {
                 )
                 .addStringOption(option =>
                     option.setName('czas')
-                        .setDescription('Czas trwania. Przykład: 1d, 1h, 30m.')
+                        .setDescription('Czas trwania. Przykład: 1d 1h 30m.')
                         .setRequired(true)
                 )
                 .addStringOption(option =>
@@ -40,7 +40,7 @@ module.exports = {
                 )
                 .addStringOption(option =>
                     option.setName('czas')
-                        .setDescription('Nowy czas trwania. Przykład: 1d, 1h, 30m.')
+                        .setDescription('Nowy czas trwania. Przykład: 1d 1h 30m.')
                         .setRequired(true)
                 )
                 .addStringOption(option =>

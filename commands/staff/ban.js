@@ -70,7 +70,7 @@ module.exports = {
 
             const successEmbed = utils.createEmbed({
                 title: 'Użytkownik zbanowany',
-                description: `\`👤\` **Wyrzucono:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}\n\`🗑️\` **Usunięcie wiadomości:** ${deleteMessageDuration ? utils.formatDuration(deleteMessageDuration * 1000, { fullWords: true }) : 'Nie usuwaj'}`
+                description: `\`👤\` **Zbanowano:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}\n\`🗑️\` **Usunięcie wiadomości:** ${deleteMessageDuration ? utils.formatDuration(deleteMessageDuration * 1000, { fullWords: true }) : 'Nie usuwaj.'}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });

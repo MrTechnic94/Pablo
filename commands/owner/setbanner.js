@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, RESTJSONErrorCodes } = require('discord.js');
 
 module.exports = {
     index: false,
@@ -44,7 +44,7 @@ module.exports = {
 
             await interaction.editReply({ embeds: [successEmbed] });
         } catch (err) {
-            if (err.code === 50035) {
+            if (err.code === RESTJSONErrorCodes.InvalidFormBodyOrContentType || err.message?.includes('BANNER_RATE_LIMIT')) {
                 return await utils.reply.error(interaction, 'RATE_LIMIT');
             }
 

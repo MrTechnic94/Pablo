@@ -122,7 +122,7 @@ module.exports = {
         USER_IS_NOT_TIMED_OUT: '`❌` Ten użytkownik nie jest wyciszony.',
         USER_NOT_PUNISHABLE: '`❌` Ten użytkownik nie podlega karze.',
         TIMEOUT_REMOVE_ERROR: '`❌` Wystąpił problem podczas usuwania wyciszenia użytkownikowi.',
-        INVALID_TIME_FORMAT: '`❌` Nieprawidłowy format czasu. Przykład: `1d 1h 20m`.',
+        INVALID_TIME_FORMAT: '`❌` Nieprawidłowy format czasu. Przykład: `1d 1h 30m`.',
         USER_IS_TIMED_OUT: '`❌` Ten użytkownik jest już wyciszony.',
         TIMEOUT_ERROR: '`❌` Wystąpił problem podczas nakładania wyciszenia na użytkownika.',
         USER_NOT_BANNED: '`❌` Ten użytkownik nie jest zbanowany.',
@@ -169,7 +169,7 @@ module.exports = {
         RESTART_BOT: '`💤` Restart w toku. Spróbuj ponownie za kilka chwil...',
         SNITCH_SENT: '`➕` Twoje zgłoszenie wpłyneło do administracji. Dziękujemy za czujność!',
         VERIFIED: '`🔹` Dziękujemy za akceptację regulaminu.',
-        SNITCH_ACCEPTED: '`🤩` Dziękujemy za czujność! Użytkownik, którego zgłosiłeś, został `%s` na serwerze `%s`.',
+        SNITCH_ACCEPTED: '`🤩` Dziękujemy za czujność! Użytkownik <@%s>, zgłoszony przez Ciebie, został `%s` na serwerze `%s`.',
         NEW_COLOR: '`➕` Twój nowy kolor to <@&%s>.',
         ROLE_REMOVED: '`➖` Pomyślnie usunięto rolę.',
         CHANNEL_REMOVED: '`➖` Pomyślnie usunięto kanał.'

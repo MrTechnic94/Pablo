@@ -1,6 +1,6 @@
 'use strict';
 
-const { PermissionFlagsBits, SlashCommandBuilder, InteractionContextType } = require('discord.js');
+const { PermissionFlagsBits, SlashCommandBuilder, InteractionContextType, RESTJSONErrorCodes } = require('discord.js');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -59,11 +59,11 @@ module.exports = {
         } catch (err) {
             logger.error(`[Slash ▸ Stealemoji] An error occurred for '${interaction.guild.id}':\n${err}`);
 
-            if (err.code === 30008 || err.code === 30018) {
+            if (err.code === RESTJSONErrorCodes.MaximumNumberOfEmojisReached || err.code === RESTJSONErrorCodes.MaximumNumberOfAnimatedEmojisReached) {
                 return await utils.reply.error(interaction, 'EMOJI_FULL_SLOT');
             }
 
-            if (err.code === 50035 || err.code === 50046) {
+            if (err.code === RESTJSONErrorCodes.InvalidFormBodyOrContentType || err.code === RESTJSONErrorCodes.InvalidFileUploaded) {
                 return await utils.reply.error(interaction, 'INVALID_FILE');
             }
 
