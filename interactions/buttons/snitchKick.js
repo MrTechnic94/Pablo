@@ -1,6 +1,6 @@
 'use strict';
 
-const { PermissionFlagsBits } = require('discord.js');
+const { PermissionFlagsBits, RESTJSONErrorCodes } = require('discord.js');
 const { embeds } = require('../../config/default.json');
 
 module.exports = {
@@ -99,7 +99,7 @@ module.exports = {
         } catch (err) {
             logger.error(`[Button ▸ SnitchKick] An error occurred for '${interaction.guild.id}':\n${err}`);
 
-            if (err.code === 10062 || err.code === 50027) return;
+            if (err.code === RESTJSONErrorCodes.UnknownInteraction) return;
 
             await utils.reply.error(interaction, 'COMMAND_ERROR');
         }
