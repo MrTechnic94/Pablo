@@ -34,9 +34,7 @@ module.exports = {
         // Urzadzenie
         const clientStatus = targetMember.presence?.clientStatus;
 
-        const deviceNames = clientStatus
-            ? Object.keys(clientStatus).map(key => device[key]?.name)
-            : [];
+        const deviceNames = clientStatus ? Object.keys(clientStatus).map(key => device[key]?.name) : [];
 
         const deviceString = deviceNames.join(', ') || 'Użytkownik jest offline.';
 

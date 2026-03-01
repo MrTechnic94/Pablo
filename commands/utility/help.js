@@ -22,6 +22,7 @@ module.exports = {
             if (index === false) return;
 
             const cat = cmd.category || '`❓` Inne';
+
             if (!categories[cat]) categories[cat] = [];
 
             const registered = clientCommands.find(c => c.name === name);

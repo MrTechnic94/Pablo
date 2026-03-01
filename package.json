@@ -1,11 +1,11 @@
 {
   "name": "pablo",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Just a useful bot.",
   "main": "index.js",
   "scripts": {
     "build": "pnpm install && pnpm update && pnpm lint:update",
-    "setup-service": "chmod +x setup-service.sh && ./setup-service.sh",
+    "setup-service": "sed -i 's/\r$//' ./setup-service.sh && chmod +x setup-service.sh && ./setup-service.sh",
     "pm2:docker": "npx pm2-runtime start . --name pablo -- --color",
     "lint:update": "pnpm exec biome migrate --write",
     "watcher": "node --env-file=./config/.env --watch .",

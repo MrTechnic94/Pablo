@@ -49,10 +49,9 @@ module.exports = {
                 description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${rawReason}`
             });
 
-            await interaction.client.users.send(targetId, { embeds: [secondEmbedDM] })
-                .catch(() => logger.warn(`[Button ▸ SnitchKick] Failed to send DM to '${targetId}'.`));
+            await targetMember.send({ embeds: [secondEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchKick] Failed to send DM to '${targetId}'.`));
 
-            await targetMember.kick(auditLogReason);
+            await targetMember.kick({ reason: auditLogReason });
 
             let duplicatesProcessed = 0;
             const messages = await interaction.channel.messages.fetch({ limit: 50 }).catch(() => null);
@@ -95,7 +94,6 @@ module.exports = {
                 embeds: [finishedEmbed],
                 components: []
             });
-
         } catch (err) {
             logger.error(`[Button ▸ SnitchKick] An error occurred for '${interaction.guild.id}':\n${err}`);
 

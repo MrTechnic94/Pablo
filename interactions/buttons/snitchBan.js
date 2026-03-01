@@ -16,8 +16,15 @@ module.exports = {
             const targetId = interaction.customId.replace('snitch_ban_', '');
 
             const targetMember = await interaction.guild.members.fetch(targetId).catch(() => null);
-            if (targetMember && !targetMember.bannable) {
-                return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
+
+            if (targetMember) {
+                if (interaction.member.roles.highest.position <= targetMember.roles.highest.position) {
+                    return await utils.reply.error(interaction, 'ROLE_TOO_HIGH');
+                }
+
+                if (!targetMember.bannable) {
+                    return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
+                }
             }
 
             const reporterField = interaction.message.embeds[0].fields.find(f => f.name.includes('Zgłaszający'));
@@ -35,8 +42,7 @@ module.exports = {
             if (reporterId) {
                 const description = utils.reply.getString('success', 'SNITCH_ACCEPTED', targetId, 'zbanowany', interaction.guild.name);
                 const firstEmbedDM = utils.createEmbed({ title: 'Zgłoszenie zaakceptowane', description });
-                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] })
-                    .catch(() => logger.warn(`[Button ▸ SnitchBan] Failed to send DM to '${reporterId}'.`));
+                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchBan] Failed to send DM to '${reporterId}'.`));
             }
 
             const secondEmbedDM = utils.createEmbed({
@@ -44,8 +50,7 @@ module.exports = {
                 description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${rawReason}`
             });
 
-            await interaction.client.users.send(targetId, { embeds: [secondEmbedDM] })
-                .catch(() => logger.warn(`[Button ▸ SnitchBan] Failed to send DM to '${targetId}'.`));
+            await targetMember.send({ embeds: [secondEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchBan] Failed to send DM to '${targetId}'.`));
 
             await interaction.guild.bans.create(targetId, { reason: auditLogReason });
 
@@ -90,7 +95,6 @@ module.exports = {
                 embeds: [finishedEmbed],
                 components: []
             });
-
         } catch (err) {
             logger.error(`[Button ▸ SnitchBan] An error occurred for '${interaction.guild.id}':\n${err}`);
 
