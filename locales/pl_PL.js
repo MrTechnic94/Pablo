@@ -122,7 +122,7 @@ module.exports = {
         USER_IS_NOT_TIMED_OUT: '`❌` Ten użytkownik nie jest wyciszony.',
         USER_NOT_PUNISHABLE: '`❌` Ten użytkownik nie podlega karze.',
         TIMEOUT_REMOVE_ERROR: '`❌` Wystąpił problem podczas usuwania wyciszenia użytkownikowi.',
-        INVALID_TIME_FORMAT: '`❌` Nieprawidłowy format czasu. Przykład: `1d 1h 20m`.',
+        INVALID_TIME_FORMAT: '`❌` Nieprawidłowy format czasu. Przykład: `1d 1h 30m`.',
         USER_IS_TIMED_OUT: '`❌` Ten użytkownik jest już wyciszony.',
         TIMEOUT_ERROR: '`❌` Wystąpił problem podczas nakładania wyciszenia na użytkownika.',
         USER_NOT_BANNED: '`❌` Ten użytkownik nie jest zbanowany.',
@@ -145,7 +145,7 @@ module.exports = {
         COMMAND_NOT_FOUND: '`❌` Polecenie które próbujesz wykonać nie istnieje.',
         COMMAND_ERROR: '`❌` Wystąpił problem podczas wykonywania polecenia.',
         USER_ALREADY_VERIFIED: '`❌` Już zaakceptowałeś regulamin.',
-        SNITCH_REJECTED_DM: '`❌` Twoje zgłoszenie %s na serwerze `%s` zostało odrzucone.',
+        SNITCH_REJECTED_DM: '`❌` Twoje zgłoszenie użytkownika %s na serwerze `%s` zostało odrzucone.',
         ROLE_ALREADY_OWNED: '`❌` Posiadasz już taką rolę.',
         MENU_ERROR: '`❌` To nie jest Twoje menu.',
         BOT_MISSING_PERMISSION: '`❌` Nie mam uprawnienia %s.',
@@ -160,7 +160,8 @@ module.exports = {
         INVALID_STEAL_EMOJI: '`❌` Nieprawidłowe emoji.',
         EMOJI_ERROR: '`❌` Wystąpił problem podczas dodawania emoji.',
         EMOJI_FULL_SLOT: '`❌` Miejsca na emoji są pełne.',
-        INVALID_FILE: '`❌` Nieprawidłowy format lub rozmiar.'
+        INVALID_FILE: '`❌` Nieprawidłowy format lub rozmiar.',
+        USER_TIMEOUT_SAME_TIME: '`❌` Nowy czas wyciszenia jest identyczny z obecnym.'
     },
 
     // KOMUNIKATY
@@ -168,10 +169,8 @@ module.exports = {
         RESTART_BOT: '`💤` Restart w toku. Spróbuj ponownie za kilka chwil...',
         SNITCH_SENT: '`➕` Twoje zgłoszenie wpłyneło do administracji. Dziękujemy za czujność!',
         VERIFIED: '`🔹` Dziękujemy za akceptację regulaminu.',
-        SNITCH_ACCEPTED: '`🤩` Dziękujemy za czujność! Użytkownik, którego zgłosiłeś, został zbanowany na serwerze `%s`.',
+        SNITCH_ACCEPTED: '`🤩` Dziękujemy za czujność! Użytkownik <@%s>, zgłoszony przez Ciebie, został `%s` na serwerze `%s`.',
         NEW_COLOR: '`➕` Twój nowy kolor to <@&%s>.',
-        SNITCH_REJECTED: '`➖` Zgłoszenie zostało odrzucone.',
-        SNITCH_CLEANED: '\nWyczyszczono powiązane zgłoszenia (`%s`).',
         ROLE_REMOVED: '`➖` Pomyślnie usunięto rolę.',
         CHANNEL_REMOVED: '`➖` Pomyślnie usunięto kanał.'
     }

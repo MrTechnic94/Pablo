@@ -12,70 +12,60 @@ module.exports = {
     async execute(interaction) {
         const { utils } = interaction.client;
 
-        const guild = interaction.guild;
-
         // Wlasciciel
-        const owner = await guild.fetchOwner().catch(() => null);
+        const owner = await interaction.guild.fetchOwner().catch(() => null);
 
         // Kiedy utworzono
-        const createdAt = Math.floor(guild.createdTimestamp / 1000);
+        const createdAt = Math.floor(interaction.guild.createdTimestamp / 1000);
 
         // Uzytkownicy
-        let membersToCount = guild.members.cache;
+        const totalMembers = interaction.guild.memberCount;
+        let membersToCount = interaction.guild.members.cache;
 
         if (membersToCount.size <= 1) {
-            membersToCount = await guild.members.fetch().catch(() => null);
+            membersToCount = await interaction.guild.members.fetch().catch(() => null);
         }
 
         const onlineCount = membersToCount.filter(m =>
-            m.presence?.status &&
-            m.presence.status !== PresenceUpdateStatus.Offline &&
-            m.presence.status !== PresenceUpdateStatus.Invisible
+            m.presence?.status && m.presence.status !== PresenceUpdateStatus.Offline
         ).size;
 
         // Emotki
-        const emojiCount = guild.emojis.cache.size;
-        const stickerCount = guild.stickers.cache.size;
+        const emojiCount = interaction.guild.emojis.cache.size;
+        const stickerCount = interaction.guild.stickers.cache.size;
 
         // Kanaly
-        const channelCounts = guild.channels.cache.reduce((acc, channel) => {
-            switch (channel.type) {
-                case ChannelType.GuildText:
-                    acc.text++;
-                    break;
-                case ChannelType.GuildVoice:
-                case ChannelType.GuildStageVoice:
-                    acc.voice++;
-                    break;
-                case ChannelType.GuildCategory:
-                    acc.category++;
-            }
-            return acc;
-        }, { text: 0, voice: 0, category: 0 });
+        const channelCounts = { text: 0, voice: 0, categories: 0 };
+
+        for (const c of interaction.channel.guild.channels.cache.values()) {
+            if (c.type === ChannelType.GuildText) channelCounts.text++;
+            else if (c.isVoiceBased()) channelCounts.voice++;
+            else if (c.type === ChannelType.GuildCategory) channelCounts.categories++;
+        }
 
         // AFK
-        const afkChannelName = guild.afkChannel ? `${guild.afkChannel}` : 'Brak.';
-        const afkTimeout = guild.afkTimeout ? utils.formatDuration(guild.afkTimeout * 1000, { fullWords: true }) : 'Brak.';
+        const afkChannelName = interaction.guild.afkChannel ? `${interaction.guild.afkChannel}` : 'Brak.';
+        const afkTimeout = interaction.guild.afkTimeout ? utils.formatDuration(interaction.guild.afkTimeout * 1000, { fullWords: true }) : 'Brak.';
         const afkInfo = `**• Kanał:** ${afkChannelName}\n**• Limit czasu:** ${afkTimeout}`;
 
         // Nitro boost
-        const boostLevel = guild.premiumTier;
-        const boostCount = guild.premiumSubscriptionCount;
+        const boostLevel = interaction.guild.premiumTier;
+        const boostCount = interaction.guild.premiumSubscriptionCount;
 
         const successEmbed = utils.createEmbed({
             title: 'Podgląd serwera',
-            thumbnail: guild.iconURL(),
+            thumbnail: interaction.guild.iconURL(),
             fields: [
-                { name: '`🔍` Serwer', value: `**•** ${guild.name}`, inline: false },
-                { name: '`🔑` ID', value: `**•** ${guild.id}`, inline: false },
+                { name: '`🔍` Serwer', value: `**•** ${interaction.guild.name}`, inline: false },
+                { name: '`🔑` ID', value: `**•** ${interaction.guild.id}`, inline: false },
                 { name: '`👑` Właściciel', value: `**•** <@${owner.id}>`, inline: false },
                 { name: '`📅` Utworzono', value: `**•** <t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },
-                { name: '`👥` Użytkownicy', value: `**• Łącznie:** ${guild.memberCount}\n**• Online:** ${onlineCount}`, inline: false },
-                { name: '`🎭` Role', value: `**• Łącznie:** ${guild.roles.cache.size - 1}`, inline: false },
-                { name: '`#️⃣` Kanały', value: `**• Tekstowe:** ${channelCounts.text}\n**• Głosowe:** ${channelCounts.voice}\n**• Kategorie:** ${channelCounts.category}`, inline: false },
+                { name: '`👥` Użytkownicy', value: `**• Łącznie:** ${totalMembers}\n**• Online:** ${onlineCount}`, inline: false },
+                { name: '`🎭` Role', value: `**• Łącznie:** ${interaction.guild.roles.cache.size - 1}`, inline: false },
+                { name: '`#️⃣` Kanały', value: `**• Tekstowe:** ${channelCounts.text}\n**• Głosowe:** ${channelCounts.voice}\n**• Kategorie:** ${channelCounts.categories}`, inline: false },
                 { name: '`💜` Nitro boost', value: `**• Poziom:** ${boostLevel}\n**• Boosty:** ${boostCount || 0}`, inline: false },
                 { name: '`📸` Media', value: `**• Emotki:** ${emojiCount}\n**• Naklejki:** ${stickerCount}`, inline: false },
-                { name: '`🛡️` Poziom weryfikacji', value: `**•** ${verification[guild.verificationLevel]}`, inline: false },
+                { name: '`🛡️` Poziom weryfikacji', value: `**•** ${verification[interaction.guild.verificationLevel]}`, inline: false },
                 { name: '`🌙` AFK', value: afkInfo, inline: false }
             ]
         });

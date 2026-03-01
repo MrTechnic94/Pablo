@@ -48,16 +48,16 @@ module.exports = {
 
             const embedDM = utils.createEmbed({
                 title: 'Zostałeś wyrzucony',
-                description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
             });
 
-            await targetMember.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Kick] Failed to send DM to '${targetMember.user.tag}'.`));
+            await targetMember.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Kick] Failed to send DM to '${targetMember.id}'.`));
 
             await targetMember.kick({ reason: reason });
 
             const successEmbed = utils.createEmbed({
                 title: 'Użytkownik wyrzucony',
-                description: `\`👤\` **Wyrzucono:** ${targetMember.user.tag}\n\`🔨\` **Moderator:** ${interaction.user.tag}\n\`💬\` **Powód:** ${reason}`
+                description: `\`👤\` **Wyrzucono:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
             });
 
             await interaction.reply({ embeds: [successEmbed] });
