@@ -30,16 +30,19 @@ module.exports = (client, logger) => {
             emitter[event.once ? 'once' : 'on'](eventName, (...args) => {
 
                 switch (item.category) {
-                    case 'database':
+                    case 'database': {
                         event.execute(logger, ...args);
                         break;
+                    }
 
-                    case 'process':
+                    case 'process': {
                         event.execute(logger, client, ...args);
                         break;
+                    }
 
-                    default:
+                    default: {
                         event.execute(logger, ...args);
+                    }
                 }
             });
 
