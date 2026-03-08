@@ -33,7 +33,7 @@
     "zlib-sync": "^0.1.10"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.4",
+    "@biomejs/biome": "^2.4.6",
     "blocked-at": "^1.2.0"
   },
   "repository": {

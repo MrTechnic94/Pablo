@@ -34,8 +34,7 @@ module.exports = {
         } else if (interaction.isButton()) {
             const button = interaction.client.buttons.get(interaction.customId) || interaction.client.buttons.find(b => b.isPrefix && interaction.customId.startsWith(b.customId));
 
-            if (!button) return;
-            if (!(await checkBotPermissions(interaction, button.botPermissions))) return;
+            if (!button || !(await checkBotPermissions(interaction, button.botPermissions))) return;
 
             try {
                 return await button.execute(interaction, logger);
@@ -45,8 +44,7 @@ module.exports = {
         } else if (interaction.isStringSelectMenu()) {
             const menu = interaction.client.selectMenus.get(interaction.customId);
 
-            if (!menu) return;
-            if (!(await checkBotPermissions(interaction, menu.botPermissions))) return;
+            if (!menu || !(await checkBotPermissions(interaction, menu.botPermissions))) return;
 
             try {
                 return await menu.execute(interaction, logger);

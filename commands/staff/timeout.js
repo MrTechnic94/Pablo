@@ -182,8 +182,12 @@ module.exports = {
                         description: `\`👤\` **Użytkownik:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
                     });
 
-                    return await interaction.reply({ embeds: [successEmbed] });
+                    await interaction.reply({ embeds: [successEmbed] });
+                    break;
                 }
+
+                default:
+                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Timeout] An error occurred for '${interaction.guild.id}':\n${err}`);
