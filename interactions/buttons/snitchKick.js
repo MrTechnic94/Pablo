@@ -31,7 +31,7 @@ module.exports = {
 
             const reasonField = interaction.message.embeds[0].fields.find(f => f.name.includes('Powód') || f.name.includes('wiadomości'));
 
-            let rawReason = reasonField ? reasonField.value : "Naruszenie regulaminu.";
+            let rawReason = reasonField ? reasonField.value : 'Naruszenie regulaminu.';
             rawReason = rawReason.replace(/[`*•]|```/g, '').trim();
 
             const fullReason = `ZGŁOSZENIE: Zaakceptowane przez ${interaction.user.tag} | POWÓD: ${rawReason}`;

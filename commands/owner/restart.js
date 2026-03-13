@@ -57,8 +57,8 @@ module.exports = {
 
                     const config = utils.getConfig();
 
-                    config.botOptions.changedActivityName = "";
-                    config.botOptions.changedActivityPresence = "";
+                    config.botOptions.changedActivityName = '';
+                    config.botOptions.changedActivityPresence = '';
 
                     utils.syncConfig(config);
 

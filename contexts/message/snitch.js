@@ -39,7 +39,7 @@ module.exports = {
             return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
         }
 
-        const reason = message.content || "Wiadomość nie zawiera tekstu.";
+        const reason = message.content || 'Wiadomość nie zawiera tekstu.';
 
         const adminFields = [
             { name: '`👤` Zgłoszony', value: `**•** ${target}\n└ \`🔑\` ${target.id}`, inline: true },

@@ -27,7 +27,7 @@ module.exports = {
         }
 
         const onlineCount = membersToCount.filter(m =>
-            m.presence?.status && m.presence.status !== PresenceUpdateStatus.Offline
+            m.presence?.status && m.presence?.status !== PresenceUpdateStatus.Offline
         ).size;
 
         // Emotki

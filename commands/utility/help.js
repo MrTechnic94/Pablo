@@ -30,7 +30,7 @@ module.exports = {
 
             const subcommands = cmd.data.options?.filter(opt => opt.toJSON().type === ApplicationCommandOptionType.Subcommand)
 
-            if (subcommands && subcommands.length > 0 && registered) {
+            if (subcommands?.length > 0 && registered) {
                 subcommands.forEach(sub => {
                     const subName = sub.name;
                     const subDesc = sub.description || 'Brak opisu.';

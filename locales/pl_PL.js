@@ -4,41 +4,41 @@ const { PresenceUpdateStatus, ChannelType, GuildVerificationLevel, PermissionFla
 
 module.exports = {
     presence: {
-        [PresenceUpdateStatus.Online]: { name: "Dostępny", emoji: "🟢" },
-        [PresenceUpdateStatus.Idle]: { name: "Zaraz wracam", emoji: "🌙" },
-        [PresenceUpdateStatus.Offline]: { name: "Offline", emoji: "🎱" },
-        [PresenceUpdateStatus.Invisible]: { name: "Niewidoczny", emoji: "🎱" },
-        [PresenceUpdateStatus.DoNotDisturb]: { name: "Nie przeszkadzać", emoji: "⛔" }
+        [PresenceUpdateStatus.Online]: { name: 'Dostępny', emoji: '🟢' },
+        [PresenceUpdateStatus.Idle]: { name: 'Zaraz wracam', emoji: '🌙' },
+        [PresenceUpdateStatus.Offline]: { name: 'Offline', emoji: '🎱' },
+        [PresenceUpdateStatus.Invisible]: { name: 'Niewidoczny', emoji: '🎱' },
+        [PresenceUpdateStatus.DoNotDisturb]: { name: 'Nie przeszkadzać', emoji: '⛔' }
     },
 
     device: {
-        desktop: { name: "Komputer", emoji: "🖥️" },
-        mobile: { name: "Telefon", emoji: "📱" },
-        web: { name: "Przeglądarka", emoji: "🌐" }
+        desktop: { name: 'Komputer', emoji: '🖥️' },
+        mobile: { name: 'Telefon', emoji: '📱' },
+        web: { name: 'Przeglądarka', emoji: '🌐' }
     },
 
     channels: {
-        [ChannelType.GuildText]: "Tekstowy",
-        [ChannelType.DM]: "Wiadomość prywatna",
-        [ChannelType.GuildVoice]: "Głosowy",
-        [ChannelType.GroupDM]: "Grupowa wiadomość prywatna",
-        [ChannelType.GuildCategory]: "Kategoria",
-        [ChannelType.GuildAnnouncement]: "Ogłoszenie",
-        [ChannelType.AnnouncementThread]: "Wątek ogłoszeniowy",
-        [ChannelType.PublicThread]: "Wątek publiczny",
-        [ChannelType.PrivateThread]: "Wątek prywatny",
-        [ChannelType.GuildStageVoice]: "Scena",
-        [ChannelType.GuildDirectory]: "Katalog",
-        [ChannelType.GuildForum]: "Forum",
-        [ChannelType.GuildMedia]: "Media"
+        [ChannelType.GuildText]: 'Tekstowy',
+        [ChannelType.DM]: 'Wiadomość prywatna',
+        [ChannelType.GuildVoice]: 'Głosowy',
+        [ChannelType.GroupDM]: 'Grupowa wiadomość prywatna',
+        [ChannelType.GuildCategory]: 'Kategoria',
+        [ChannelType.GuildAnnouncement]: 'Ogłoszenie',
+        [ChannelType.AnnouncementThread]: 'Wątek ogłoszeniowy',
+        [ChannelType.PublicThread]: 'Wątek publiczny',
+        [ChannelType.PrivateThread]: 'Wątek prywatny',
+        [ChannelType.GuildStageVoice]: 'Scena',
+        [ChannelType.GuildDirectory]: 'Katalog',
+        [ChannelType.GuildForum]: 'Forum',
+        [ChannelType.GuildMedia]: 'Media'
     },
 
     verification: {
-        [GuildVerificationLevel.None]: "**Brak:** Bez ograniczeń.",
-        [GuildVerificationLevel.Low]: "**Niski:** Wymaga potwierdzenia adresu e-mail konta Discorda.",
-        [GuildVerificationLevel.Medium]: "**Średni:** Wymaga dodatkowo rejestracji na Discordzie przez dłużej niż 5 minut.",
-        [GuildVerificationLevel.High]: "**Wysoki:** Wymaga dodatkowo członkostwa na tym serwerze przez dłużej niż 10 minut.",
-        [GuildVerificationLevel.VeryHigh]: "**Najwyższy:** Wymaga potwierdzenia numeru telefonu na koncie Discorda."
+        [GuildVerificationLevel.None]: '**Brak:** Bez ograniczeń.',
+        [GuildVerificationLevel.Low]: '**Niski:** Wymaga potwierdzenia adresu e-mail konta Discorda.',
+        [GuildVerificationLevel.Medium]: '**Średni:** Wymaga dodatkowo rejestracji na Discordzie przez dłużej niż 5 minut.',
+        [GuildVerificationLevel.High]: '**Wysoki:** Wymaga dodatkowo członkostwa na tym serwerze przez dłużej niż 10 minut.',
+        [GuildVerificationLevel.VeryHigh]: '**Najwyższy:** Wymaga potwierdzenia numeru telefonu na koncie Discorda.'
     },
 
     permissions: {
@@ -161,7 +161,11 @@ module.exports = {
         EMOJI_ERROR: '`❌` Wystąpił problem podczas dodawania emoji.',
         EMOJI_FULL_SLOT: '`❌` Miejsca na emoji są pełne.',
         INVALID_FILE: '`❌` Nieprawidłowy format lub rozmiar.',
-        USER_TIMEOUT_SAME_TIME: '`❌` Nowy czas wyciszenia jest identyczny z obecnym.'
+        USER_TIMEOUT_SAME_TIME: '`❌` Nowy czas wyciszenia jest identyczny z obecnym.',
+        LOCK_CHANNEL_ERROR: '`❌` Wystąpił problem podczas zablokowania kanału.',
+        UNLOCK_CHANNEL_ERROR: '`❌` Wystąpił problem podczas odblokowywania kanału.',
+        CHANNEL_ALREADY_LOCKED: '`❌` Kanał jest już zablokowany.',
+        CHANNEL_ALREADY_UNLOCKED: '`❌` Kanał jest już odblokowany.'
     },
 
     // KOMUNIKATY
