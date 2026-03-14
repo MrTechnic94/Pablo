@@ -8,10 +8,10 @@ module.exports = {
         .setName('banner')
         .setDescription('Wyświetla baner użytkownika.')
         .setContexts(InteractionContextType.Guild)
-        .addUserOption(option =>
-            option.setName('użytkownik')
-                .setDescription('Wybierz użytkownika, którego baner chcesz zobaczyć.')
-                .setRequired(false)
+        .addUserOption(option => option
+            .setName('użytkownik')
+            .setDescription('Wybierz użytkownika, którego baner chcesz zobaczyć.')
+            .setRequired(false)
         ),
     async execute(interaction) {
         const { utils } = interaction.client;

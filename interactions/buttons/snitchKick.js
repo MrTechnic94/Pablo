@@ -31,7 +31,7 @@ module.exports = {
 
             const reasonField = interaction.message.embeds[0].fields.find(f => f.name.includes('Powód') || f.name.includes('wiadomości'));
 
-            let rawReason = reasonField ? reasonField.value : "Naruszenie regulaminu.";
+            let rawReason = reasonField ? reasonField.value : 'Naruszenie regulaminu.';
             rawReason = rawReason.replace(/[`*•]|```/g, '').trim();
 
             const fullReason = `ZGŁOSZENIE: Zaakceptowane przez ${interaction.user.tag} | POWÓD: ${rawReason}`;
@@ -40,8 +40,7 @@ module.exports = {
             if (reporterId) {
                 const description = utils.reply.getString('success', 'SNITCH_ACCEPTED', targetId, 'wyrzucony', interaction.guild.name);
                 const firstEmbedDM = utils.createEmbed({ title: 'Zgłoszenie zaakceptowane', description });
-                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] })
-                    .catch(() => logger.warn(`[Button ▸ SnitchKick] Failed to send DM to '${reporterId}'.`));
+                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchKick] Failed to send DM to '${reporterId}'.`));
             }
 
             const secondEmbedDM = utils.createEmbed({

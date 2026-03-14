@@ -7,24 +7,24 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('snitch')
         .setDescription('Zgłoś przewinienie użytkownika.')
-        .addUserOption(option =>
-            option.setName('użytkownik')
-                .setDescription('Użytkownik którego chcesz zgłosić.')
-                .setRequired(true)
+        .setContexts(InteractionContextType.Guild)
+        .addUserOption(option => option
+            .setName('użytkownik')
+            .setDescription('Użytkownik którego chcesz zgłosić.')
+            .setRequired(true)
         )
-        .addStringOption(option =>
-            option.setName('powód')
-                .setDescription('Powód zgłoszenia.')
-                .setRequired(true)
-                .setMinLength(5)
-                .setMaxLength(450)
+        .addStringOption(option => option
+            .setName('powód')
+            .setDescription('Powód zgłoszenia.')
+            .setRequired(true)
+            .setMinLength(5)
+            .setMaxLength(450)
         )
-        .addAttachmentOption(option =>
-            option.setName('obraz')
-                .setDescription('Zdjęcie albo zrzut ekranu przewinienia.')
-                .setRequired(false)
-        )
-        .setContexts(InteractionContextType.Guild),
+        .addAttachmentOption(option => option
+            .setName('obraz')
+            .setDescription('Zdjęcie albo zrzut ekranu przewinienia.')
+            .setRequired(false)
+        ),
     async execute(interaction) {
         const { utils } = interaction.client;
 

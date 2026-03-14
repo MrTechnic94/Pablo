@@ -10,14 +10,14 @@ module.exports = {
         .setDescription('Wyświetla werset z Biblii.')
         .setIntegrationTypes([ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall])
         .setContexts([InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel])
-        .addStringOption(option =>
-            option.setName('rodzaj')
-                .setDescription('Wybierz werset z Biblii który chcesz zobaczyć.')
-                .setRequired(false)
-                .addChoices(
-                    { name: 'Werset na dzień', value: 'daily' },
-                    { name: 'Losowy werset', value: 'random' }
-                )
+        .addStringOption(option => option
+            .setName('rodzaj')
+            .setDescription('Wybierz werset z Biblii który chcesz zobaczyć.')
+            .setRequired(false)
+            .addChoices(
+                { name: 'Werset na dzień', value: 'daily' },
+                { name: 'Losowy werset', value: 'random' }
+            )
         ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;

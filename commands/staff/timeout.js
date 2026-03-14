@@ -10,63 +10,64 @@ module.exports = {
         .setDescription('Zarządzanie wyciszeniami użytkowników.')
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
-        .addSubcommand(sub =>
-            sub.setName('add')
-                .setDescription('Nakłada wyciszenie na użytkownika.')
-                .addUserOption(option =>
-                    option.setName('użytkownik')
-                        .setDescription('Użytkownik do wyciszenia.')
-                        .setRequired(true)
-                )
-                .addStringOption(option =>
-                    option.setName('czas')
-                        .setDescription('Czas trwania. Przykład: 1d 1h 30m.')
-                        .setRequired(true)
-                )
-                .addStringOption(option =>
-                    option.setName('powód')
-                        .setDescription('Powód wyciszenia.')
-                        .setRequired(false)
-                        .setMaxLength(500)
-                )
+        .addSubcommand(sub => sub
+            .setName('add')
+            .setDescription('Nakłada wyciszenie na użytkownika.')
+            .addUserOption(option => option
+                .setName('użytkownik')
+                .setDescription('Użytkownik do wyciszenia.')
+                .setRequired(true)
+            )
+            .addStringOption(option => option
+                .setName('czas')
+                .setDescription('Czas trwania. Przykład: 1d 1h 30m.')
+                .setRequired(true)
+            )
+            .addStringOption(option => option
+                .setName('powód')
+                .setDescription('Powód wyciszenia.')
+                .setRequired(false)
+                .setMaxLength(500)
+            )
         )
-        .addSubcommand(sub =>
-            sub.setName('edit')
-                .setDescription('Zmienia czas trwania aktywnego wyciszenia.')
-                .addUserOption(option =>
-                    option.setName('użytkownik')
-                        .setDescription('Użytkownik, którego wyciszenie chcesz edytować.')
-                        .setRequired(true)
-                )
-                .addStringOption(option =>
-                    option.setName('czas')
-                        .setDescription('Nowy czas trwania. Przykład: 1d 1h 30m.')
-                        .setRequired(true)
-                )
-                .addStringOption(option =>
-                    option.setName('powód')
-                        .setDescription('Powód zmiany czasu.')
-                        .setRequired(false)
-                        .setMaxLength(500)
-                )
+        .addSubcommand(sub => sub
+            .setName('edit')
+            .setDescription('Zmienia czas trwania aktywnego wyciszenia.')
+            .addUserOption(option => option
+                .setName('użytkownik')
+                .setDescription('Użytkownik, którego wyciszenie chcesz edytować.')
+                .setRequired(true)
+            )
+            .addStringOption(option => option
+                .setName('czas')
+                .setDescription('Nowy czas trwania. Przykład: 1d 1h 30m.')
+                .setRequired(true)
+            )
+            .addStringOption(option => option
+                .setName('powód')
+                .setDescription('Powód zmiany czasu.')
+                .setRequired(false)
+                .setMaxLength(500)
+            )
         )
-        .addSubcommand(sub =>
-            sub.setName('remove')
-                .setDescription('Odcisza użytkownika przed czasem.')
-                .addUserOption(option =>
-                    option.setName('użytkownik')
-                        .setDescription('Użytkownik do odciszenia.')
-                        .setRequired(true)
-                )
-                .addStringOption(option =>
-                    option.setName('powód')
-                        .setDescription('Powód odciszenia.')
-                        .setRequired(false)
-                        .setMaxLength(500)
-                )
+        .addSubcommand(sub => sub
+            .setName('remove')
+            .setDescription('Odcisza użytkownika przed czasem.')
+            .addUserOption(option => option
+                .setName('użytkownik')
+                .setDescription('Użytkownik do odciszenia.')
+                .setRequired(true)
+            )
+            .addStringOption(option => option
+                .setName('powód')
+                .setDescription('Powód odciszenia.')
+                .setRequired(false)
+                .setMaxLength(500)
+            )
         ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;
+
         const subcommand = interaction.options.getSubcommand();
         const targetUser = interaction.options.getUser('użytkownik');
         const reason = interaction.options.getString('powód') || 'Brak.';
@@ -105,9 +106,11 @@ module.exports = {
                         return await utils.reply.error(interaction, 'USER_IS_TIMED_OUT');
                     }
 
+                    const expiryTimestamp = Math.floor((Date.now() + (timeInfo.seconds * 1000)) / 1000);
+
                     const embedDM = utils.createEmbed({
                         title: 'Zostałeś wyciszony',
-                        description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Czas:** ${timeInfo.formatted}\n\`💬\` **Powód:** ${reason}`
+                        description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Koniec kary:** <t:${expiryTimestamp}:R>\n\`💬\` **Powód:** ${reason}`
                     });
 
                     await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed to send DM to '${targetUser.id}'.`));
@@ -116,7 +119,7 @@ module.exports = {
 
                     const successEmbed = utils.createEmbed({
                         title: 'Użytkownik wyciszony',
-                        description: `\`👤\` **Użytkownik:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Czas:** ${timeInfo.formatted}\n\`💬\` **Powód:** ${reason}`
+                        description: `\`👤\` **Użytkownik:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Koniec kary:** <t:${expiryTimestamp}:R> \n\`💬\` **Powód:** ${reason}`
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });
@@ -145,18 +148,20 @@ module.exports = {
                         return await utils.reply.error(interaction, 'INVALID_TIME_FORMAT');
                     }
 
-                    const embedDM = utils.createEmbed({
+                    const newExpiryTimestamp = Math.floor((Date.now() + (timeInfo.seconds * 1000)) / 1000);
+
+                    const successEmbedDM = utils.createEmbed({
                         title: 'Czas wyciszenia został zmieniony',
-                        description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Nowy czas:** ${timeInfo.formatted}\n\`💬\` **Powód:** ${reason}`
+                        description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Koniec kary:** <t:${newExpiryTimestamp}:R>\n\`💬\` **Powód:** ${reason}`
                     });
 
-                    await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed to send DM to '${targetUser.id}'.`));
+                    await targetUser.send({ embeds: [successEmbedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed to send DM to '${targetUser.id}'.`));
 
                     await member.timeout(timeInfo.seconds * 1000, { reason: reason });
 
                     const successEmbed = utils.createEmbed({
                         title: 'Zaktualizowano czas wyciszenia',
-                        description: `\`👤\` **Użytkownik:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Nowy czas:** ${timeInfo.formatted}\n\`💬\` **Powód:** ${reason}`
+                        description: `\`👤\` **Użytkownik:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Koniec kary:** <t:${newExpiryTimestamp}:R>\n\`💬\` **Powód:** ${reason}`
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });
@@ -168,12 +173,12 @@ module.exports = {
                         return await utils.reply.error(interaction, 'USER_IS_NOT_TIMED_OUT');
                     }
 
-                    const embedDM = utils.createEmbed({
+                    const successEmbedDM = utils.createEmbed({
                         title: 'Zostałeś odciszony',
                         description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
                     });
 
-                    await targetUser.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed to send DM to '${targetUser.id}'.`));
+                    await targetUser.send({ embeds: [successEmbedDM] }).catch(() => logger.warn(`[Slash ▸ Timeout] Failed to send DM to '${targetUser.id}'.`));
 
                     await member.timeout(null, { reason: reason });
 
@@ -182,15 +187,16 @@ module.exports = {
                         description: `\`👤\` **Użytkownik:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
                     });
 
-                    return await interaction.reply({ embeds: [successEmbed] });
+                    await interaction.reply({ embeds: [successEmbed] });
+                    break;
                 }
+
+                default:
+                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
-            logger.error(`[Slash ▸ Timeout] An error occurred for '${interaction.guild.id}':\n${err}`);
-            let errorKey = 'TIMEOUT_ERROR';
-
-            if (subcommand === 'remove') errorKey = 'TIMEOUT_REMOVE_ERROR';
-
+            logger.error(`[Slash ▸ Timeout] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
+            const errorKey = subcommand === 'remove' ? 'TIMEOUT_REMOVE_ERROR' : 'TIMEOUT_ERROR';
             await utils.reply.error(interaction, errorKey);
         }
     },

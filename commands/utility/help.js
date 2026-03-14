@@ -30,7 +30,7 @@ module.exports = {
 
             const subcommands = cmd.data.options?.filter(opt => opt.toJSON().type === ApplicationCommandOptionType.Subcommand)
 
-            if (subcommands && subcommands.length > 0 && registered) {
+            if (subcommands?.length > 0 && registered) {
                 subcommands.forEach(sub => {
                     const subName = sub.name;
                     const subDesc = sub.description || 'Brak opisu.';
@@ -53,7 +53,9 @@ module.exports = {
             return utils.createEmbed({
                 title: 'Menu pomocy',
                 description: `**• Kategoria: ${category}**\n\n ${categories[category].join('\n\n')}`,
-                footer: { text: `Strona ${index + 1} z ${categoryKeys.length} • Poleceń: ${categories[category].length}` }
+                footer: {
+                    text: `Strona ${index + 1} z ${categoryKeys.length} • Poleceń: ${categories[category].length}`
+                }
             });
         });
 

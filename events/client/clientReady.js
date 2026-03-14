@@ -19,7 +19,7 @@ module.exports = {
         const startFormatted = startDate.format(new Date());
         const statsInfo = `GUILDS: ${totalGuilds} | USERS: ${totalUsers} | APP USERS: ${userInstalls}`;
         const ramInfo = `${ramUsage.toFixed(2)} MB`;
-        const shardInfo = client.shard ? `TOTAL: ${client.shard.count} | ID: ${client.shard.ids.join(', ')}` : "";
+        const shardInfo = client.shard ? `TOTAL: ${client.shard.count} | ID: ${client.shard.ids.join(', ')}` : '';
 
         const rows = [
             '[Client] STATUS: Connected',
