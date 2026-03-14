@@ -53,7 +53,9 @@ module.exports = {
             return utils.createEmbed({
                 title: 'Menu pomocy',
                 description: `**• Kategoria: ${category}**\n\n ${categories[category].join('\n\n')}`,
-                footer: { text: `Strona ${index + 1} z ${categoryKeys.length} • Poleceń: ${categories[category].length}` }
+                footer: {
+                    text: `Strona ${index + 1} z ${categoryKeys.length} • Poleceń: ${categories[category].length}`
+                }
             });
         });
 

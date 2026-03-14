@@ -43,8 +43,7 @@ module.exports = {
             if (reporterId) {
                 const description = utils.reply.getString('success', 'SNITCH_ACCEPTED', targetId, 'wyciszony', interaction.guild.name);
                 const firstEmbedDM = utils.createEmbed({ title: 'Zgłoszenie zaakceptowane', description });
-                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] })
-                    .catch(() => logger.warn(`[Button ▸ SnitchTimeout] Failed to send DM to '${reporterId}'.`));
+                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchTimeout] Failed to send DM to '${reporterId}'.`));
             }
 
             const timeoutDurationMs = 7200000;

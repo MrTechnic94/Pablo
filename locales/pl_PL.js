@@ -1,6 +1,6 @@
 'use strict';
 
-const { PresenceUpdateStatus, ChannelType, GuildVerificationLevel, PermissionFlagsBits } = require('discord.js');
+const { PresenceUpdateStatus, ChannelType, GuildVerificationLevel, PermissionFlagsBits, Colors } = require('discord.js');
 
 module.exports = {
     presence: {
@@ -90,6 +90,39 @@ module.exports = {
         [PermissionFlagsBits.Administrator]: 'Administrator'
     },
 
+    colors: {
+        'DEFAULT': Colors.Default,
+        'WHITE': Colors.White,
+        'AQUA': Colors.Aqua,
+        'GREEN': Colors.Green,
+        'BLUE': Colors.Blue,
+        'YELLOW': Colors.Yellow,
+        'PURPLE': Colors.Purple,
+        'LUMINOUS VIVID PINK': Colors.LuminousVividPink,
+        'FUCHSIA': Colors.Fuchsia,
+        'GOLD': Colors.Gold,
+        'ORANGE': Colors.Orange,
+        'RED': Colors.Red,
+        'GREY': Colors.Grey,
+        'NAVY': Colors.Navy,
+        'DARK AQUA': Colors.DarkAqua,
+        'DARK GREEN': Colors.DarkGreen,
+        'DARK BLUE': Colors.DarkBlue,
+        'DARK PURPLE': Colors.DarkPurple,
+        'DARK VIVID PINK': Colors.DarkVividPink,
+        'DARK GOLD': Colors.DarkGold,
+        'DARK ORANGE': Colors.DarkOrange,
+        'DARK RED': Colors.DarkRed,
+        'DARK GREY': Colors.DarkGrey,
+        'DARKER GREY': Colors.DarkerGrey,
+        'LIGHT GREY': Colors.LightGrey,
+        'DARK NAVY': Colors.DarkNavy,
+        'BLURPLE': Colors.Blurple,
+        'GREYPLE': Colors.Greyple,
+        'DARK BUT NOT BLACK': Colors.DarkButNotBlack,
+        'NOT QUITE BLACK': Colors.NotQuiteBlack
+    },
+
     // ERRORY
     error: {
         TOO_MANY_FIGHTS: '`❌` Trwa już zbyt wiele walk (`%d`).',
@@ -106,22 +139,20 @@ module.exports = {
         BANNER_ERROR: '`❌` Wystąpił problem podczas ustawiania baneru.',
         NO_BANNER_FOUND: '`❌` Banner nie jest ustawiony.',
         STATUS_ALREADY_SET: '`❌` Nie możesz ustawić takiego samego statusu.',
-        RATE_LIMIT: '`❌` Zbyt często wykonujesz tę akcje. Odczekaj kilka minut.',
+        RATE_LIMIT: '`❌` Zbyt często wykonujesz tę akcję. Odczekaj kilka minut.',
         USER_NOT_FOUND: '`❌` Nie znaleziono użytkownika.',
-        ROLE_TOO_HIGH: '`❌` Nie możesz tego zrobić, ponieważ jego ranga jest równa lub wyższa od Twojej.',
+        ROLE_TOO_HIGH: '`❌` Nie możesz tego zrobić, ponieważ jego rola jest równa lub wyższa od Twojej.',
         BAN_ERROR: '`❌` Wystąpił problem podczas banowania użytkownika.',
         CLEAR_ERROR: '`❌` Wystąpił problem podczas usuwania wiadomości.',
         MISSING_ROLE: '`❌` Nie masz wymaganej roli.',
         ROLE_HIGHER_THAN_BOT: '`❌` Rola, którą chcesz nadać, znajduje się wyżej niż moja najwyższa rola.',
         USER_ALREADY_HAS_ROLE: '`❌` Użytkownik posiada już rolę <@&%s>.',
-        ROLE_GIVE_ERROR: '`❌` Nie udało się nadać roli.',
         KICK_ERROR: '`❌` Wystąpił problem podczas wyrzucania użytkownika.',
         BOT_HIERARCHY_TOO_LOW: '`❌` Rola, którą chcesz zabrać, znajduje się wyżej niż moja najwyższa rola.',
         USER_NOT_HAS_ROLE: '`❌` Użytkownik nie posiada roli <@&%s>.',
-        ROLE_REMOVE_ERROR: '`❌` Nie udało się zabrać roli.',
         USER_IS_NOT_TIMED_OUT: '`❌` Ten użytkownik nie jest wyciszony.',
         USER_NOT_PUNISHABLE: '`❌` Ten użytkownik nie podlega karze.',
-        TIMEOUT_REMOVE_ERROR: '`❌` Wystąpił problem podczas usuwania wyciszenia użytkownikowi.',
+        TIMEOUT_REMOVE_ERROR: '`❌` Wystąpił problem podczas zdejmowania wyciszenia użytkownikowi.',
         INVALID_TIME_FORMAT: '`❌` Nieprawidłowy format czasu. Przykład: `1d 1h 30m`.',
         USER_IS_TIMED_OUT: '`❌` Ten użytkownik jest już wyciszony.',
         TIMEOUT_ERROR: '`❌` Wystąpił problem podczas nakładania wyciszenia na użytkownika.',
@@ -142,7 +173,7 @@ module.exports = {
         SAME_NICKNAME_ERROR: '`❌` Nie możesz ustawić takiego samego pseudonimu.',
         NICKNAME_ERROR: '`❌` Nie udało się zmienić Twojego pseudonimu.',
         ONLY_MEMES_ALLOWED: '`❌` Możesz wysyłać tutaj tylko memy.',
-        COMMAND_NOT_FOUND: '`❌` Polecenie które próbujesz wykonać nie istnieje.',
+        COMMAND_NOT_FOUND: '`❌` Polecenie, które próbujesz wykonać, nie istnieje.',
         COMMAND_ERROR: '`❌` Wystąpił problem podczas wykonywania polecenia.',
         USER_ALREADY_VERIFIED: '`❌` Już zaakceptowałeś regulamin.',
         SNITCH_REJECTED_DM: '`❌` Twoje zgłoszenie użytkownika %s na serwerze `%s` zostało odrzucone.',
@@ -155,23 +186,29 @@ module.exports = {
         SETTINGS_ERROR: '`❌` Wystąpił problem z bazą danych.',
         NOT_TEXT_CHANNEL: '`❌` Wybrany kanał nie jest kanałem tekstowym.',
         ROLE_NOT_SET: '`❌` Rola nie została ustawiona.',
-        CHANNE_NOT_SET: '`❌` Kanał nie został ustawiony.',
+        CHANNEL_NOT_SET: '`❌` Kanał nie został ustawiony.',
         SAME_RECORD: '`❌` Nie możesz ustawić takiej samej wartości.',
         INVALID_STEAL_EMOJI: '`❌` Nieprawidłowe emoji.',
-        EMOJI_ERROR: '`❌` Wystąpił problem podczas dodawania emoji.',
         EMOJI_FULL_SLOT: '`❌` Miejsca na emoji są pełne.',
+        STEAL_EMOJI_ERROR: '`❌` Wystąpił problem podczas dodawania emoji.',
         INVALID_FILE: '`❌` Nieprawidłowy format lub rozmiar.',
         USER_TIMEOUT_SAME_TIME: '`❌` Nowy czas wyciszenia jest identyczny z obecnym.',
         LOCK_CHANNEL_ERROR: '`❌` Wystąpił problem podczas zablokowania kanału.',
         UNLOCK_CHANNEL_ERROR: '`❌` Wystąpił problem podczas odblokowywania kanału.',
         CHANNEL_ALREADY_LOCKED: '`❌` Kanał jest już zablokowany.',
-        CHANNEL_ALREADY_UNLOCKED: '`❌` Kanał jest już odblokowany.'
+        CHANNEL_ALREADY_UNLOCKED: '`❌` Kanał jest już odblokowany.',
+        NUKE_ERROR: '`❌` Wystąpił problem podczas niszczenia kanału.',
+        CHANNEL_NOT_DELETABLE: '`❌` Ten kanał jest niemożliwy do usunięcia.',
+        ROLE_ADD_ERROR: '`❌` Wystąpił problem podczas nadania roli użytkownikowi.',
+        ROLE_REMOVE_ERROR: '`❌` Wystąpił problem podczas odbierania roli użytkownikowi.',
+        INFO_ERROR: '`❌` Wystąpił problem podczas wyświetlania informacji.',
+        INVALID_COLOR_FORMAT: '`❌` Nieprawidłowy format koloru.'
     },
 
     // KOMUNIKATY
     success: {
         RESTART_BOT: '`💤` Restart w toku. Spróbuj ponownie za kilka chwil...',
-        SNITCH_SENT: '`➕` Twoje zgłoszenie wpłyneło do administracji. Dziękujemy za czujność!',
+        SNITCH_SENT: '`➕` Twoje zgłoszenie wpłynęło do administracji. Dziękujemy za czujność!',
         VERIFIED: '`🔹` Dziękujemy za akceptację regulaminu.',
         SNITCH_ACCEPTED: '`🤩` Dziękujemy za czujność! Użytkownik <@%s>, zgłoszony przez Ciebie, został `%s` na serwerze `%s`.',
         NEW_COLOR: '`➕` Twój nowy kolor to <@&%s>.',

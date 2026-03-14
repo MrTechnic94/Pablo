@@ -10,16 +10,16 @@ module.exports = {
         .setDescription('Wyrzuć użytkownika z serwera.')
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-        .addUserOption(option =>
-            option.setName('użytkownik')
-                .setDescription('Użytkownik do wyrzucenia.')
-                .setRequired(true)
+        .addUserOption(option => option
+            .setName('użytkownik')
+            .setDescription('Użytkownik do wyrzucenia.')
+            .setRequired(true)
         )
-        .addStringOption(option =>
-            option.setName('powód')
-                .setDescription('Powód wyrzucenia.')
-                .setRequired(false)
-                .setMaxLength(500)
+        .addStringOption(option => option
+            .setName('powód')
+            .setDescription('Powód wyrzucenia.')
+            .setRequired(false)
+            .setMaxLength(500)
         ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;
@@ -46,12 +46,12 @@ module.exports = {
                 return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
             }
 
-            const embedDM = utils.createEmbed({
+            const successEmbedDM = utils.createEmbed({
                 title: 'Zostałeś wyrzucony',
                 description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
             });
 
-            await targetMember.send({ embeds: [embedDM] }).catch(() => logger.warn(`[Slash ▸ Kick] Failed to send DM to '${targetMember.id}'.`));
+            await targetMember.send({ embeds: [successEmbedDM] }).catch(() => logger.warn(`[Slash ▸ Kick] Failed to send DM to '${targetMember.id}'.`));
 
             await targetMember.kick({ reason: reason });
 

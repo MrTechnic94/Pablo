@@ -40,8 +40,7 @@ module.exports = {
             if (reporterId) {
                 const description = utils.reply.getString('success', 'SNITCH_ACCEPTED', targetId, 'wyrzucony', interaction.guild.name);
                 const firstEmbedDM = utils.createEmbed({ title: 'Zgłoszenie zaakceptowane', description });
-                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] })
-                    .catch(() => logger.warn(`[Button ▸ SnitchKick] Failed to send DM to '${reporterId}'.`));
+                await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchKick] Failed to send DM to '${reporterId}'.`));
             }
 
             const secondEmbedDM = utils.createEmbed({

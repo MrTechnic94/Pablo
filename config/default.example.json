@@ -31,10 +31,10 @@
         "guildTextThreadManager": 0,
         "guildForumThreadManager": 0,
         "guildMemberManager": {
-            "maxSize": 500
+            "maxSize": 50
         },
         "userManager": {
-            "maxSize": 1000
+            "maxSize": 50
         }
     },
     "clientSweepers": {
@@ -52,14 +52,6 @@
         "AddReactions",
         "ReadMessageHistory"
     ],
-    "roles": {
-        "user": "",
-        "black": "",
-        "red": "",
-        "blue": "",
-        "magenta": "",
-        "green": ""
-    },
     "emojis": {
         "stage": "PORADNIK ZNAJDZIESZ TUTAJ: index.js",
         "voice": "PORADNIK ZNAJDZIESZ TUTAJ: index.js",

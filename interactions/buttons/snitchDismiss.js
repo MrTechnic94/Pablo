@@ -21,14 +21,13 @@ module.exports = {
 
             const description = utils.reply.getString('error', 'SNITCH_REJECTED_DM', userDisplay, interaction.guild.name);
 
-            const embedDM = utils.createEmbed({
+            const successEmbedDM = utils.createEmbed({
                 title: 'Zgłoszenie odrzucone',
                 description: description
             });
 
             if (reporterId) {
-                await interaction.client.users.send(reporterId, { embeds: [embedDM] })
-                    .catch(() => logger.warn(`[Button ▸ SnitchDismiss] Failed to send DM to '${reporterId}'.`));
+                await interaction.client.users.send(reporterId, { embeds: [successEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchDismiss] Failed to send DM to '${reporterId}'.`));
             }
 
             const finishedEmbed = interaction.message.embeds[0].toJSON();

@@ -9,11 +9,11 @@ module.exports = {
         .setName('nick')
         .setDescription('Zmiana pseudonimu na serwerze.')
         .setContexts(InteractionContextType.Guild)
-        .addStringOption(option =>
-            option.setName('nowy')
-                .setDescription('Nowy pseudonim.')
-                .setMaxLength(32)
-                .setRequired(false)
+        .addStringOption(option => option
+            .setName('nowy')
+            .setDescription('Nowy pseudonim.')
+            .setMaxLength(32)
+            .setRequired(false)
         ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;

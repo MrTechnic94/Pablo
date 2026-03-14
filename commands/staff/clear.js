@@ -10,21 +10,21 @@ module.exports = {
         .setDescription('Usuwa wybraną ilość wiadomości z kanału.')
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
-        .addIntegerOption(option =>
-            option.setName('ilość')
-                .setDescription('Ilość wiadomości do usunięcia.')
-                .setMinValue(1)
-                .setMaxValue(100)
-                .setRequired(true)
+        .addIntegerOption(option => option
+            .setName('ilość')
+            .setDescription('Ilość wiadomości do usunięcia.')
+            .setMinValue(1)
+            .setMaxValue(100)
+            .setRequired(true)
         )
-        .addStringOption(option =>
-            option.setName('usuń_przypięte')
-                .setDescription('Wybierz, czy chcesz usunąć również przypięte wiadomości.')
-                .setRequired(false)
-                .addChoices(
-                    { name: 'Tak', value: 'true' },
-                    { name: 'Nie', value: 'false' }
-                )
+        .addStringOption(option => option
+            .setName('usuń_przypięte')
+            .setDescription('Wybierz, czy chcesz usunąć również przypięte wiadomości.')
+            .setRequired(false)
+            .addChoices(
+                { name: 'Tak', value: 'true' },
+                { name: 'Nie', value: 'false' }
+            )
         ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;
@@ -49,8 +49,8 @@ module.exports = {
             });
 
             await interaction.reply({ embeds: [successEmbed] });
-        } catch (error) {
-            logger.error(`[Slash ▸ Clear] An error occurred for '${interaction.guild.id}':\n${error}`);
+        } catch (err) {
+            logger.error(`[Slash ▸ Clear] An error occurred for '${interaction.guild.id}':\n${err}`);
             await utils.reply.error(interaction, 'CLEAR_ERROR');
         }
     },

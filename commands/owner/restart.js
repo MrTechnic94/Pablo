@@ -11,16 +11,16 @@ module.exports = {
         .setName('restart')
         .setDescription('Restart bota lub jego funkcji.')
         .setContexts(InteractionContextType.Guild)
-        .addStringOption(option =>
-            option.setName('rodzaj')
-                .setDescription('Rodzaj restartu.')
-                .setRequired(true)
-                .addChoices(
-                    { name: 'Bot', value: 'Bot' },
-                    { name: 'Status', value: 'Status' },
-                    { name: 'Avatar', value: 'Avatar' },
-                    { name: 'Banner', value: 'Banner' }
-                )
+        .addStringOption(option => option
+            .setName('rodzaj')
+            .setDescription('Rodzaj restartu.')
+            .setRequired(true)
+            .addChoices(
+                { name: 'Bot', value: 'Bot' },
+                { name: 'Status', value: 'Status' },
+                { name: 'Avatar', value: 'Avatar' },
+                { name: 'Banner', value: 'Banner' }
+            )
         ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;

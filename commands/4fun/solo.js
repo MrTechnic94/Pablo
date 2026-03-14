@@ -11,10 +11,10 @@ module.exports = {
         .setName('solo')
         .setDescription('Stocz walkę 1v1 z innym użytkownikiem.')
         .setContexts(InteractionContextType.Guild)
-        .addUserOption(option =>
-            option.setName('przeciwnik')
-                .setDescription('Wybierz użytkownika do walki.')
-                .setRequired(true)
+        .addUserOption(option => option
+            .setName('przeciwnik')
+            .setDescription('Wybierz użytkownika do walki.')
+            .setRequired(true)
         ),
     async execute(interaction, logger) {
         const { guildId } = interaction;
