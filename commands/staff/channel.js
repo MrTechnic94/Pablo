@@ -17,13 +17,17 @@ module.exports = {
         .addSubcommand(sub => sub
             .setName('unlock')
             .setDescription('Odblokowuje zablokowany kanał.')
+        )
+        .addSubcommand(sub => sub
+            .setName('nuke')
+            .setDescription('Usuwa kanał i tworzy jego kopię.')
         ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;
 
         const subcommand = interaction.options.getSubcommand();
 
-        if (!interaction.channel.isTextBased()) {
+        if (!interaction.channel?.isTextBased()) {
             return await utils.reply.error(interaction, 'NOT_TEXT_CHANNEL');
         }
 
@@ -76,13 +80,37 @@ module.exports = {
                     break;
                 }
 
+                case 'nuke': {
+                    if (!interaction.channel.deletable) {
+                        return await utils.reply.error(interaction, 'CHANNEL_NOT_DELETABLE');
+                    }
+
+                    await interaction.deferReply();
+
+                    const newChannel = await interaction.channel.clone({
+                        reason: `Zlecono wykonanie polecenia 'nuke' przez ${interaction.user.tag}.`
+                    });
+
+                    await interaction.channel.delete(`Zniszczenie kanału zostało wykonane przez ${interaction.user.tag}.`);
+
+                    const unixTimestamp = Math.floor(Date.now() / 1000);
+
+                    const successEmbed = utils.createEmbed({
+                        title: 'Kanał został zrestartowany',
+                        description: `\`📛\` **Moderator:** <@${interaction.user.id}>\n\`📅\` **Czas:** <t:${unixTimestamp}:R>`
+                    });
+
+                    await newChannel.send({ embeds: [successEmbed] });
+                    break;
+                }
+
                 default:
                     await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Channel] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
-            const errorKey = subcommand === 'lock' ? 'LOCK_CHANNEL_ERROR' : 'UNLOCK_CHANNEL_ERROR';
-            await utils.reply.error(interaction, errorKey);
+            const errorMap = { lock: 'LOCK_CHANNEL_ERROR', unlock: 'UNLOCK_CHANNEL_ERROR', nuke: 'NUKE_ERROR' };
+            await utils.reply.error(interaction, errorMap[subcommand] || 'INFO_ERROR');
         }
     },
 };
