@@ -110,7 +110,7 @@ module.exports = {
         } catch (err) {
             logger.error(`[Slash ▸ Channel] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
             const errorMap = { lock: 'LOCK_CHANNEL_ERROR', unlock: 'UNLOCK_CHANNEL_ERROR', nuke: 'NUKE_ERROR' };
-            await utils.reply.error(interaction, errorMap[subcommand] || 'INFO_ERROR');
+            await utils.reply.error(interaction, errorMap[subcommand]);
         }
     },
 };

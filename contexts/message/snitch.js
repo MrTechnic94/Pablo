@@ -27,15 +27,11 @@ module.exports = {
             return await utils.reply.error(interaction, 'USER_NOT_FOUND');
         }
 
-        if (target.bot) {
-            return await utils.reply.error(interaction, 'REPORT_BOT_ERROR');
-        }
-
         if (target.id === reporter.id) {
             return await utils.reply.error(interaction, 'CANT_REPORT_SELF');
         }
 
-        if (!targetMember.bannable && !targetMember.kickable && !targetMember.moderatable) {
+        if (!targetMember.bannable && !targetMember.kickable && !targetMember.moderatable || target.bot) {
             return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
         }
 

@@ -148,7 +148,6 @@ module.exports = {
         ROLE_HIGHER_THAN_BOT: '`❌` Rola, którą chcesz nadać, znajduje się wyżej niż moja najwyższa rola.',
         USER_ALREADY_HAS_ROLE: '`❌` Użytkownik posiada już rolę <@&%s>.',
         KICK_ERROR: '`❌` Wystąpił problem podczas wyrzucania użytkownika.',
-        BOT_HIERARCHY_TOO_LOW: '`❌` Rola, którą chcesz zabrać, znajduje się wyżej niż moja najwyższa rola.',
         USER_NOT_HAS_ROLE: '`❌` Użytkownik nie posiada roli <@&%s>.',
         USER_IS_NOT_TIMED_OUT: '`❌` Ten użytkownik nie jest wyciszony.',
         USER_NOT_PUNISHABLE: '`❌` Ten użytkownik nie podlega karze.',
@@ -179,6 +178,7 @@ module.exports = {
         SNITCH_REJECTED_DM: '`❌` Twoje zgłoszenie użytkownika %s na serwerze `%s` zostało odrzucone.',
         ROLE_ALREADY_OWNED: '`❌` Posiadasz już taką rolę.',
         MENU_ERROR: '`❌` To nie jest Twoje menu.',
+        BUTTON_ERROR: '`❌` To nie jest Twój przycisk.',
         BOT_MISSING_PERMISSION: '`❌` Nie mam uprawnienia %s.',
         BOT_MISSING_PERMISSIONS: '`❌` Nie mam uprawnień %s.',
         CANT_CLEAR_MESSAGES: '`❌` Wiadomości są starsze niż `14 dni` i nie mogą zostać usunięte.',
@@ -202,7 +202,17 @@ module.exports = {
         ROLE_ADD_ERROR: '`❌` Wystąpił problem podczas nadania roli użytkownikowi.',
         ROLE_REMOVE_ERROR: '`❌` Wystąpił problem podczas odbierania roli użytkownikowi.',
         INFO_ERROR: '`❌` Wystąpił problem podczas wyświetlania informacji.',
-        INVALID_COLOR_FORMAT: '`❌` Nieprawidłowy format koloru.'
+        INVALID_COLOR_FORMAT: '`❌` Nieprawidłowy format koloru.',
+        WARN_ERROR: '`❌` Wystąpił problem podczas nadawania ostrzeżenia użytkownikowi.',
+        WARN_REMOVE_ERROR: '`❌` Wystąpił problem podczas usuwania ostrzeżenia użytkownikowi.',
+        USER_NOTE_NOT_FOUND: '`❌` Użytkownik nie posiada notatki.',
+        USER_NOTE_ALREADY_EXISTS: '`❌` Ten użytkownik ma już notatkę.',
+        CANNOT_WARN_BOT: '`❌` Nie możesz nadać ostrzeżenia botowi.',
+        WARN_NOT_FOUND: '`❌` Nie znaleziono ostrzeżenia o podanym ID.',
+        DATABASE_EMPTY: '`❌` Brak wyników w bazie danych dla tej operacji.',
+        CANNOT_NOTE_BOT: '`❌` Nie możesz dodać notatki botowi.',
+        CANNOT_ADD_NOTE_YOURSELF: '`❌` Nie możesz dodać notatki samemu sobie.',
+        CANNOT_REMOVE_NOTE_YOURSELF: '`❌` Nie możesz usunać notatki samemu sobie.'
     },
 
     // KOMUNIKATY
@@ -213,6 +223,8 @@ module.exports = {
         SNITCH_ACCEPTED: '`🤩` Dziękujemy za czujność! Użytkownik <@%s>, zgłoszony przez Ciebie, został `%s` na serwerze `%s`.',
         NEW_COLOR: '`➕` Twój nowy kolor to <@&%s>.',
         ROLE_REMOVED: '`➖` Pomyślnie usunięto rolę.',
-        CHANNEL_REMOVED: '`➖` Pomyślnie usunięto kanał.'
+        CHANNEL_REMOVED: '`➖` Pomyślnie usunięto kanał.',
+        NOTE_REMOVED: '`🗑️` Pomyślnie usunięto notatkę użytkownika <@%s>.',
+        NOTE_CLEARED: '`🧹` Wyczyszczono notatki dla <@%s>.'
     }
 };

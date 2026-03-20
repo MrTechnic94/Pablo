@@ -54,10 +54,11 @@ module.exports = {
         ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;
+
         const subcommand = interaction.options.getSubcommand();
 
         try {
-            const dbKey = `guild:${interaction.guild.id}`;
+            const dbKey = `guilds:${interaction.guild.id}:settings`;
 
             switch (subcommand) {
                 case 'view': {
@@ -217,7 +218,7 @@ module.exports = {
 
                     const successEmbed = utils.createEmbed({
                         title: 'Akcja wykonana',
-                        description: `\`✅\`Statystyki będą od teraz aktualizowane na ${channel}.\n\`🕒\` Aktualizacja co \`5 minuty\`.`
+                        description: `\`✅\`Statystyki będą od teraz aktualizowane na ${channel}.\n\`🕒\` Aktualizacja co \`5 minut\`.`
                     });
 
                     logger.info(`[Slash ▸ Settings] Statistics channel set to '${channel.id}' for '${interaction.guild.id}'.`);

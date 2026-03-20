@@ -8,7 +8,7 @@ module.exports = {
         .setName('help')
         .setDescription('Wyświetla listę poleceń.')
         .setContexts(InteractionContextType.Guild),
-    async execute(interaction) {
+    async execute(interaction, logger) {
         const { utils } = interaction.client;
 
         const clientCommands = await interaction.client.application.commands.fetch().catch(() => null);
@@ -35,10 +35,14 @@ module.exports = {
                     const subName = sub.name;
                     const subDesc = sub.description || 'Brak opisu.';
                     const fullLink = `</${name} ${subName}:${registered.id}>`;
+                    logger.debug(`[Debug] ${fullLink}`);
+
                     categories[cat].push(`\`🔹\` ${fullLink}\n> ${subDesc}`);
                 });
             } else {
                 const commandLink = registered ? `</${name}:${registered.id}>` : `\`/${name}\``;
+                logger.debug(`[Debug] ${commandLink}`);
+
                 categories[cat].push(`\`🔹\` ${commandLink}\n> ${description}`);
             }
         });

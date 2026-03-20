@@ -279,20 +279,32 @@ module.exports = {
                     const userStatus = presence[rawStatus]?.name || 'Niedostępny.';
                     const statusEmoji = presence[rawStatus]?.emoji || '🎱';
 
+                    // Notatka i ostrzezenia
+                    const warnCount = await utils.db.lLen(`warns:${interaction.guild.id}:${targetMember.id}`) || 0;
+                    const userNote = await utils.db.hGet(`notes:${interaction.guild.id}`, targetMember.id);
+
+                    const fields = [
+                        { name: '`👤` Użytkownik', value: `**•** <@${targetMember.id}>`, inline: false },
+                        { name: '`🔑` ID', value: `**•** ${targetMember.user.id}`, inline: false },
+                        { name: '`✏️` Pseudonim', value: `**•** ${targetMember.nickname || 'Nie ustawiono.'}`, inline: false },
+                        { name: `\`${deviceEmoji}\` Urządzenie`, value: `**•** ${deviceString}`, inline: false },
+                        { name: `\`${statusEmoji}\` Status`, value: `**•** ${userStatus}`, inline: false },
+                        { name: '`🚪` Dołączył na serwer', value: `**•** <t:${joinedAt}> (<t:${joinedAt}:R>)`, inline: false },
+                        { name: '`📆` Stworzył konto', value: `**•** <t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },
+                        { name: '`⚠️` Ostrzeżenia', value: `**•** ${warnCount}`, inline: true },
+                        { name: '`🤖` Bot', value: `**•** ${isBot}`, inline: false }
+                    ];
+
+                    if (userNote) {
+                        fields.push({ name: '`📝` Notatka moderatora', value: `**•** Wpisz </notes view:1482729096554221618>, aby zobaczyć notatkę.`, inline: false });
+                    }
+
+                    fields.push({ name: `\`🎭\` Role (${targetMember.roles.cache.size - 1})`, value: roles, inline: false });
+
                     const successEmbed = utils.createEmbed({
                         title: 'Podgląd użytkownika',
                         thumbnail: targetMember.user.displayAvatarURL(),
-                        fields: [
-                            { name: '`👤` Użytkownik', value: `**•** <@${targetMember.id}>`, inline: false },
-                            { name: '`🔑` ID', value: `**•** ${targetMember.user.id}`, inline: false },
-                            { name: '`✏️` Pseudonim', value: `**•** ${targetMember.nickname || 'Nie ustawiono.'}`, inline: false },
-                            { name: `\`${deviceEmoji}\` Urządzenie`, value: `**•** ${deviceString}`, inline: false },
-                            { name: `\`${statusEmoji}\` Status`, value: `**•** ${userStatus}`, inline: false },
-                            { name: '`🚪` Dołączył na serwer', value: `**•** <t:${joinedAt}> (<t:${joinedAt}:R>)`, inline: false },
-                            { name: '`📆` Stworzył konto', value: `**•** <t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },
-                            { name: `\`🎭\` Role (${targetMember.roles.cache.size - 1})`, value: roles, inline: false },
-                            { name: '`🤖` Bot', value: `**•** ${isBot}`, inline: false }
-                        ]
+                        fields: fields
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });
