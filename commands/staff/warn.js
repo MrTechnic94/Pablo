@@ -1,7 +1,7 @@
 'use strict';
 
 const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
-const crypto = require('node:crypto');
+const { randomBytes } = require('node:crypto');
 
 module.exports = {
     category: '`📛` Administracja',
@@ -65,7 +65,7 @@ module.exports = {
                         return await utils.reply.error(interaction, 'ROLE_TOO_HIGH');
                     }
 
-                    const warnId = crypto.randomBytes(3).toString('hex').toUpperCase();
+                    const warnId = randomBytes(3).toString('hex').toUpperCase();
                     const reason = interaction.options.getString('powód') || 'Brak.';
 
                     const warnData = {
@@ -86,7 +86,7 @@ module.exports = {
 
                     const successEmbed = utils.createEmbed({
                         title: 'Użytkownik ostrzeżony',
-                        description: `\`👤\` **Użytkownik:** <@${target.id}>\n\`📛\` **Moderator:** <@${interaction.user.id}>\n\`🆔\` **ID:** ${warnId}\n\`📝\` **Powód:** \`\`\`${reason}\`\`\``
+                        description: `\`👤\` **Użytkownik:** <@${target.id}>\n\`📛\` **Moderator:** <@${interaction.user.id}>\n\`🆔\` **ID:** #${warnId}\n\`📝\` **Powód:** \`\`\`${reason}\`\`\``
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });
@@ -94,7 +94,7 @@ module.exports = {
                 }
 
                 case 'remove': {
-                    const warnId = interaction.options.getString('id_ostrzeżenia').toUpperCase();
+                    const warnId = interaction.options.getString('id_ostrzeżenia').toUpperCase().replace('#', '');
                     const allWarns = await utils.db.lRange(dbKey, 0, -1);
 
                     const foundWarn = allWarns.map(w => JSON.parse(w)).find(w => w.id === warnId);
@@ -116,7 +116,7 @@ module.exports = {
 
                     const successEmbed = utils.createEmbed({
                         title: 'Usunięto ostrzeżenie',
-                        description: `\`👤\` **Użytkownik:** <@${target.user.id}>\n\`📛\` **Moderator:** <@${interaction.user.id}>\n\`🆔\` **ID:** ${warnId}`
+                        description: `\`👤\` **Użytkownik:** <@${target.user.id}>\n\`📛\` **Moderator:** <@${interaction.user.id}>\n\`🆔\` **ID:** #${warnId}`
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });

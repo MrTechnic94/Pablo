@@ -14,7 +14,7 @@ module.exports = {
         const message = interaction.targetMessage;
         const target = message.author;
         const reporter = interaction.user;
-        const requiredChannel = await utils.db.hGet(`guild:${interaction.guild.id}`, 'snitchChannelId');
+        const requiredChannel = await utils.db.hGet(`guild:${interaction.guild.id}:settings`, 'snitchChannelId');
         const logChannel = interaction.guild.channels.cache.get(requiredChannel);
 
         if (!logChannel) {

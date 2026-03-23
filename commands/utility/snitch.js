@@ -32,7 +32,7 @@ module.exports = {
         const reason = interaction.options.getString('powód');
         const evidence = interaction.options.getAttachment('obraz');
         const reporter = interaction.user;
-        const requiredChannel = await utils.db.hGet(`guild:${interaction.guild.id}`, 'snitchChannelId');
+        const requiredChannel = await utils.db.hGet(`guild:${interaction.guild.id}:settings`, 'snitchChannelId');
         const logChannel = interaction.guild.channels.cache.get(requiredChannel);
 
         if (!logChannel) {

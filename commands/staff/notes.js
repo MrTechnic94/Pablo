@@ -7,7 +7,7 @@ module.exports = {
     category: '`📛` Administracja',
     data: new SlashCommandBuilder()
         .setName('notes')
-        .setDescription('Zarządzanie notatkami o użytkownikach.')
+        .setDescription('Zarządzanie notatkami użytkowników.')
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
         .addSubcommand(sub => sub
@@ -280,8 +280,9 @@ module.exports = {
                     await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
-            logger.error(`[Slash ▸ Notes] Error in ${subcommand}: ${err}`);
-            await utils.reply.error(interaction, 'SETTINGS_ERROR');
+            logger.error(`[Slash ▸ Notes] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
+            const errorMap = { view: 'NOTE_VIEW_ERROR', add: 'NOTE_ADD_ERROR', edit: 'NOTE_EDIT_ERROR', remove: 'NOTE_REMOVE_ERROR', restart: 'NOTE_REMOVE_ERROR' };
+            await utils.reply.error(interaction, errorMap);
         }
     }
 };

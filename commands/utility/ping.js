@@ -25,7 +25,7 @@ module.exports = {
                 description: `${getEmoji(latency)} **Opóźnienie:** ${latency}ms\n${getEmoji(ws)} **Websocket:** ${ws > 0 ? `${ws}ms` : 'Brak danych.'}`
             });
 
-            await interaction.editReply({ content: '', embeds: [successEmbed] });
+            await interaction.editReply({ content: null, embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Ping] An error occurred for '${interaction.guild.id}':\n${err}`);
             await utils.reply.error(interaction, 'API_CONNECTION_ERROR');

@@ -11,6 +11,6 @@ module.exports = {
     async execute(interaction) {
         const botUptime = Math.floor(interaction.client.readyTimestamp / 1000);
 
-        await interaction.reply({ content: `\`🕒\` Uruchomiono: <t:${botUptime}:R>` });
+        await interaction.reply({ content: `\`🕒\` Uruchomiono <t:${botUptime}:R>.` });
     },
 };

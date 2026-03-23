@@ -35,7 +35,7 @@ module.exports = {
             const { reference, content } = await fn(logger);
 
             if (!reference || !content) {
-                return utils.reply.error(interaction, 'FETCH_ERROR', title.toLowerCase());
+                return await utils.reply.error(interaction, 'FETCH_ERROR', title.toLowerCase());
             }
 
             const successEmbed = utils.createEmbed({

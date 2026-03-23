@@ -154,7 +154,8 @@ module.exports = {
         TIMEOUT_REMOVE_ERROR: '`❌` Wystąpił problem podczas zdejmowania wyciszenia użytkownikowi.',
         INVALID_TIME_FORMAT: '`❌` Nieprawidłowy format czasu. Przykład: `1d 1h 30m`.',
         USER_IS_TIMED_OUT: '`❌` Ten użytkownik jest już wyciszony.',
-        TIMEOUT_ERROR: '`❌` Wystąpił problem podczas nakładania wyciszenia na użytkownika.',
+        TIMEOUT_ADD_ERROR: '`❌` Wystąpił problem podczas nakładania wyciszenia na użytkownika.',
+        TIMEOUT_EDIT_ERROR: '`❌` Wystąpił problem podczas edytowania wyciszenia użytkownika.',
         USER_NOT_BANNED: '`❌` Ten użytkownik nie jest zbanowany.',
         UNBAN_ERROR: '`❌` Wystąpił problem podczas odbanowywania użytkownika.',
         USER_NO_BANNER: '`❌` Użytkownik nie ma ustawionego baneru.',
@@ -212,7 +213,14 @@ module.exports = {
         DATABASE_EMPTY: '`❌` Brak wyników w bazie danych dla tej operacji.',
         CANNOT_NOTE_BOT: '`❌` Nie możesz dodać notatki botowi.',
         CANNOT_ADD_NOTE_YOURSELF: '`❌` Nie możesz dodać notatki samemu sobie.',
-        CANNOT_REMOVE_NOTE_YOURSELF: '`❌` Nie możesz usunać notatki samemu sobie.'
+        CANNOT_REMOVE_NOTE_YOURSELF: '`❌` Nie możesz usunać notatki samemu sobie.',
+        NOTE_VIEW_ERROR: '`❌` Wystąpił problem podczas wyświetlania notatki.',
+        NOTE_ADD_ERROR: '`❌` Wystąpił problem podczas dodawania notatki.',
+        NOTE_EDIT_ERROR: '`❌` Wystąpił problem podczas edytowania notatki.',
+        NOTE_REMOVE_ERROR: '`❌` Wystąpił problem podczas usuwania notatki.',
+        EMBED_CREATE_ERROR: '`❌` Wystąpił problem podczas tworzenia wiadomości osadzonej.',
+        EMBED_EDIT_ERROR: '`❌` Wystąpił problem podczas edytowania wiadomości osadzonej.',
+        NO_EMBED_FOUND: '`❌` Nie znaleziono wiadomości osadzonej o podanym ID.'
     },
 
     // KOMUNIKATY
@@ -225,6 +233,8 @@ module.exports = {
         ROLE_REMOVED: '`➖` Pomyślnie usunięto rolę.',
         CHANNEL_REMOVED: '`➖` Pomyślnie usunięto kanał.',
         NOTE_REMOVED: '`🗑️` Pomyślnie usunięto notatkę użytkownika <@%s>.',
-        NOTE_CLEARED: '`🧹` Wyczyszczono notatki dla <@%s>.'
+        NOTE_CLEARED: '`🧹` Wyczyszczono notatki dla <@%s>.',
+        EMBED_CREATED: '`➕` Wiadomość osadzona została stworzona i wysłana na kanał <#%s>.',
+        EMBED_EDIT: '`➕` Wiadomość osadzona została zedytowana.',
     }
 };

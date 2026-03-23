@@ -196,8 +196,8 @@ module.exports = {
             }
         } catch (err) {
             logger.error(`[Slash ▸ Timeout] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
-            const errorKey = subcommand === 'remove' ? 'TIMEOUT_REMOVE_ERROR' : 'TIMEOUT_ERROR';
-            await utils.reply.error(interaction, errorKey);
+            const errorMap = { add: 'TIMEOUT_ADD_ERROR', edit: 'TIMEOUT_EDIT_ERROR', remove: 'TIMEOUT_REMOVE_ERROR' };
+            await utils.reply.error(interaction, errorMap);
         }
     },
 };

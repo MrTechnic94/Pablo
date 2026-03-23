@@ -280,7 +280,7 @@ module.exports = {
                     const statusEmoji = presence[rawStatus]?.emoji || '🎱';
 
                     // Notatka i ostrzezenia
-                    const warnCount = await utils.db.lLen(`warns:${interaction.guild.id}:${targetMember.id}`) || 0;
+                    const warnCount = await utils.db.lLen(`warns:${interaction.guild.id}:${targetMember.id}`) || 'Brak.';
                     const userNote = await utils.db.hGet(`notes:${interaction.guild.id}`, targetMember.id);
 
                     const fields = [
@@ -291,7 +291,7 @@ module.exports = {
                         { name: `\`${statusEmoji}\` Status`, value: `**•** ${userStatus}`, inline: false },
                         { name: '`🚪` Dołączył na serwer', value: `**•** <t:${joinedAt}> (<t:${joinedAt}:R>)`, inline: false },
                         { name: '`📆` Stworzył konto', value: `**•** <t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },
-                        { name: '`⚠️` Ostrzeżenia', value: `**•** ${warnCount}`, inline: true },
+                        { name: '`⚠️` Ostrzeżenia', value: `**•** ${warnCount}`, inline: false },
                         { name: '`🤖` Bot', value: `**•** ${isBot}`, inline: false }
                     ];
 
@@ -315,10 +315,15 @@ module.exports = {
                     const rawEmoji = interaction.options.getString('emoji');
                     const emojiId = utils.parseEmojiId(rawEmoji);
 
-                    if (!emojiId) return await utils.reply.error(interaction, 'INVALID_EMOJI');
+                    if (!emojiId) {
+                        return await utils.reply.error(interaction, 'INVALID_EMOJI');
+                    }
 
                     const emoji = interaction.guild.emojis.cache.get(emojiId);
-                    if (!emoji) return await utils.reply.error(interaction, 'EMOJI_NOT_FOUND');
+
+                    if (!emoji) {
+                        return await utils.reply.error(interaction, 'EMOJI_NOT_FOUND');
+                    }
 
                     const createdAt = Math.floor(emoji.createdTimestamp / 1000);
                     const author = await emoji.fetchAuthor().catch(() => 'Brak uprawnień.');
