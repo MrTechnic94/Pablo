@@ -19,9 +19,9 @@ module.exports = {
 
             const userDisplay = targetId ? `<@${targetId}>` : 'wybranego użytkownika';
 
-            const description = utils.reply.getString('error', 'SNITCH_REJECTED_DM', userDisplay, interaction.guild.name);
+            const description = utils.interface.getString('error', 'SNITCH_REJECTED_DM', userDisplay, interaction.guild.name);
 
-            const successEmbedDM = utils.createEmbed({
+            const successEmbedDM = utils.interface.createEmbed({
                 title: 'Zgłoszenie odrzucone',
                 description: description
             });
@@ -79,7 +79,7 @@ module.exports = {
 
             if (err.code === RESTJSONErrorCodes.UnknownInteraction) return;
 
-            await utils.reply.error(interaction, 'COMMAND_ERROR');
+            await utils.interface.sendError(interaction, 'COMMAND_ERROR');
         }
     },
 };

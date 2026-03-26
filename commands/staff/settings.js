@@ -64,7 +64,7 @@ module.exports = {
                 case 'view': {
                     const settings = await utils.db.hGetAll(dbKey);
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Ustawienia serwera',
                         fields: [
                             {
@@ -103,19 +103,19 @@ module.exports = {
                             await utils.db.hDel(dbKey, 'changeNicknameRoleId');
 
                             logger.info(`[Slash ▸ Settings] Nickname role removed for '${interaction.guild.id}'.`);
-                            return await utils.reply.success(interaction, 'ROLE_REMOVED');
+                            return await utils.interface.sendSuccesss(interaction, 'ROLE_REMOVED');
                         } else {
-                            return await utils.reply.error(interaction, 'ROLE_NOT_SET');
+                            return await utils.interface.sendError(interaction, 'ROLE_NOT_SET');
                         }
                     }
 
                     if (role.id === currentRole) {
-                        return await utils.reply.error(interaction, 'SAME_RECORD');
+                        return await utils.interface.sendError(interaction, 'SAME_RECORD');
                     }
 
                     await utils.db.hSet(dbKey, 'changeNicknameRoleId', role.id);
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Akcja wykonana',
                         description: `\`✅\` Pomyślnie ustawiono rolę <@&${role.id}> jako wymaganą do zmiany pseudonimu.`,
                     });
@@ -135,19 +135,19 @@ module.exports = {
                             await utils.db.hDel(dbKey, 'snitchChannelId');
 
                             logger.info(`[Slash ▸ Settings] Snitch channel removed for '${interaction.guild.id}'.`);
-                            return await utils.reply.success(interaction, 'CHANNEL_REMOVED');
+                            return await utils.interface.sendSuccesss(interaction, 'CHANNEL_REMOVED');
                         } else {
-                            return await utils.reply.error(interaction, 'CHANNEL_NOT_SET');
+                            return await utils.interface.sendError(interaction, 'CHANNEL_NOT_SET');
                         }
                     }
 
                     if (channel.id === currentChannel) {
-                        return await utils.reply.error(interaction, 'SAME_RECORD');
+                        return await utils.interface.sendError(interaction, 'SAME_RECORD');
                     }
 
                     await utils.db.hSet(dbKey, 'snitchChannelId', channel.id);
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Akcja wykonana',
                         description: `\`✅\` Pomyślnie ustawiono kanał systemu zgłoszeń na <#${channel.id}>.`,
                     });
@@ -167,20 +167,20 @@ module.exports = {
                             await utils.db.hDel(dbKey, 'memesChannelId');
 
                             logger.info(`[Slash ▸ Settings] Memes channel removed for '${interaction.guild.id}'.`);
-                            return await utils.reply.success(interaction, 'CHANNEL_REMOVED');
+                            return await utils.interface.sendSuccesss(interaction, 'CHANNEL_REMOVED');
                         } else {
-                            return await utils.reply.error(interaction, 'CHANNEL_NOT_SET');
+                            return await utils.interface.sendError(interaction, 'CHANNEL_NOT_SET');
 
                         }
                     }
 
                     if (channel.id === currentChannel) {
-                        return await utils.reply.error(interaction, 'SAME_RECORD');
+                        return await utils.interface.sendError(interaction, 'SAME_RECORD');
                     }
 
                     await utils.db.hSet(dbKey, 'memesChannelId', channel.id);
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Akcja wykonana',
                         description: `\`✅\` Pomyślnie ustawiono kanał memów na <#${channel.id}>.`,
                     });
@@ -201,22 +201,22 @@ module.exports = {
                             await utils.db.sRem('statistics:activeGuilds', interaction.guild.id);
 
                             logger.info(`[Slash ▸ Settings] Statistics channel removed for '${interaction.guild.id}'.`);
-                            return await utils.reply.success(interaction, 'CHANNEL_REMOVED');
+                            return await utils.interface.sendSuccesss(interaction, 'CHANNEL_REMOVED');
 
                         } else {
-                            return await utils.reply.error(interaction, 'CHANNEL_NOT_SET');
+                            return await utils.interface.sendError(interaction, 'CHANNEL_NOT_SET');
                         }
                     }
 
                     if (channel.id === currentChannel) {
-                        return await utils.reply.error(interaction, 'SAME_RECORD');
+                        return await utils.interface.sendError(interaction, 'SAME_RECORD');
                     }
 
                     await utils.db.hSet(dbKey, 'statisticsChannelId', channel.id);
 
                     await utils.db.sAdd('statistics:activeGuilds', interaction.guild.id);
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Akcja wykonana',
                         description: `\`✅\`Statystyki będą od teraz aktualizowane na ${channel}.\n\`🕒\` Aktualizacja co \`5 minut\`.`
                     });
@@ -228,11 +228,11 @@ module.exports = {
                 }
 
                 default:
-                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
+                    await utils.interface.sendError(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Settings] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
-            await utils.reply.error(interaction, 'SETTINGS_ERROR');
+            await utils.interface.sendError(interaction, 'SETTINGS_ERROR');
         }
     },
 };

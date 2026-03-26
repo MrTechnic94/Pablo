@@ -18,11 +18,11 @@ module.exports = {
             const targetMember = await interaction.guild.members.fetch(targetId).catch(() => null);
 
             if (!targetMember) {
-                return await utils.reply.error(interaction, 'USER_NOT_FOUND');
+                return await utils.interface.sendError(interaction, 'USER_NOT_FOUND');
             }
 
             if (!targetMember.kickable) {
-                return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
+                return await utils.interface.sendError(interaction, 'USER_NOT_PUNISHABLE');
             }
 
             const reporterField = interaction.message.embeds[0].fields.find(f => f.name.includes('Zgłaszający'));
@@ -38,12 +38,12 @@ module.exports = {
             const auditLogReason = fullReason.length > 500 ? `${fullReason.slice(0, 497)}...` : fullReason;
 
             if (reporterId) {
-                const description = utils.reply.getString('success', 'SNITCH_ACCEPTED', targetId, 'wyrzucony', interaction.guild.name);
-                const firstEmbedDM = utils.createEmbed({ title: 'Zgłoszenie zaakceptowane', description });
+                const description = utils.interface.getString('success', 'SNITCH_ACCEPTED', targetId, 'wyrzucony', interaction.guild.name);
+                const firstEmbedDM = utils.interface.createEmbed({ title: 'Zgłoszenie zaakceptowane', description });
                 await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchKick] Failed to send DM to '${reporterId}'.`));
             }
 
-            const secondEmbedDM = utils.createEmbed({
+            const secondEmbedDM = utils.interface.createEmbed({
                 title: 'Zostałeś wyrzucony',
                 description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${rawReason}`
             });
@@ -98,7 +98,7 @@ module.exports = {
 
             if (err.code === RESTJSONErrorCodes.UnknownInteraction) return;
 
-            await utils.reply.error(interaction, 'COMMAND_ERROR');
+            await utils.interface.sendError(interaction, 'COMMAND_ERROR');
         }
     },
 };

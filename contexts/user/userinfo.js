@@ -15,7 +15,7 @@ module.exports = {
         const targetMember = interaction.targetMember;
 
         if (!targetMember) {
-            return await utils.reply.error(interaction, 'USER_NOT_FOUND');
+            return await utils.interface.sendError(interaction, 'USER_NOT_FOUND');
         }
 
         // Role
@@ -45,7 +45,7 @@ module.exports = {
         const userStatus = presence[rawStatus]?.name || 'Niedostępny.';
         const statusEmoji = presence[rawStatus]?.emoji || '🎱';
 
-        const successEmbed = utils.createEmbed({
+        const successEmbed = utils.interface.createEmbed({
             title: 'Podgląd użytkownika',
             thumbnail: targetMember.user.displayAvatarURL(),
             fields: [

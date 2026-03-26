@@ -1,7 +1,7 @@
 'use strict';
 
+const dbMigration = require('../../lib/utils/developer');
 const scheduler = require('../../lib/utils/scheduler');
-const DBMIGRATION = require('../../lib/utils/devTools');
 const { Events } = require('discord.js');
 
 module.exports = {
@@ -50,6 +50,6 @@ module.exports = {
         await scheduler(client, logger);
 
         // Migracja na nowe struktury bazy danych
-        await DBMIGRATION(client, logger);
+        await dbMigration(client, logger);
     },
 };

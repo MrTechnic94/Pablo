@@ -1,6 +1,6 @@
 'use strict';
 
-const { PermissionFlagsBits, InteractionContextType, SlashCommandBuilder } = require('discord.js');
+const { PermissionFlagsBits, SlashCommandBuilder, InteractionContextType } = require('discord.js');
 
 module.exports = {
     category: '`📛` Administracja',
@@ -28,7 +28,7 @@ module.exports = {
         const subcommand = interaction.options.getSubcommand();
 
         if (!interaction.channel?.isTextBased()) {
-            return await utils.reply.error(interaction, 'NOT_TEXT_CHANNEL');
+            return await utils.interface.sendError(interaction, 'NOT_TEXT_CHANNEL');
         }
 
         try {
@@ -50,12 +50,12 @@ module.exports = {
             switch (subcommand) {
                 case 'lock': {
                     if (overwrite?.deny.has(PermissionFlagsBits.SendMessages)) {
-                        return await utils.reply.error(interaction, 'CHANNEL_ALREADY_LOCKED');
+                        return await utils.interface.sendError(interaction, 'CHANNEL_ALREADY_LOCKED');
                     }
 
                     await interaction.channel.permissionOverwrites.edit(everyoneRole, lockPermissions);
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Kanał zablokowany',
                         description: `\`📛\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Zablokowano:** <t:${unixTimestamp}:R>`
                     });
@@ -66,12 +66,12 @@ module.exports = {
 
                 case 'unlock': {
                     if (!overwrite?.deny.has(PermissionFlagsBits.SendMessages)) {
-                        return await utils.reply.error(interaction, 'CHANNEL_ALREADY_UNLOCKED');
+                        return await utils.interface.sendError(interaction, 'CHANNEL_ALREADY_UNLOCKED');
                     }
 
                     await interaction.channel.permissionOverwrites.edit(everyoneRole, lockPermissions);
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Kanał odblokowany',
                         description: `\`📛\` **Moderator:** <@${interaction.user.id}>\n\`🕓\` **Odblokowano:** <t:${unixTimestamp}:R>`
                     });
@@ -82,7 +82,7 @@ module.exports = {
 
                 case 'nuke': {
                     if (!interaction.channel.deletable) {
-                        return await utils.reply.error(interaction, 'CHANNEL_NOT_DELETABLE');
+                        return await utils.interface.sendError(interaction, 'CHANNEL_NOT_DELETABLE');
                     }
 
                     await interaction.deferReply();
@@ -95,7 +95,7 @@ module.exports = {
 
                     const unixTimestamp = Math.floor(Date.now() / 1000);
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Kanał został zrestartowany',
                         description: `\`📛\` **Moderator:** <@${interaction.user.id}>\n\`📅\` **Czas:** <t:${unixTimestamp}:R>`
                     });
@@ -105,12 +105,12 @@ module.exports = {
                 }
 
                 default:
-                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
+                    await utils.interface.sendError(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Channel] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
             const errorMap = { lock: 'LOCK_CHANNEL_ERROR', unlock: 'UNLOCK_CHANNEL_ERROR', nuke: 'NUKE_ERROR' };
-            await utils.reply.error(interaction, errorMap[subcommand]);
+            await utils.interface.sendError(interaction, errorMap[subcommand]);
         }
     },
 };

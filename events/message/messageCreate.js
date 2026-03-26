@@ -11,7 +11,7 @@ module.exports = {
     async execute(logger, message) {
         const { utils } = message.client;
 
-        const requiredChannel = await utils.db.hGet(`guild:${message.guild.id}:settings`, 'memesChannelId');
+        const requiredChannel = await utils.db.hGet(`guilds:${message.guild.id}:settings`, 'memesChannelId');
 
         if (!requiredChannel || message.channel.id !== requiredChannel || message.author.bot) return;
 
@@ -24,7 +24,7 @@ module.exports = {
 
         // Auto reakcje dla kanalu
         if (!message.attachments.size && !allowedExtensions.test(message.content) && !urlRegex.test(message.content)) {
-            const warningMessage = await utils.reply.error(message, 'ONLY_MEMES_ALLOWED');
+            const warningMessage = await utils.interface.sendError(message, 'ONLY_MEMES_ALLOWED');
             return setTimeout(() => {
                 warningMessage.delete().catch(() => null);
                 message.delete().catch(() => null);

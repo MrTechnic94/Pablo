@@ -50,11 +50,11 @@ module.exports = {
         const categoryKeys = Object.keys(categories);
 
         if (!categoryKeys) {
-            return await utils.reply.error(interaction, 'NO_COMMANDS_AVAILABLE');
+            return await utils.interface.sendError(interaction, 'NO_COMMANDS_AVAILABLE');
         }
 
         const pages = categoryKeys.map((category, index) => {
-            return utils.createEmbed({
+            return utils.interface.createEmbed({
                 title: 'Menu pomocy',
                 description: `**• Kategoria: ${category}**\n\n ${categories[category].join('\n\n')}`,
                 footer: {
@@ -63,6 +63,6 @@ module.exports = {
             });
         });
 
-        await utils.sendPaginatedEmbed(interaction, pages);
+        await utils.interface.sendPaginatedEmbed(interaction, pages);
     },
 };

@@ -76,39 +76,39 @@ module.exports = {
             const member = await interaction.guild.members.fetch(targetUser.id).catch(() => null);
 
             if (!member) {
-                return await utils.reply.error(interaction, 'USER_NOT_FOUND');
+                return await utils.interface.sendError(interaction, 'USER_NOT_FOUND');
             }
 
             if (subcommand === 'add' || subcommand === 'edit') {
                 if (targetUser.id === interaction.user.id) {
-                    return await utils.reply.error(interaction, 'CANT_TIMEOUT_SELF');
+                    return await utils.interface.sendError(interaction, 'CANT_TIMEOUT_SELF');
                 }
 
                 if (interaction.member.roles.highest.position <= member.roles.highest.position) {
-                    return await utils.reply.error(interaction, 'ROLE_TOO_HIGH');
+                    return await utils.interface.sendError(interaction, 'ROLE_TOO_HIGH');
                 }
 
                 if (!member.moderatable) {
-                    return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
+                    return await utils.interface.sendError(interaction, 'USER_NOT_PUNISHABLE');
                 }
             }
 
             switch (subcommand) {
                 case 'add': {
                     const rawTime = interaction.options.getString('czas');
-                    const timeInfo = utils.parseTimeString(rawTime);
+                    const timeInfo = utils.parser.timeString(rawTime);
 
                     if (!timeInfo) {
-                        return await utils.reply.error(interaction, 'INVALID_TIME_FORMAT');
+                        return await utils.interface.sendError(interaction, 'INVALID_TIME_FORMAT');
                     }
 
                     if (member.isCommunicationDisabled()) {
-                        return await utils.reply.error(interaction, 'USER_IS_TIMED_OUT');
+                        return await utils.interface.sendError(interaction, 'USER_IS_TIMED_OUT');
                     }
 
                     const expiryTimestamp = Math.floor((Date.now() + (timeInfo.seconds * 1000)) / 1000);
 
-                    const embedDM = utils.createEmbed({
+                    const embedDM = utils.interface.createEmbed({
                         title: 'Zostałeś wyciszony',
                         description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Koniec kary:** <t:${expiryTimestamp}:R>\n\`💬\` **Powód:** ${reason}`
                     });
@@ -117,7 +117,7 @@ module.exports = {
 
                     await member.timeout(timeInfo.seconds * 1000, { reason: reason });
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Użytkownik wyciszony',
                         description: `\`👤\` **Użytkownik:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Koniec kary:** <t:${expiryTimestamp}:R> \n\`💬\` **Powód:** ${reason}`
                     });
@@ -128,11 +128,11 @@ module.exports = {
 
                 case 'edit': {
                     if (!member.isCommunicationDisabled()) {
-                        return await utils.reply.error(interaction, 'USER_IS_NOT_TIMED_OUT');
+                        return await utils.interface.sendError(interaction, 'USER_IS_NOT_TIMED_OUT');
                     }
 
                     const rawTime = interaction.options.getString('czas');
-                    const timeInfo = utils.parseTimeString(rawTime);
+                    const timeInfo = utils.parser.timeString(rawTime);
 
                     const now = Date.now();
                     const currentTimeoutEnd = member.communicationDisabledUntilTimestamp;
@@ -141,16 +141,16 @@ module.exports = {
                     const diff = Math.abs(newTimeoutEnd - currentTimeoutEnd);
 
                     if (diff < 10000) {
-                        return await utils.reply.error(interaction, 'USER_TIMEOUT_SAME_TIME');
+                        return await utils.interface.sendError(interaction, 'USER_TIMEOUT_SAME_TIME');
                     }
 
                     if (!timeInfo) {
-                        return await utils.reply.error(interaction, 'INVALID_TIME_FORMAT');
+                        return await utils.interface.sendError(interaction, 'INVALID_TIME_FORMAT');
                     }
 
                     const newExpiryTimestamp = Math.floor((Date.now() + (timeInfo.seconds * 1000)) / 1000);
 
-                    const successEmbedDM = utils.createEmbed({
+                    const successEmbedDM = utils.interface.createEmbed({
                         title: 'Czas wyciszenia został zmieniony',
                         description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Koniec kary:** <t:${newExpiryTimestamp}:R>\n\`💬\` **Powód:** ${reason}`
                     });
@@ -159,7 +159,7 @@ module.exports = {
 
                     await member.timeout(timeInfo.seconds * 1000, { reason: reason });
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Zaktualizowano czas wyciszenia',
                         description: `\`👤\` **Użytkownik:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`🕒\` **Koniec kary:** <t:${newExpiryTimestamp}:R>\n\`💬\` **Powód:** ${reason}`
                     });
@@ -170,10 +170,10 @@ module.exports = {
 
                 case 'remove': {
                     if (!member.isCommunicationDisabled()) {
-                        return await utils.reply.error(interaction, 'USER_IS_NOT_TIMED_OUT');
+                        return await utils.interface.sendError(interaction, 'USER_IS_NOT_TIMED_OUT');
                     }
 
-                    const successEmbedDM = utils.createEmbed({
+                    const successEmbedDM = utils.interface.createEmbed({
                         title: 'Zostałeś odciszony',
                         description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
                     });
@@ -182,7 +182,7 @@ module.exports = {
 
                     await member.timeout(null, { reason: reason });
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Użytkownik odciszony',
                         description: `\`👤\` **Użytkownik:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
                     });
@@ -192,12 +192,12 @@ module.exports = {
                 }
 
                 default:
-                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
+                    await utils.interface.sendError(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Timeout] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
             const errorMap = { add: 'TIMEOUT_ADD_ERROR', edit: 'TIMEOUT_EDIT_ERROR', remove: 'TIMEOUT_REMOVE_ERROR' };
-            await utils.reply.error(interaction, errorMap);
+            await utils.interface.sendError(interaction, errorMap);
         }
     },
 };

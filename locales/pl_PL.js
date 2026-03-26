@@ -104,6 +104,7 @@ module.exports = {
         'ORANGE': Colors.Orange,
         'RED': Colors.Red,
         'GREY': Colors.Grey,
+        'GRAY': Colors.Grey,
         'NAVY': Colors.Navy,
         'DARK AQUA': Colors.DarkAqua,
         'DARK GREEN': Colors.DarkGreen,
@@ -114,11 +115,15 @@ module.exports = {
         'DARK ORANGE': Colors.DarkOrange,
         'DARK RED': Colors.DarkRed,
         'DARK GREY': Colors.DarkGrey,
+        'DARK GRAY': Colors.DarkGrey,
         'DARKER GREY': Colors.DarkerGrey,
+        'DARKER GRAY': Colors.DarkerGrey,
         'LIGHT GREY': Colors.LightGrey,
+        'LIGHT GRAY': Colors.LightGrey,
         'DARK NAVY': Colors.DarkNavy,
         'BLURPLE': Colors.Blurple,
         'GREYPLE': Colors.Greyple,
+        'GRAYPLE': Colors.Greyple,
         'DARK BUT NOT BLACK': Colors.DarkButNotBlack,
         'NOT QUITE BLACK': Colors.NotQuiteBlack
     },
@@ -175,7 +180,6 @@ module.exports = {
         ONLY_MEMES_ALLOWED: '`❌` Możesz wysyłać tutaj tylko memy.',
         COMMAND_NOT_FOUND: '`❌` Polecenie, które próbujesz wykonać, nie istnieje.',
         COMMAND_ERROR: '`❌` Wystąpił problem podczas wykonywania polecenia.',
-        USER_ALREADY_VERIFIED: '`❌` Już zaakceptowałeś regulamin.',
         SNITCH_REJECTED_DM: '`❌` Twoje zgłoszenie użytkownika %s na serwerze `%s` zostało odrzucone.',
         ROLE_ALREADY_OWNED: '`❌` Posiadasz już taką rolę.',
         MENU_ERROR: '`❌` To nie jest Twoje menu.',
@@ -220,21 +224,22 @@ module.exports = {
         NOTE_REMOVE_ERROR: '`❌` Wystąpił problem podczas usuwania notatki.',
         EMBED_CREATE_ERROR: '`❌` Wystąpił problem podczas tworzenia wiadomości osadzonej.',
         EMBED_EDIT_ERROR: '`❌` Wystąpił problem podczas edytowania wiadomości osadzonej.',
-        NO_EMBED_FOUND: '`❌` Nie znaleziono wiadomości osadzonej o podanym ID.'
+        NO_EMBED_FOUND: '`❌` Nie znaleziono wiadomości osadzonej o podanym ID.',
+        EMPTY_EMBED_CONTENT: '`❌` Wiadomość osadzona nie może być pusta. Uzupełnij chociaż jedno pole `Tytuł`, `Opis`, `Miniaturka`, `Obraz`, `Autor_Nazwa` lub `Stopka_Tekst`.',
+        EMPTY_CONTENT: '`❌` Musisz wybrać co najmniej `1` opcję.',
+        NO_EMBED_CHANGES_DETECTED: '`❌` Nie dokonano żadnych zmian.'
     },
 
     // KOMUNIKATY
     success: {
         RESTART_BOT: '`💤` Restart w toku. Spróbuj ponownie za kilka chwil...',
         SNITCH_SENT: '`➕` Twoje zgłoszenie wpłynęło do administracji. Dziękujemy za czujność!',
-        VERIFIED: '`🔹` Dziękujemy za akceptację regulaminu.',
         SNITCH_ACCEPTED: '`🤩` Dziękujemy za czujność! Użytkownik <@%s>, zgłoszony przez Ciebie, został `%s` na serwerze `%s`.',
-        NEW_COLOR: '`➕` Twój nowy kolor to <@&%s>.',
         ROLE_REMOVED: '`➖` Pomyślnie usunięto rolę.',
         CHANNEL_REMOVED: '`➖` Pomyślnie usunięto kanał.',
         NOTE_REMOVED: '`🗑️` Pomyślnie usunięto notatkę użytkownika <@%s>.',
         NOTE_CLEARED: '`🧹` Wyczyszczono notatki dla <@%s>.',
         EMBED_CREATED: '`➕` Wiadomość osadzona została stworzona i wysłana na kanał <#%s>.',
-        EMBED_EDIT: '`➕` Wiadomość osadzona została zedytowana.',
+        EMBED_EDITED: '`➕` Wiadomość osadzona została zedytowana.'
     }
 };

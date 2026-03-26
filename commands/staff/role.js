@@ -46,27 +46,27 @@ module.exports = {
         const role = interaction.options.getRole('rola');
 
         if (!targetMember) {
-            return await utils.reply.error(interaction, 'USER_NOT_FOUND');
+            return await utils.interface.sendError(interaction, 'USER_NOT_FOUND');
         }
 
         if (interaction.guild.members.me.roles.highest.position <= role.position) {
-            return await utils.reply.error(interaction, 'ROLE_HIGHER_THAN_BOT');
+            return await utils.interface.sendError(interaction, 'ROLE_HIGHER_THAN_BOT');
         }
 
         if (interaction.member.roles.highest.position <= role.position && interaction.guild.ownerId !== interaction.user.id) {
-            return await utils.reply.error(interaction, 'ROLE_HIGHER_THAN_USER');
+            return await utils.interface.sendError(interaction, 'ROLE_HIGHER_THAN_USER');
         }
 
         try {
             switch (subcommand) {
                 case 'add': {
                     if (targetMember.roles.cache.has(role.id)) {
-                        return await utils.reply.error(interaction, 'USER_ALREADY_HAS_ROLE', role.id);
+                        return await utils.interface.sendError(interaction, 'USER_ALREADY_HAS_ROLE', role.id);
                     }
 
                     await targetMember.roles.add(role);
 
-                    const addEmbed = utils.createEmbed({
+                    const addEmbed = utils.interface.createEmbed({
                         title: 'Rola nadana',
                         description: `\`🎭\` **Nadano rolę:** <@&${role.id}>\n\`👤\` **Użytkownikowi:** <@${targetMember.id}>\n\`📛\` **Moderator:** <@${interaction.user.id}>`
                     });
@@ -77,12 +77,12 @@ module.exports = {
 
                 case 'remove': {
                     if (!targetMember.roles.cache.has(role.id)) {
-                        return await utils.reply.error(interaction, 'USER_NOT_HAS_ROLE', role.id);
+                        return await utils.interface.sendError(interaction, 'USER_NOT_HAS_ROLE', role.id);
                     }
 
                     await targetMember.roles.remove(role);
 
-                    const removeEmbed = utils.createEmbed({
+                    const removeEmbed = utils.interface.createEmbed({
                         title: 'Rola zabrana',
                         description: `\`🎭\` **Usunięto rolę:** <@&${role.id}>\n\`👤\` **Użytkownikowi:** <@${targetMember.id}>\n\`📛\` **Moderator:** <@${interaction.user.id}>`
                     });
@@ -92,12 +92,12 @@ module.exports = {
                 }
 
                 default:
-                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
+                    await utils.interface.sendError(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Role] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
             const errorKey = subcommand === 'add' ? 'ROLE_ADD_ERROR' : 'ROLE_REMOVE_ERROR'
-            await utils.reply.error(interaction, errorKey);
+            await utils.interface.sendError(interaction, errorKey);
         }
     },
 };

@@ -32,25 +32,25 @@ module.exports = {
         const reason = interaction.options.getString('powód');
         const evidence = interaction.options.getAttachment('obraz');
         const reporter = interaction.user;
-        const requiredChannel = await utils.db.hGet(`guild:${interaction.guild.id}:settings`, 'snitchChannelId');
+        const requiredChannel = await utils.db.hGet(`guilds:${interaction.guild.id}:settings`, 'snitchChannelId');
         const logChannel = interaction.guild.channels.cache.get(requiredChannel);
 
         if (!logChannel) {
-            return await utils.reply.error(interaction, 'RECORD_NOT_FOUND');
+            return await utils.interface.sendError(interaction, 'RECORD_NOT_FOUND');
         }
 
         if (!target) {
-            return await utils.reply.error(interaction, 'USER_NOT_FOUND');
+            return await utils.interface.sendError(interaction, 'USER_NOT_FOUND');
         }
 
         if (target.id === reporter.id) {
-            return await utils.reply.error(interaction, 'CANT_REPORT_SELF');
+            return await utils.interface.sendError(interaction, 'CANT_REPORT_SELF');
         }
 
         const targetMember = await interaction.guild.members.fetch(target.id).catch(() => null);
 
         if (!targetMember.bannable && !targetMember.kickable && !targetMember.moderatable || target.bot) {
-            return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
+            return await utils.interface.sendError(interaction, 'USER_NOT_PUNISHABLE');
         }
 
         const adminFields = [
@@ -60,7 +60,7 @@ module.exports = {
             { name: '`💬` Powód', value: `\`\`\`${reason}\`\`\``, inline: false }
         ];
 
-        const adminEmbed = utils.createEmbed({
+        const adminEmbed = utils.interface.createEmbed({
             title: 'Nowe zgłoszenie',
             fields: adminFields
         });
@@ -91,6 +91,6 @@ module.exports = {
 
         await logChannel.send({ embeds: [adminEmbed], components: [row] });
 
-        await utils.reply.success(interaction, 'SNITCH_SENT');
+        await utils.interface.sendSuccess(interaction, 'SNITCH_SENT');
     },
 };

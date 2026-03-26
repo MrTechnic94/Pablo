@@ -87,7 +87,9 @@ module.exports = {
                     const target = interaction.options.getUser('użytkownik');
                     const rawNote = await utils.db.hGet(dbKey, target.id);
 
-                    if (!rawNote) return await utils.reply.error(interaction, 'USER_NOTE_NOT_FOUND');
+                    if (!rawNote) {
+                        return await utils.interface.sendError(interaction, 'USER_NOTE_NOT_FOUND');
+                    }
 
                     const noteData = JSON.parse(rawNote);
                     const createdAt = Math.floor(noteData.createdAt / 1000);
@@ -144,15 +146,15 @@ module.exports = {
 
                     if (subcommand === 'add') {
                         if (exists) {
-                            return await utils.reply.error(interaction, 'USER_NOTE_ALREADY_EXISTS');
+                            return await utils.interface.sendError(interaction, 'USER_NOTE_ALREADY_EXISTS');
                         }
 
                         if (target.bot) {
-                            return await utils.reply.error(interaction, 'CANNOT_NOTE_BOT');
+                            return await utils.interface.sendError(interaction, 'CANNOT_NOTE_BOT');
                         }
 
                         if (target.id === interaction.user.id) {
-                            return await utils.reply.error(interaction, 'CANNOT_ADD_NOTE_YOURSELF');
+                            return await utils.interface.sendError(interaction, 'CANNOT_ADD_NOTE_YOURSELF');
                         }
 
                         noteData = {
@@ -164,7 +166,7 @@ module.exports = {
                         };
                     } else {
                         if (!exists) {
-                            return await utils.reply.error(interaction, 'USER_NOTE_NOT_FOUND');
+                            return await utils.interface.sendError(interaction, 'USER_NOTE_NOT_FOUND');
                         }
 
                         const oldData = JSON.parse(await utils.db.hGet(dbKey, target.id));
@@ -179,7 +181,7 @@ module.exports = {
 
                     await utils.db.hSet(dbKey, target.id, JSON.stringify(noteData));
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: subcommand === 'add' ? 'Dodano notatkę' : 'Zaktualizowano notatkę',
                         description: `\`👤\` **Użytkownik:** <@${target.id}>\n\`📛\` **Moderator:** <@${interaction.user.id}>\n\`📝\` **Treść notatki:** \`\`\`${content}\`\`\``
                     });
@@ -193,14 +195,14 @@ module.exports = {
                     const deleted = await utils.db.hDel(dbKey, target.id);
 
                     if (!deleted) {
-                        return await utils.reply.error(interaction, 'USER_NOTE_NOT_FOUND');
+                        return await utils.interface.sendError(interaction, 'USER_NOTE_NOT_FOUND');
                     }
 
                     if (target.id === interaction.user.id) {
-                        return await utils.reply.error(interaction, 'CANNOT_REMOVE_NOTE_YOURSELF');
+                        return await utils.interface.sendError(interaction, 'CANNOT_REMOVE_NOTE_YOURSELF');
                     }
 
-                    await utils.reply.success(interaction, 'NOTE_REMOVED', target.id);
+                    await utils.interface.sendSuccess(interaction, 'NOTE_REMOVED', target.id);
                     break;
                 }
 
@@ -211,24 +213,25 @@ module.exports = {
                         const target = interaction.options.getUser('użytkownik');
 
                         if (!target) {
-                            return await utils.reply.error(interaction, 'USER_NOT_FOUND');
+                            return await utils.interface.sendError(interaction, 'USER_NOT_FOUND');
                         }
 
                         const hasNote = await utils.db.hExists(dbKey, target.id);
 
                         if (!hasNote) {
-                            return await utils.reply.error(interaction, 'USER_NOTE_NOT_FOUND');
+                            return await utils.interface.sendError(interaction, 'USER_NOTE_NOT_FOUND');
                         }
 
                         await utils.db.hDel(dbKey, target.id);
 
-                        return await utils.reply.success(interaction, 'NOTE_CLEARED', target.id);
+                        return await utils.interface.sendSuccess(interaction, 'NOTE_CLEARED', target.id);
                     }
+
                     const allNotes = await utils.db.hGetAll(dbKey);
                     const notesCount = Object.keys(allNotes).length;
 
                     if (!notesCount) {
-                        return await utils.reply.error(interaction, 'DATABASE_EMPTY');
+                        return await utils.interface.sendError(interaction, 'DATABASE_EMPTY');
                     }
 
                     const confirmButton = new ButtonBuilder()
@@ -238,51 +241,44 @@ module.exports = {
 
                     const row = new ActionRowBuilder().addComponents(confirmButton);
 
-                    const label = utils.getPlural(notesCount, 'notatkę', 'notatki', 'notatek');
+                    const label = utils.parser.getPlural(notesCount, 'notatkę', 'notatki', 'notatek');
                     const countString = `\`${notesCount}\` ${label}`;
 
-                    const queryEmbed = utils.createEmbed({
+                    const queryEmbed = utils.interface.createEmbed({
                         description: `\`❓\` Czy na pewno chcesz usunąć ${countString} z tego serwera?\n\`❗\` Tej operacji nie da się cofnąć!`
                     });
 
-                    await interaction.reply({
-                        embeds: [queryEmbed],
-                        components: [row]
-                    });
+                    await interaction.reply({ embeds: [queryEmbed], components: [row] });
 
                     const msg = await interaction.fetchReply();
                     const collector = msg.createMessageComponentCollector({ componentType: ComponentType.Button, time: 15000 });
 
                     collector.on('collect', async i => {
                         if (i.user.id !== interaction.user.id) {
-                            return await utils.reply.error(i, 'BUTTON_ERROR');
+                            return await utils.interface.sendError(i, 'BUTTON_ERROR');
                         }
 
                         await utils.db.del(dbKey);
 
                         const deletedTimestamp = Math.floor(Date.now() / 1000);
 
-                        const successEmbed = utils.createEmbed({
+                        const successEmbed = utils.interface.createEmbed({
                             title: 'Akcja wykonana',
                             description: `\`💥\` **Info:** Wszystkie notatki serwerowe zostały pomyślnie usunięte.\n\`🗑️\` **Usunięto:** ${notesCount}\n\`📅\` **Data:** <t:${deletedTimestamp}:f>\n\`📛\` **Moderator:** <@${interaction.user.id}>`,
                         });
 
-                        await i.update({
-                            embeds: [successEmbed],
-                            components: []
-                        });
+                        await i.update({ embeds: [successEmbed], components: [] });
                     });
-
                     break;
                 }
 
                 default:
-                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
+                    await utils.interface.sendError(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Notes] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
             const errorMap = { view: 'NOTE_VIEW_ERROR', add: 'NOTE_ADD_ERROR', edit: 'NOTE_EDIT_ERROR', remove: 'NOTE_REMOVE_ERROR', restart: 'NOTE_REMOVE_ERROR' };
-            await utils.reply.error(interaction, errorMap);
+            await utils.interface.sendError(interaction, errorMap);
         }
     }
 };

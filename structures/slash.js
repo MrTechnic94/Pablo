@@ -1,6 +1,6 @@
 'use strict';
 
-const { loadInteractions, loadComponents } = require('../lib/utils/interactionMapper');
+const { loadInteractions, loadComponents } = require('../lib/utils/mapper');
 const { REST, ApplicationCommandType, Routes } = require('discord.js');
 const { resolve } = require('node:path');
 

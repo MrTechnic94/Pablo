@@ -1,6 +1,6 @@
 'use strict';
 
-const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits, ChannelType } = require('discord.js');
 
 module.exports = {
     category: '`📛` Administracja',
@@ -13,13 +13,13 @@ module.exports = {
             .setName('create')
             .setDescription('Tworzy nową wiadomość osadzoną z wybranymi opcjami.')
             .addStringOption(option => option
-                .setName('opis')
-                .setDescription('Główna treść.')
-                .setRequired(true)
-            )
-            .addStringOption(option => option
                 .setName('tytuł')
                 .setDescription('Tytuł.')
+                .setRequired(false)
+            )
+            .addStringOption(option => option
+                .setName('opis')
+                .setDescription('Główna treść.')
                 .setRequired(false)
             )
             .addStringOption(option => option
@@ -48,8 +48,8 @@ module.exports = {
                 .setRequired(false)
             )
             .addStringOption(option => option
-                .setName('miniatura')
-                .setDescription('Link do miniatury.')
+                .setName('miniaturka')
+                .setDescription('Link do miniaturki.')
                 .setRequired(false)
             )
             .addStringOption(option => option
@@ -76,6 +76,7 @@ module.exports = {
                 .setName('kanał')
                 .setDescription('Kanał, na który wysłać.')
                 .setRequired(false)
+                .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.AnnouncementThread)
             )
         )
         .addSubcommand(sub => sub
@@ -87,13 +88,13 @@ module.exports = {
                 .setRequired(true)
             )
             .addStringOption(option => option
-                .setName('opis')
-                .setDescription('Nowa treść.')
+                .setName('tytuł')
+                .setDescription('Nowy tytuł.')
                 .setRequired(false)
             )
             .addStringOption(option => option
-                .setName('tytuł')
-                .setDescription('Nowy tytuł.')
+                .setName('opis')
+                .setDescription('Nowa treść.')
                 .setRequired(false)
             )
             .addStringOption(option => option
@@ -122,7 +123,7 @@ module.exports = {
                 .setRequired(false)
             )
             .addStringOption(option => option
-                .setName('miniatura')
+                .setName('miniaturka')
                 .setDescription('Nowy link do miniatury.')
                 .setRequired(false)
             )
@@ -146,11 +147,6 @@ module.exports = {
                 .setDescription('Czy zmienić znacznik czasu?')
                 .setRequired(false)
             )
-            .addChannelOption(option => option
-                .setName('kanał')
-                .setDescription('Kanał, na którym jest wiadomość.')
-                .setRequired(false)
-            )
         ),
     async execute(interaction, logger) {
         const { utils } = interaction.client;
@@ -161,11 +157,11 @@ module.exports = {
             const targetChannel = interaction.options.getChannel('kanał') || interaction.channel;
             const messageId = interaction.options.getString('id_wiadomości');
 
-            const description = interaction.options.getString('opis');
             const title = interaction.options.getString('tytuł');
+            const description = interaction.options.getString('opis');
             const color = interaction.options.getString('kolor');
             const url = interaction.options.getString('tytuł_url');
-            const thumbnail = interaction.options.getString('miniatura');
+            const thumbnail = interaction.options.getString('miniaturka');
             const image = interaction.options.getString('obraz');
             const timestampOption = interaction.options.getBoolean('znacznik_czasu');
 
@@ -176,11 +172,24 @@ module.exports = {
             const footerText = interaction.options.getString('stopka_tekst');
             const footerIcon = interaction.options.getString('stopka_ikona');
 
-            const finalColor = color && /^#([A-Fa-f0-9]{6})$/.test(color) ? color : null;
+            const finalColor = utils.parser.color(color);
+
+            if (color && !finalColor) {
+                return await utils.interface.sendError(interaction, 'INVALID_COLOR_FORMAT');
+            }
 
             switch (subcommand) {
                 case 'create': {
-                    const successEmbed = utils.createEmbed({
+                    const hasAnyContent = [
+                        title, description, thumbnail,
+                        image, authorName, footerText
+                    ].some(option => option !== null && option !== undefined && option !== '');
+
+                    if (!hasAnyContent) {
+                        return await utils.interface.sendError(interaction, 'EMPTY_EMBED_CONTENT');
+                    }
+
+                    const successEmbed = utils.interface.createEmbed({
                         title,
                         url,
                         description,
@@ -193,19 +202,47 @@ module.exports = {
                     });
 
                     await targetChannel.send({ embeds: [successEmbed] });
-                    await utils.reply.success(interaction, 'EMBED_CREATED', targetChannel.id);
+                    await utils.interface.sendSuccess(interaction, 'EMBED_CREATED', targetChannel.id);
                     break;
                 }
 
                 case 'edit': {
+                    const hasAnyContent = [
+                        title, description, color, url, thumbnail, image,
+                        timestampOption, authorName, authorIcon, authorUrl,
+                        footerText, footerIcon, finalColor
+                    ].some(option => option !== null && option !== undefined && option !== '');
+
+                    if (!hasAnyContent) {
+                        return await utils.interface.sendError(interaction, 'EMPTY_CONTENT');
+                    }
+
                     const message = await targetChannel.messages.fetch(messageId).catch(() => null);
                     const oldEmbed = message?.embeds[0];
 
                     if (!message || message.author.id !== interaction.client.user.id || !oldEmbed) {
-                        return await utils.reply.error(interaction, 'NO_EMBED_FOUND');
+                        return await utils.interface.sendError(interaction, 'NO_EMBED_FOUND');
                     }
 
-                    const editedEmbed = utils.createEmbed({
+                    const isUnchanged =
+                        (title === null || title === oldEmbed.title) &&
+                        (description === null || description === oldEmbed.description) &&
+                        (url === null || url === oldEmbed.url) &&
+                        (finalColor === null || finalColor === oldEmbed.hexColor) &&
+                        (thumbnail === null || thumbnail === oldEmbed.thumbnail?.url) &&
+                        (image === null || image === oldEmbed.image?.url) &&
+                        (timestampOption === null || (timestampOption === !!oldEmbed.timestamp)) &&
+                        (authorName === null || authorName === oldEmbed.author?.name) &&
+                        (authorIcon === null || authorIcon === oldEmbed.author?.iconURL) &&
+                        (authorUrl === null || authorUrl === oldEmbed.author?.url) &&
+                        (footerText === null || footerText === oldEmbed.footer?.text) &&
+                        (footerIcon === null || footerIcon === oldEmbed.footer?.iconURL);
+
+                    if (isUnchanged) {
+                        return await utils.interface.sendError(interaction, 'NO_EMBED_CHANGES_DETECTED');
+                    }
+
+                    const editedEmbed = utils.interface.createEmbed({
                         title: title ?? oldEmbed.title,
                         description: description ?? oldEmbed.description,
                         url: url ?? oldEmbed.url,
@@ -225,17 +262,17 @@ module.exports = {
                     });
 
                     await message.edit({ embeds: [editedEmbed] });
-                    await utils.reply.success(interaction, 'EMBED_EDIT');
+                    await utils.interface.sendSuccess(interaction, 'EMBED_EDITED');
                     break;
                 }
 
                 default:
-                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
+                    await utils.interface.sendError(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Embed] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
-            const errorKey = subcommand === 'create' ? 'EMBED_ADD_ERROR' : 'EMBED_EDIT_ERROR';
-            await utils.reply.error(interaction, errorKey);
+            const errorKey = subcommand === 'create' ? 'EMBED_CREATE_ERROR' : 'EMBED_EDIT_ERROR';
+            await utils.interface.sendError(interaction, errorKey);
         }
     }
 };

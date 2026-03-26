@@ -45,7 +45,7 @@ module.exports = {
         const target = interaction.options.getMember('użytkownik');
 
         if (!target) {
-            return await utils.reply.error(interaction, 'USER_NOT_FOUND');
+            return await utils.interface.sendError(interaction, 'USER_NOT_FOUND');
         }
 
         const dbKey = `guilds:${interaction.guild.id}:warns:${target.id}`;
@@ -54,15 +54,15 @@ module.exports = {
             switch (subcommand) {
                 case 'add': {
                     if (target.user.bot) {
-                        return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
+                        return await utils.interface.sendError(interaction, 'USER_NOT_PUNISHABLE');
                     }
 
                     if (target.id === interaction.user.id) {
-                        return await utils.reply.error(interaction, 'CANT_REPORT_SELF');
+                        return await utils.interface.sendError(interaction, 'CANT_REPORT_SELF');
                     }
 
                     if (target.roles.highest.position >= interaction.member.roles.highest.position && interaction.guild.ownerId !== interaction.user.id) {
-                        return await utils.reply.error(interaction, 'ROLE_TOO_HIGH');
+                        return await utils.interface.sendError(interaction, 'ROLE_TOO_HIGH');
                     }
 
                     const warnId = randomBytes(3).toString('hex').toUpperCase();
@@ -77,14 +77,14 @@ module.exports = {
 
                     await utils.db.lPush(dbKey, JSON.stringify(warnData));
 
-                    const successEmbedDM = utils.createEmbed({
+                    const successEmbedDM = utils.interface.createEmbed({
                         title: 'Zostałeś ostrzeżony',
                         description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`📛\` **Moderator:** <@${interaction.user.id}>\n\`📝\` **Powód:** ${reason}`
                     });
 
                     await target.send({ embeds: [successEmbedDM] }).catch(() => logger.warn(`[Slash ▸ Warn] Failed to send DM to '${target.id}'.`));
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Użytkownik ostrzeżony',
                         description: `\`👤\` **Użytkownik:** <@${target.id}>\n\`📛\` **Moderator:** <@${interaction.user.id}>\n\`🆔\` **ID:** #${warnId}\n\`📝\` **Powód:** \`\`\`${reason}\`\`\``
                     });
@@ -100,12 +100,12 @@ module.exports = {
                     const foundWarn = allWarns.map(w => JSON.parse(w)).find(w => w.id === warnId);
 
                     if (!foundWarn) {
-                        return await utils.reply.error(interaction, 'WARN_NOT_FOUND');
+                        return await utils.interface.sendError(interaction, 'WARN_NOT_FOUND');
                     }
 
                     const warnTimestamp = Math.floor(foundWarn.time / 1000);
 
-                    const successEmbedDM = utils.createEmbed({
+                    const successEmbedDM = utils.interface.createEmbed({
                         title: 'Usunięto ostrzeżenie',
                         description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`📛\` **Moderator:** <@${interaction.user.id}>\n\`📅\` **Ostrzeżenie z dnia:** <t:${warnTimestamp}>\n\`📝\` **Oryginalny powód:** ${foundWarn.reason}`
                     });
@@ -114,7 +114,7 @@ module.exports = {
 
                     await utils.db.lRem(dbKey, 1, JSON.stringify(foundWarn));
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Usunięto ostrzeżenie',
                         description: `\`👤\` **Użytkownik:** <@${target.user.id}>\n\`📛\` **Moderator:** <@${interaction.user.id}>\n\`🆔\` **ID:** #${warnId}`
                     });
@@ -124,12 +124,12 @@ module.exports = {
                 }
 
                 default:
-                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
+                    await utils.interface.sendError(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Warn] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
             const errorKey = subcommand === 'remove' ? 'WARN_REMOVE_ERROR' : 'WARN_ERROR';
-            await utils.reply.error(interaction, errorKey);
+            await utils.interface.sendError(interaction, errorKey);
         }
     }
 };
