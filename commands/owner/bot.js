@@ -120,7 +120,11 @@ module.exports = {
                     const status = interaction.options.getString('nazwa');
                     const botPresence = interaction.options.getString('status');
 
-                    if (interaction.client.user.presence?.activities?.[0]?.name === status && interaction.client.user.presence?.status === botPresence) {
+                    const currentPresence = interaction.client.user.presence;
+                    const currentActivity = currentPresence?.activities?.[0];
+                    const currentStatus = currentPresence?.status;
+
+                    if (currentActivity?.name === status && currentStatus === botPresence) {
                         return await utils.interface.sendError(interaction, 'STATUS_ALREADY_SET');
                     }
 

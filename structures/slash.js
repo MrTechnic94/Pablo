@@ -2,19 +2,19 @@
 
 const { loadInteractions, loadComponents } = require('../lib/utils/mapper');
 const { REST, ApplicationCommandType, Routes } = require('discord.js');
-const { resolve } = require('node:path');
+const { join } = require('node:path');
 
 module.exports = async (client, logger) => {
     const publicCommands = [];
     const ownerCommands = [];
 
     // Slash i context
-    loadInteractions(client, resolve(__dirname, '../commands'), 'Slash', logger, publicCommands, ownerCommands);
-    loadInteractions(client, resolve(__dirname, '../contexts'), 'Context', logger, publicCommands, ownerCommands);
+    loadInteractions(client, join(__dirname, '../commands'), 'Slash', logger, publicCommands, ownerCommands);
+    loadInteractions(client, join(__dirname, '../contexts'), 'Context', logger, publicCommands, ownerCommands);
 
     // Buttony i menu
-    loadComponents(resolve(__dirname, '../interactions/buttons'), client.buttons, 'Button', logger);
-    loadComponents(resolve(__dirname, '../interactions/selectmenus'), client.selectMenus, 'SelectMenu', logger);
+    loadComponents(join(__dirname, '../interactions/buttons'), client.buttons, 'Button', logger);
+    loadComponents(join(__dirname, '../interactions/selectmenus'), client.selectMenus, 'SelectMenu', logger);
 
     const rest = new REST().setToken(global.isDev ? process.env.DEV_BOT_TOKEN : process.env.BOT_TOKEN);
 

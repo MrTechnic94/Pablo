@@ -38,7 +38,9 @@ module.exports = {
                     const name = interaction.options.getString('nazwa');
                     const url = utils.parser.emojiUrl(emojiInput);
 
-                    if (!url) return await utils.interface.sendError(interaction, 'INVALID_FILE');
+                    if (!url) {
+                        return await utils.interface.sendError(interaction, 'INVALID_FILE');
+                    }
 
                     const createdEmoji = await interaction.guild.emojis.create({ attachment: url, name: name });
                     const createdAt = Math.floor(createdEmoji.createdTimestamp / 1000);
@@ -74,6 +76,7 @@ module.exports = {
             if (err.code === RESTJSONErrorCodes.InvalidFormBodyOrContentType || err.code === RESTJSONErrorCodes.InvalidFileUploaded) {
                 return await utils.interface.sendError(interaction, 'INVALID_FILE');
             }
+
             await utils.interface.sendError(interaction, 'STEAL_EMOJI_ERROR');
         }
     },

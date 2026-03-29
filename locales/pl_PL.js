@@ -180,7 +180,7 @@ module.exports = {
         ONLY_MEMES_ALLOWED: '`❌` Możesz wysyłać tutaj tylko memy.',
         COMMAND_NOT_FOUND: '`❌` Polecenie, które próbujesz wykonać, nie istnieje.',
         COMMAND_ERROR: '`❌` Wystąpił problem podczas wykonywania polecenia.',
-        SNITCH_REJECTED_DM: '`❌` Twoje zgłoszenie użytkownika %s na serwerze `%s` zostało odrzucone.',
+        SNITCH_REJECTED_DM: '`❌` Twoje zgłoszenie użytkownika %s na serwerze `%s` zostało `odrzucone`.',
         ROLE_ALREADY_OWNED: '`❌` Posiadasz już taką rolę.',
         MENU_ERROR: '`❌` To nie jest Twoje menu.',
         BUTTON_ERROR: '`❌` To nie jest Twój przycisk.',

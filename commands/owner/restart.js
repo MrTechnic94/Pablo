@@ -41,16 +41,21 @@ module.exports = {
             }
 
             case 'Status': {
-                if (interaction.client.user.presence?.activities?.[0]?.name === botOptions.defaultActivityName &&
-                    interaction.client.user.presence?.status === botOptions.defaultActivityPresence) {
+                const currentPresence = interaction.client.user.presence;
+                const currentActivity = currentPresence?.activities?.[0];
+                const currentStatus = currentPresence?.status;
+
+                const { defaultActivityName, defaultActivityPresence } = botOptions;
+
+                if (currentActivity?.name === defaultActivityName && currentStatus === defaultActivityPresence) {
                     return await utils.interface.sendError(interaction, 'STATUS_ALREADY_RESTARTED');
                 }
 
                 try {
                     await interaction.client.user.setPresence({
-                        status: botOptions.defaultActivityPresence,
+                        status: defaultActivityPresence,
                         activities: [{
-                            name: botOptions.defaultActivityName,
+                            name: defaultActivityName,
                             type: ActivityType.Custom
                         }]
                     });
@@ -62,14 +67,14 @@ module.exports = {
 
                     utils.config.sync(config);
 
-                    const presenceData = presence[botOptions.defaultActivityPresence];
+                    const presenceData = presence[defaultActivityPresence];
 
                     const presenceEmoji = presenceData?.emoji || '❓';
                     const presenceType = presenceData?.name || 'Nieznany';
 
                     const successEmbed = utils.interface.createEmbed({
                         title: 'Status zmieniony',
-                        description: `\`💬\` **Nazwa:** ${botOptions.defaultActivityName}\n\`${presenceEmoji}\` **Status:** ${presenceType}`
+                        description: `\`💬\` **Nazwa:** ${defaultActivityName}\n\`${presenceEmoji}\` **Status:** ${presenceType}`
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });
