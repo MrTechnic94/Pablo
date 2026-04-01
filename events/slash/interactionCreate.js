@@ -37,19 +37,31 @@ module.exports = {
         }
 
         if (interaction.isButton()) {
-            const customId = interaction.customId;
-            const button = interaction.client.buttons.get(customId) || interaction.client.buttons.find(b => b.isPrefix && customId.startsWith(b.customId));
+            const { customId, client } = interaction;
+            const { buttons } = client;
+
+            let button = buttons.get(customId);
+
+            if (!button) {
+                for (const [key, btn] of buttons) {
+                    if (btn.isPrefix && customId.startsWith(key)) {
+                        button = btn;
+                        break;
+                    }
+                }
+            }
 
             if (!button) return;
+
             if (button.botPermissions && !(await checkBotPermissions(interaction, button.botPermissions))) return;
 
             try {
                 await button.execute(interaction, logger);
             } catch (err) {
-                const buttonName = interaction.client.buttons.get(interaction.customId) || interaction.nt.buttons.find(btn => btn.isPrefix && interaction.custclieomId.startsWith(btn.customId));
-                const buttonNameBig = buttonName.charAt(0).toUpperCase() + buttonName.slice(1);
+                const name = button.name || customId;
+                const formattedName = name.charAt(0).toUpperCase() + name.slice(1);
 
-                await utils.error(err, 'Button', buttonNameBig, interaction, logger, utils);
+                await utils.error(err, 'Button', formattedName, interaction, logger, utils);
             }
 
             return;

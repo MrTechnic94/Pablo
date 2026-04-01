@@ -15,9 +15,9 @@
  * Zalecane jest dodanie tych emotek dla bota w jego panelu
  * (https://discord.com/developers/applications) oraz dodanie do
  * pliku konfiguracyjnego 'default.json' w sekcji 'emojis'.
- * W pliku default.json, po użyciu komend takich jak np. '/bot status' czy '/bot restart',
- * zostanie usunięte formatowanie, a zawartość zostanie zapisana w jednej linii.
- * Aby przywrócić czytelność, użyj skrótu 'Ctrl + Shift + I'.
+ * W pliku default.json, po uzyciu polecen takich jak np. '/bot status' czy '/bot restart',
+ * zostanie usuniete formatowanie, a zawartosc zostanie zapisana w jednej linii.
+ * Aby przywrocic czytelnosc, uzyj skrotu 'Ctrl + Shift + I'.
  * Skrot ten dziala w vscodium/vsc w innych edytorach moze byc inaczej.
  * UWAGA: emotki te nie sa moja wlasnoscia, zostaly skopiowane/pobrane
  * z innych serwerow Discorda lub ze strony 'https://emoji.gg'.
@@ -27,4 +27,10 @@
 
 'use strict';
 
-require('./lib/core/startup').startup();
+const { startup } = require('./lib/core/startup');
+
+async function run() {
+    await startup();
+}
+
+run();

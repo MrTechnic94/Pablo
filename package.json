@@ -23,9 +23,9 @@
   "dependencies": {
     "@redis/client": "^5.11.0",
     "croner": "^10.0.1",
-    "discord.js": "^14.25.1",
+    "discord.js": "^14.26.0",
     "pino": "^10.3.1",
-    "undici": "^7.24.6"
+    "undici": "^7.24.7"
   },
   "optionalDependencies": {
     "bufferutil": "^4.1.0",
@@ -33,7 +33,7 @@
     "zlib-sync": "^0.1.10"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.9",
+    "@biomejs/biome": "^2.4.10",
     "blocked-at": "^1.2.0"
   },
   "repository": {
