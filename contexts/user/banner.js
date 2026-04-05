@@ -17,7 +17,7 @@ module.exports = {
         const userData = await user.fetch().catch(() => null);
 
         if (!userData.bannerURL()) {
-            return await utils.interaction.sendError(interaction, 'USER_NO_BANNER');
+            return await utils.interafce.sendError(interaction, 'USER_NO_BANNER');
         }
 
         const successEmbed = utils.interface.createEmbed({

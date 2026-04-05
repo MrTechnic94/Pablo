@@ -18,21 +18,21 @@ module.exports = {
         const logChannel = interaction.guild.channels.cache.get(requiredChannel);
 
         if (!logChannel) {
-            return await utils.interaction.sendError(interaction, 'RECORD_NOT_FOUND');
+            return await utils.interafce.sendError(interaction, 'RECORD_NOT_FOUND');
         }
 
         const targetMember = await interaction.guild.members.fetch(target.id).catch(() => null);
 
         if (!targetMember) {
-            return await utils.interaction.sendError(interaction, 'USER_NOT_FOUND');
+            return await utils.interafce.sendError(interaction, 'USER_NOT_FOUND');
         }
 
         if (target.id === reporter.id) {
-            return await utils.interaction.sendError(interaction, 'CANT_REPORT_SELF');
+            return await utils.interafce.sendError(interaction, 'CANT_REPORT_SELF');
         }
 
         if (!targetMember.bannable && !targetMember.kickable && !targetMember.moderatable || target.bot) {
-            return await utils.interaction.sendError(interaction, 'USER_NOT_PUNISHABLE');
+            return await utils.interafce.sendError(interaction, 'USER_NOT_PUNISHABLE');
         }
 
         const reason = message.content || 'Wiadomość nie zawiera tekstu.';

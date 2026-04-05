@@ -66,23 +66,5 @@ module.exports = {
 
             return;
         }
-
-        if (interaction.isStringSelectMenu()) {
-            const menu = interaction.client.selectMenus.get(interaction.customId);
-
-            if (!menu) return;
-            if (menu.botPermissions && !(await checkBotPermissions(interaction, menu.botPermissions))) return;
-
-            try {
-                await menu.execute(interaction, logger);
-            } catch (err) {
-                const menuName = menu.__fileName || menu.data?.name || (interaction.isCommand?.() ? interaction.commandName : interaction.customId);
-                const menuNameBig = menuName.charAt(0).toUpperCase() + menuName.slice(1);
-
-                await utils.error(err, 'SelectMenu', menuNameBig, interaction, logger, utils);
-            }
-
-            return;
-        }
     },
 };
