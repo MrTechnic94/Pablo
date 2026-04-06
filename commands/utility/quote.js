@@ -1,7 +1,6 @@
 'use strict';
 
 const { SlashCommandBuilder, ApplicationIntegrationType, InteractionContextType } = require('discord.js');
-const { verseOfTheDay, randomVerse } = require('../../lib/services/verseApi');
 
 module.exports = {
     category: '`ℹ️` Przydatne',
@@ -25,8 +24,8 @@ module.exports = {
         const versetType = interaction.options.getString('rodzaj') || 'daily';
 
         const verseFuncs = {
-            daily: { fn: verseOfTheDay, title: 'Werset dnia' },
-            random: { fn: randomVerse, title: 'Losowy werset' }
+            daily: { fn: utils.api.verseOfTheDay, title: 'Werset dnia' },
+            random: { fn: utils.api.randomVerse, title: 'Losowy werset' }
         };
 
         const { fn, title } = verseFuncs[versetType] || verseFuncs.daily;
@@ -35,10 +34,10 @@ module.exports = {
             const { reference, content } = await fn(logger);
 
             if (!reference || !content) {
-                return utils.reply.error(interaction, 'FETCH_ERROR', title.toLowerCase());
+                return await utils.interface.sendError(interaction, 'FETCH_ERROR', title.toLowerCase());
             }
 
-            const successEmbed = utils.createEmbed({
+            const successEmbed = utils.interface.createEmbed({
                 title: `\`📜\` ${title} (${reference})`,
                 description: content
             });
@@ -46,7 +45,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Quote] An error occurred for '${interaction.guild.id}':\n${err}`);
-            await utils.reply.error(interaction, 'FETCH_ERROR', title.toLowerCase());
+            await utils.interface.sendError(interaction, 'FETCH_ERROR', title.toLowerCase());
         }
     },
 };

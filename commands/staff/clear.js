@@ -40,10 +40,10 @@ module.exports = {
             const deleted = await interaction.channel.bulkDelete(messagesToDelete, true);
 
             if (!deleted?.size) {
-                return await utils.reply.error(interaction, 'CANT_CLEAR_MESSAGES');
+                return await utils.interface.sendError(interaction, 'CANT_CLEAR_MESSAGES');
             }
 
-            const successEmbed = utils.createEmbed({
+            const successEmbed = utils.interface.createEmbed({
                 title: 'Akcja wykonana',
                 description: `\`💬\` **Usunięto:** ${deleted.size > 1 ? `${deleted.size} wiadomości` : `${deleted.size} wiadomość`}\n\`📌\` **W tym przypięte:** ${removePinnedStr === 'true' ? 'Tak.' : 'Nie.'}`
             });
@@ -51,7 +51,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Clear] An error occurred for '${interaction.guild.id}':\n${err}`);
-            await utils.reply.error(interaction, 'CLEAR_ERROR');
+            await utils.interface.sendError(interaction, 'CLEAR_ERROR');
         }
     },
 };

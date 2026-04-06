@@ -8,7 +8,7 @@ module.exports = {
         const { utils } = guild.client;
 
         try {
-            const dbKey = await utils.db.del(`guild:${guild.id}`);
+            const dbKey = await utils.db.del(`guilds:${guild.id}`);
 
             if (!dbKey) return;
 

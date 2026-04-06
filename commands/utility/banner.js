@@ -21,10 +21,10 @@ module.exports = {
         const userData = await user.fetch().catch(() => null);
 
         if (!userData.bannerURL()) {
-            return await utils.reply.error(interaction, 'USER_NO_BANNER');
+            return await utils.interface.sendError(interaction, 'USER_NO_BANNER');
         }
 
-        const successEmbed = utils.createEmbed({
+        const successEmbed = utils.interface.createEmbed({
             title: 'Podgląd baneru',
             description: `\`👤\` **Użytkownik:** ${user}\n\`🖼️\` **Obraz:** [KLIKNIJ🡭](${userData.bannerURL({ size: 256 })})`,
             image: userData.bannerURL({ size: 256 })

@@ -2,7 +2,7 @@
 
 module.exports = {
     name: 'uncaughtException',
-    execute(logger, err) {
+    execute(logger, _client, err) {
         logger.error(`[UncaughtException] Uncaught exception found:\n${err}`);
     },
 };

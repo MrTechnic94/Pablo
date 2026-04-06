@@ -14,7 +14,7 @@ module.exports = {
 
         const user = interaction.targetUser;
 
-        const successEmbed = utils.createEmbed({
+        const successEmbed = utils.interface.createEmbed({
             title: 'Podgląd avataru',
             description: `\`👤\` **Użytkownik:** ${user}\n\`🖼️\` **Obraz:** [KLIKNIJ🡭](${user.displayAvatarURL({ size: 256 })})`,
             image: user.displayAvatarURL({ size: 256 })

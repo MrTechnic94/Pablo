@@ -1,12 +1,12 @@
 'use strict';
 
 const { getFiles } = require('../lib/utils/explorer');
-const { resolve } = require('node:path');
+const { join } = require('node:path');
 const db = require('../lib/core/database');
 
 module.exports = (client, logger) => {
-    const eventsDir = resolve(__dirname, '../events');
-    const eventFiles = getFiles(eventsDir);
+    const eventsDir = join(__dirname, '../events');
+    const eventFiles = getFiles(eventsDir, logger);
 
     for (const item of eventFiles) {
         const eventName = item.fileName.slice(0, item.fileName.lastIndexOf('.'));

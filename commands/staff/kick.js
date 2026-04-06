@@ -28,25 +28,25 @@ module.exports = {
         const reason = interaction.options.getString('powód') || 'Brak.';
 
         if (targetUser.id === interaction.user.id) {
-            return await utils.reply.error(interaction, 'CANT_KICK_SELF');
+            return await utils.interface.sendError(interaction, 'CANT_KICK_SELF');
         }
 
         try {
             const targetMember = await interaction.guild.members.fetch(targetUser.id).catch(() => null);
 
             if (!targetMember) {
-                return await utils.reply.error(interaction, 'USER_NOT_FOUND');
+                return await utils.interface.sendError(interaction, 'USER_NOT_FOUND');
             }
 
             if (interaction.member.roles.highest.position <= targetMember.roles.highest.position) {
-                return await utils.reply.error(interaction, 'ROLE_TOO_HIGH');
+                return await utils.interface.sendError(interaction, 'ROLE_TOO_HIGH');
             }
 
             if (!targetMember.kickable) {
-                return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
+                return await utils.interface.sendError(interaction, 'USER_NOT_PUNISHABLE');
             }
 
-            const successEmbedDM = utils.createEmbed({
+            const successEmbedDM = utils.interface.createEmbed({
                 title: 'Zostałeś wyrzucony',
                 description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
             });
@@ -55,7 +55,7 @@ module.exports = {
 
             await targetMember.kick({ reason: reason });
 
-            const successEmbed = utils.createEmbed({
+            const successEmbed = utils.interface.createEmbed({
                 title: 'Użytkownik wyrzucony',
                 description: `\`👤\` **Wyrzucono:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
             });
@@ -63,7 +63,7 @@ module.exports = {
             await interaction.reply({ embeds: [successEmbed] });
         } catch (err) {
             logger.error(`[Slash ▸ Kick] An error occurred for '${interaction.guild.id}':\n${err}`);
-            await utils.reply.error(interaction, 'KICK_ERROR');
+            await utils.interface.sendError(interaction, 'KICK_ERROR');
         }
     },
 };

@@ -23,14 +23,14 @@ module.exports = {
         const currentGuildBattles = activeBattles.get(guildId) || 0;
 
         if (currentGuildBattles >= others.maxBattlesPerGuild) {
-            return await utils.reply.error(interaction, 'TOO_MANY_FIGHTS', others.maxBattlesPerGuild);
+            return await utils.interface.sendError(interaction, 'TOO_MANY_FIGHTS', others.maxBattlesPerGuild);
         }
 
         const player1 = interaction.user;
         const player2 = interaction.options.getUser('przeciwnik');
 
         if (player1.id === player2.id) {
-            return await utils.reply.error(interaction, 'CANT_FIGHT_YOURSELF');
+            return await utils.interface.sendError(interaction, 'CANT_FIGHT_YOURSELF');
         }
 
         activeBattles.set(guildId, currentGuildBattles + 1);
@@ -43,7 +43,7 @@ module.exports = {
 
             const battleLog = [];
 
-            const countdownEmbed = utils.createEmbed({
+            const countdownEmbed = utils.interface.createEmbed({
                 title: '`💢` SOLÓWA ! `💢`',
                 description: '*Walka zacznie się za 3...*'
             });
@@ -60,35 +60,37 @@ module.exports = {
             }
 
             let round = 0;
+            let actionText = '';
+            let damage = 0;
 
             while (players[0].hp > 0 && players[1].hp > 0) {
                 const attacker = players[round % 2];
                 const defender = players[(round + 1) % 2];
 
-                // 15% szans na krytyka
-                const isCrit = Math.random() < 0.15;
-                // 10% szans na unik
-                const isMiss = Math.random() < 0.10;
-                let damage = Math.floor(Math.random() * (25 - 10 + 1) + 10);
-                let actionText = '';
+                const rand = Math.random();
+                const isMiss = rand < 0.10;
+                const isCrit = !isMiss && rand > 0.85;
 
                 if (isMiss) {
-                    actionText = `\`💨\` **${defender.user.username}** zrobił zwinny unik! **Zero obrażeń.**`;
+                    actionText = `\`💨\` **${defender.user.username}** zrobił unik!`;
                 } else {
+                    damage = (Math.random() * 16 + 10) >>> 0;
                     if (isCrit) {
-                        damage = Math.floor(damage * 1.8);
-                        actionText = `\`💥\` **CIOS KRYTYCZNY!** **${attacker.user.username}** potężnie uderzył **${defender.user.username}** za **${damage}** HP!`;
+                        damage = (damage * 1.8) >>> 0;
+                        actionText = `\`💥\` **KRYTYK!** **${attacker.user.username}** uderzył za **${damage}** HP!`;
                     } else {
-                        actionText = `\`⚔️\` **${attacker.user.username}** zadaje **${damage}** obrażeń użytkownikowi **${defender.user.username}**.`;
+                        actionText = `\`⚔️\` **${attacker.user.username}** zadaje **${damage}** obrażeń.`;
                     }
-                    defender.hp = Math.max(0, defender.hp - damage);
+                    defender.hp = defender.hp - damage;
+
+                    if (defender.hp < 0) defender.hp = 0;
                 }
 
                 battleLog.push(actionText);
 
                 if (battleLog.length > 5) battleLog.shift();
 
-                const battleEmbed = utils.createEmbed({
+                const battleEmbed = utils.interface.createEmbed({
                     title: '`💢` TRWA WALKA ! `💢`',
                     description: battleLog.join('\n'),
                     fields: [
@@ -107,7 +109,7 @@ module.exports = {
 
             const winner = players.find(p => p.hp > 0);
 
-            const finalEmbed = utils.createEmbed({
+            const finalEmbed = utils.interface.createEmbed({
                 title: '`🥊` PODSUMOWANIE ! `🥊`',
                 description: `\`👑\` **Zwycięzca:** <@${winner.user.id}>\n\n${battleLog.join('\n')}`,
                 fields: [
@@ -119,7 +121,7 @@ module.exports = {
             await message.edit({ embeds: [finalEmbed] }).catch(() => null);
         } catch (err) {
             logger.error(`[Slash ▸ Solo] An error occurred for '${interaction.guild.id}':\n${err}`);
-            await utils.reply.error(interaction, 'FIGHT_ERROR');
+            await utils.interface.sendError(interaction, 'FIGHT_ERROR');
         } finally {
             const current = activeBattles.get(guildId) || 1;
             if (current <= 1) {

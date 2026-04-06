@@ -19,11 +19,11 @@ module.exports = {
 
             if (targetMember) {
                 if (interaction.member.roles.highest.position <= targetMember.roles.highest.position) {
-                    return await utils.reply.error(interaction, 'ROLE_TOO_HIGH');
+                    return await utils.interface.sendError(interaction, 'ROLE_TOO_HIGH');
                 }
 
                 if (!targetMember.bannable) {
-                    return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
+                    return await utils.interface.sendError(interaction, 'USER_NOT_PUNISHABLE');
                 }
             }
 
@@ -40,12 +40,12 @@ module.exports = {
             const auditLogReason = fullReason.length > 500 ? `${fullReason.slice(0, 497)}...` : fullReason;
 
             if (reporterId) {
-                const description = utils.reply.getString('success', 'SNITCH_ACCEPTED', targetId, 'zbanowany', interaction.guild.name);
-                const firstEmbedDM = utils.createEmbed({ title: 'Zgłoszenie zaakceptowane', description });
+                const description = utils.interface.getString('success', 'SNITCH_ACCEPTED', targetId, 'zbanowany', interaction.guild.name);
+                const firstEmbedDM = utils.interface.createEmbed({ title: 'Zgłoszenie zaakceptowane', description });
                 await interaction.client.users.send(reporterId, { embeds: [firstEmbedDM] }).catch(() => logger.warn(`[Button ▸ SnitchBan] Failed to send DM to '${reporterId}'.`));
             }
 
-            const secondEmbedDM = utils.createEmbed({
+            const secondEmbedDM = utils.interface.createEmbed({
                 title: 'Zostałeś zbanowany',
                 description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${rawReason}`
             });
@@ -100,7 +100,7 @@ module.exports = {
 
             if (err.code === RESTJSONErrorCodes.UnknownInteraction) return;
 
-            await utils.reply.error(interaction, 'COMMAND_ERROR');
+            await utils.interface.sendError(interaction, 'COMMAND_ERROR');
         }
     },
 };

@@ -30,71 +30,76 @@ module.exports = {
         switch (type) {
             case 'Bot': {
                 try {
-                    await utils.reply.success(interaction, 'RESTART_BOT');
+                    await utils.interface.sendSuccess(interaction, 'RESTART_BOT');
 
                     process.emit('SIGINT');
                 } catch (err) {
                     logger.error(`[Slash ▸ Restart] An error occurred for '${interaction.guild.id}':\n${err}`);
-                    await utils.reply.error(interaction, 'RESTART_ERROR');
+                    await utils.interface.sendError(interaction, 'RESTART_ERROR');
                 }
                 break;
             }
 
             case 'Status': {
-                if (interaction.client.user.presence?.activities?.[0]?.name === botOptions.defaultActivityName &&
-                    interaction.client.user.presence?.status === botOptions.defaultActivityPresence) {
-                    return await utils.reply.error(interaction, 'STATUS_ALREADY_RESTARTED');
+                const currentPresence = interaction.client.user.presence;
+                const currentActivity = currentPresence?.activities?.[0];
+                const currentStatus = currentPresence?.status;
+
+                const { defaultActivityName, defaultActivityPresence } = botOptions;
+
+                if (currentActivity?.name === defaultActivityName && currentStatus === defaultActivityPresence) {
+                    return await utils.interface.sendError(interaction, 'STATUS_ALREADY_RESTARTED');
                 }
 
                 try {
                     await interaction.client.user.setPresence({
-                        status: botOptions.defaultActivityPresence,
+                        status: defaultActivityPresence,
                         activities: [{
-                            name: botOptions.defaultActivityName,
+                            name: defaultActivityName,
                             type: ActivityType.Custom
                         }]
                     });
 
-                    const config = utils.getConfig();
+                    const config = utils.config.get();
 
                     config.botOptions.changedActivityName = '';
                     config.botOptions.changedActivityPresence = '';
 
-                    utils.syncConfig(config);
+                    utils.config.sync(config);
 
-                    const presenceData = presence[botOptions.defaultActivityPresence];
+                    const presenceData = presence[defaultActivityPresence];
 
                     const presenceEmoji = presenceData?.emoji || '❓';
                     const presenceType = presenceData?.name || 'Nieznany';
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Status zmieniony',
-                        description: `\`💬\` **Nazwa:** ${botOptions.defaultActivityName}\n\`${presenceEmoji}\` **Status:** ${presenceType}`
+                        description: `\`💬\` **Nazwa:** ${defaultActivityName}\n\`${presenceEmoji}\` **Status:** ${presenceType}`
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });
                 } catch (err) {
                     logger.error(`[Slash ▸ Restart] An error occurred for '${interaction.guild.id}':\n${err}`);
-                    await utils.reply.error(interaction, 'STATUS_ERROR');
+                    await utils.interface.sendError(interaction, 'STATUS_ERROR');
                 }
                 break;
             }
 
             case 'Avatar': {
-                const config = utils.getConfig();
+                const config = utils.config.get();
 
                 if (!config.botOptions.changedAvatar) {
-                    return await utils.reply.error(interaction, 'AVATAR_NO_CHANGE');
+                    return await utils.interface.sendError(interaction, 'AVATAR_NO_CHANGE');
                 }
 
                 try {
                     config.botOptions.changedAvatar = false;
 
-                    utils.syncConfig(config);
+                    utils.config.sync(config);
 
                     await interaction.client.user.setAvatar(botOptions.currentAvatar === 'default' ? botOptions.avatarDefaultPath : botOptions.avatarChrismasPath);
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Avatar zrestartowany',
                         description: `\`🖼️\`**Obraz:** [KLIKNIJ🡭](${interaction.client.user.displayAvatarURL()})\n\`🔎\` **Rodzaj:** ${botOptions.currentAvatar === 'default' ? 'Domyślny' : 'Świąteczny'}`,
                         image: interaction.client.user.displayAvatarURL()
@@ -103,11 +108,11 @@ module.exports = {
                     await interaction.reply({ embeds: [successEmbed] })
                 } catch (err) {
                     if (err.code === RESTJSONErrorCodes.InvalidFormBodyOrContentType || err.message.includes('AVATAR_RATE_LIMIT')) {
-                        return await utils.reply.error(interaction, 'RATE_LIMIT');
+                        return await utils.interface.sendError(interaction, 'RATE_LIMIT');
                     }
 
                     logger.error(`[Slash ▸ Restart] An error occurred for '${interaction.guild.id}':\n${err}`);
-                    await utils.reply.error(interaction, 'AVATAR_ERROR');
+                    await utils.interface.sendError(interaction, 'AVATAR_ERROR');
                 }
                 break;
             }
@@ -116,7 +121,7 @@ module.exports = {
                 const botUser = await interaction.client.user.fetch().catch(() => null);
 
                 if (!botUser.bannerURL()) {
-                    return await utils.reply.error(interaction, 'NO_BANNER_FOUND');
+                    return await utils.interface.sendError(interaction, 'NO_BANNER_FOUND');
                 }
 
                 try {
@@ -124,7 +129,7 @@ module.exports = {
 
                     const isAnimated = botUser.bannerURL()?.includes('.gif');
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Banner zrestartowany',
                         description: `\`🖼️\`**Obraz:** [KLIKNIJ🡭](${interaction.client.user.bannerURL({ size: 256 })})\n\`🔥\`**Rodzaj:** ${isAnimated ? 'Animowany.' : 'Statyczny.'}`,
                         image: interaction.client.user.bannerURL({ size: 256 })
@@ -133,17 +138,17 @@ module.exports = {
                     await interaction.reply({ embeds: [successEmbed] })
                 } catch (err) {
                     if (err.code === RESTJSONErrorCodes.InvalidFormBodyOrContentType || err.message?.includes('BANNER_RATE_LIMIT')) {
-                        return await utils.reply.error(interaction, 'RATE_LIMIT');
+                        return await utils.interface.sendError(interaction, 'RATE_LIMIT');
                     }
 
                     logger.error(`[Slash ▸ Restart] An error occurred for '${interaction.guild.id}':\n${err}`);
-                    await utils.reply.error(interaction, 'BANNER_ERROR');
+                    await utils.interface.sendError(interaction, 'BANNER_ERROR');
                 }
                 break;
             }
 
             default:
-                await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
+                await utils.interface.sendError(interaction, 'PARAMETER_NOT_FOUND');
         }
     },
 };

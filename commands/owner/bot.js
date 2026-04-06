@@ -62,16 +62,16 @@ module.exports = {
                     const extension = attachment.url.split('.').pop().toLowerCase().split('?')[0];
 
                     if (!allowedExtensions.includes(extension)) {
-                        return await utils.reply.error(interaction, 'INVALID_EXTENSION');
+                        return await utils.interface.sendError(interaction, 'INVALID_EXTENSION');
                     }
 
                     await interaction.deferReply();
 
-                    const config = utils.getConfig();
+                    const config = utils.config.get();
 
                     config.botOptions.changedAvatar = true;
 
-                    utils.syncConfig(config);
+                    utils.config.sync(config);
 
                     const oldAvatar = interaction.client.user.displayAvatarURL({ size: 256 });
 
@@ -79,7 +79,7 @@ module.exports = {
 
                     const newAvatar = interaction.client.user.displayAvatarURL({ size: 256 });
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Avatar ustawiony',
                         description: `\`📷\` **Wcześniejszy:** [KLIKNIJ🡭](${oldAvatar})\n\`🌟\` **Nowy:** [KLIKNIJ🡭](${newAvatar})`,
                         image: newAvatar
@@ -94,7 +94,7 @@ module.exports = {
                     const extension = attachment.url.split('.').pop().toLowerCase().split('?')[0];
 
                     if (!allowedExtensions.includes(extension)) {
-                        return await utils.reply.error(interaction, 'INVALID_EXTENSION');
+                        return await utils.interface.sendError(interaction, 'INVALID_EXTENSION');
                     }
 
                     await interaction.deferReply();
@@ -106,7 +106,7 @@ module.exports = {
 
                     const newBanner = interaction.client.user.bannerURL({ size: 256 });
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Baner ustawiony',
                         description: `\`🖼️\` **Wcześniejszy:** [KLIKNIJ🡭](${oldBanner})\n\`🌟\` **Nowy:** [KLIKNIJ🡭](${newBanner})`,
                         image: newBanner
@@ -120,8 +120,12 @@ module.exports = {
                     const status = interaction.options.getString('nazwa');
                     const botPresence = interaction.options.getString('status');
 
-                    if (interaction.client.user.presence?.activities?.[0]?.name === status && interaction.client.user.presence?.status === botPresence) {
-                        return await utils.reply.error(interaction, 'STATUS_ALREADY_SET');
+                    const currentPresence = interaction.client.user.presence;
+                    const currentActivity = currentPresence?.activities?.[0];
+                    const currentStatus = currentPresence?.status;
+
+                    if (currentActivity?.name === status && currentStatus === botPresence) {
+                        return await utils.interface.sendError(interaction, 'STATUS_ALREADY_SET');
                     }
 
                     await interaction.client.user.setPresence({
@@ -132,18 +136,18 @@ module.exports = {
                         }]
                     });
 
-                    const config = utils.getConfig();
+                    const config = utils.config.get();
 
                     config.botOptions.changedActivityName = status;
                     config.botOptions.changedActivityPresence = botPresence;
 
-                    utils.syncConfig(config);
+                    utils.config.sync(config);
 
                     const presenceData = presence[botPresence];
                     const presenceEmoji = presenceData?.emoji || '❓';
                     const presenceType = presenceData?.name || 'Nieznany';
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Status zmieniony',
                         description: `\`💬\` **Nazwa:** ${status}\n\`${presenceEmoji}\` **Status:** ${presenceType}`
                     });
@@ -153,7 +157,7 @@ module.exports = {
                 }
 
                 default:
-                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
+                    await utils.interface.sendError(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Bot] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
@@ -166,7 +170,7 @@ module.exports = {
                 errorKey = subcommand === 'avatar' ? 'AVATAR_ERROR' : subcommand === 'banner' ? 'BANNER_ERROR' : 'STATUS_ERROR';
             }
 
-            await utils.reply.error(interaction, errorKey);
+            await utils.interface.sendError(interaction, errorKey);
         }
     },
 };

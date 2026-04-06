@@ -8,7 +8,7 @@ module.exports = {
         .setName('help')
         .setDescription('Wyświetla listę poleceń.')
         .setContexts(InteractionContextType.Guild),
-    async execute(interaction) {
+    async execute(interaction, logger) {
         const { utils } = interaction.client;
 
         const clientCommands = await interaction.client.application.commands.fetch().catch(() => null);
@@ -35,10 +35,14 @@ module.exports = {
                     const subName = sub.name;
                     const subDesc = sub.description || 'Brak opisu.';
                     const fullLink = `</${name} ${subName}:${registered.id}>`;
+                    logger.debug(`[Debug] ${fullLink}`);
+
                     categories[cat].push(`\`🔹\` ${fullLink}\n> ${subDesc}`);
                 });
             } else {
                 const commandLink = registered ? `</${name}:${registered.id}>` : `\`/${name}\``;
+                logger.debug(`[Debug] ${commandLink}`);
+
                 categories[cat].push(`\`🔹\` ${commandLink}\n> ${description}`);
             }
         });
@@ -46,11 +50,11 @@ module.exports = {
         const categoryKeys = Object.keys(categories);
 
         if (!categoryKeys) {
-            return await utils.reply.error(interaction, 'NO_COMMANDS_AVAILABLE');
+            return await utils.interface.sendError(interaction, 'NO_COMMANDS_AVAILABLE');
         }
 
         const pages = categoryKeys.map((category, index) => {
-            return utils.createEmbed({
+            return utils.interface.createEmbed({
                 title: 'Menu pomocy',
                 description: `**• Kategoria: ${category}**\n\n ${categories[category].join('\n\n')}`,
                 footer: {
@@ -59,6 +63,6 @@ module.exports = {
             });
         });
 
-        await utils.sendPaginatedEmbed(interaction, pages);
+        await utils.interface.sendPaginatedEmbed(interaction, pages);
     },
 };

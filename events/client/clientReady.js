@@ -1,5 +1,7 @@
 'use strict';
 
+const { dbMigration } = require('../../lib/utils/developer');
+const { isDev } = require('../../lib/utils/developer');
 const scheduler = require('../../lib/utils/scheduler');
 const { Events } = require('discord.js');
 
@@ -15,7 +17,7 @@ module.exports = {
         const ramUsage = process.memoryUsage().rss / 1024 / 1024;
         const startDate = new Intl.DateTimeFormat({ dateStyle: 'medium' });
 
-        const modeInfo = global.isDev ? 'Development' : 'Production';
+        const modeInfo = isDev() ? 'Development' : 'Production';
         const startFormatted = startDate.format(new Date());
         const statsInfo = `GUILDS: ${totalGuilds} | USERS: ${totalUsers} | APP USERS: ${userInstalls}`;
         const ramInfo = `${ramUsage.toFixed(2)} MB`;
@@ -47,5 +49,8 @@ module.exports = {
 
         // Zaladowanie harmonogramu zadan bota w tle
         await scheduler(client, logger);
+
+        // Migracja na nowe struktury bazy danych
+        await dbMigration(client, logger);
     },
 };

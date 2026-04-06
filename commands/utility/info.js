@@ -99,7 +99,7 @@ module.exports = {
                     }
 
                     if (channel.isThread()) {
-                        const autoArchive = channel.autoArchiveDuration ? utils.formatDuration(channel.autoArchiveDuration * 60000, { fullWords: true }) : 'Nie ustawiono.';
+                        const autoArchive = channel.autoArchiveDuration ? utils.parser.formatDuration(channel.autoArchiveDuration * 60000, { fullWords: true }) : 'Nie ustawiono.';
 
                         const archived = channel.archived ? 'Tak.' : 'Nie.';
                         const locked = channel.locked ? 'Tak.' : 'Nie.';
@@ -108,12 +108,12 @@ module.exports = {
                     }
 
                     if (channel.rateLimitPerUser > 0) {
-                        const slowmodeValue = utils.formatDuration(channel.rateLimitPerUser * 1000, { fullWords: true });
+                        const slowmodeValue = utils.parser.formatDuration(channel.rateLimitPerUser * 1000, { fullWords: true });
 
                         fields.push({ name: '`⏱️` Tryb powolny', value: `**•** ${slowmodeValue}`, inline: false });
                     }
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Podgląd kanału',
                         fields: fields
                     });
@@ -156,14 +156,14 @@ module.exports = {
 
                     // AFK
                     const afkChannelName = interaction.guild.afkChannel ? `${interaction.guild.afkChannel}` : 'Brak.';
-                    const afkTimeout = interaction.guild.afkTimeout ? utils.formatDuration(interaction.guild.afkTimeout * 1000, { fullWords: true }) : 'Brak.';
+                    const afkTimeout = interaction.guild.afkTimeout ? utils.parser.formatDuration(interaction.guild.afkTimeout * 1000, { fullWords: true }) : 'Brak.';
                     const afkInfo = `**• Kanał:** ${afkChannelName}\n**• Limit czasu:** ${afkTimeout}`;
 
                     // Nitro boost
                     const boostLevel = interaction.guild.premiumTier;
                     const boostCount = interaction.guild.premiumSubscriptionCount;
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Podgląd serwera',
                         thumbnail: interaction.guild.iconURL(),
                         fields: [
@@ -226,7 +226,7 @@ module.exports = {
                     // BitField
                     const perms = role.permissions.bitfield;
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Podgląd roli',
                         fields: [
                             { name: '`🔍` Rola', value: `**•** <@${role.id}>`, inline: false },
@@ -250,7 +250,7 @@ module.exports = {
                     const targetMember = interaction.options.getMember('użytkownik') ?? interaction.member;
 
                     if (interaction.options.getUser('użytkownik') && !targetMember) {
-                        return await utils.reply.error(interaction, 'USER_NOT_FOUND');
+                        return await utils.interface.sendError(interaction, 'USER_NOT_FOUND');
                     }
 
                     const roles = targetMember.roles.cache
@@ -279,20 +279,32 @@ module.exports = {
                     const userStatus = presence[rawStatus]?.name || 'Niedostępny.';
                     const statusEmoji = presence[rawStatus]?.emoji || '🎱';
 
-                    const successEmbed = utils.createEmbed({
+                    // Notatka i ostrzezenia
+                    const warnCount = await utils.db.lLen(`warns:${interaction.guild.id}:${targetMember.id}`) || 'Brak.';
+                    const userNote = await utils.db.hGet(`notes:${interaction.guild.id}`, targetMember.id);
+
+                    const fields = [
+                        { name: '`👤` Użytkownik', value: `**•** <@${targetMember.id}>`, inline: false },
+                        { name: '`🔑` ID', value: `**•** ${targetMember.user.id}`, inline: false },
+                        { name: '`✏️` Pseudonim', value: `**•** ${targetMember.nickname || 'Nie ustawiono.'}`, inline: false },
+                        { name: `\`${deviceEmoji}\` Urządzenie`, value: `**•** ${deviceString}`, inline: false },
+                        { name: `\`${statusEmoji}\` Status`, value: `**•** ${userStatus}`, inline: false },
+                        { name: '`🚪` Dołączył na serwer', value: `**•** <t:${joinedAt}> (<t:${joinedAt}:R>)`, inline: false },
+                        { name: '`📆` Stworzył konto', value: `**•** <t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },
+                        { name: '`⚠️` Ostrzeżenia', value: `**•** ${warnCount}`, inline: false },
+                        { name: '`🤖` Bot', value: `**•** ${isBot}`, inline: false }
+                    ];
+
+                    if (userNote) {
+                        fields.push({ name: '`📝` Notatka moderatora', value: `**•** Wpisz </notes view:1482729096554221618>, aby zobaczyć notatkę.`, inline: false });
+                    }
+
+                    fields.push({ name: `\`🎭\` Role (${targetMember.roles.cache.size - 1})`, value: roles, inline: false });
+
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Podgląd użytkownika',
                         thumbnail: targetMember.user.displayAvatarURL(),
-                        fields: [
-                            { name: '`👤` Użytkownik', value: `**•** <@${targetMember.id}>`, inline: false },
-                            { name: '`🔑` ID', value: `**•** ${targetMember.user.id}`, inline: false },
-                            { name: '`✏️` Pseudonim', value: `**•** ${targetMember.nickname || 'Nie ustawiono.'}`, inline: false },
-                            { name: `\`${deviceEmoji}\` Urządzenie`, value: `**•** ${deviceString}`, inline: false },
-                            { name: `\`${statusEmoji}\` Status`, value: `**•** ${userStatus}`, inline: false },
-                            { name: '`🚪` Dołączył na serwer', value: `**•** <t:${joinedAt}> (<t:${joinedAt}:R>)`, inline: false },
-                            { name: '`📆` Stworzył konto', value: `**•** <t:${createdAt}> (<t:${createdAt}:R>)`, inline: false },
-                            { name: `\`🎭\` Role (${targetMember.roles.cache.size - 1})`, value: roles, inline: false },
-                            { name: '`🤖` Bot', value: `**•** ${isBot}`, inline: false }
-                        ]
+                        fields: fields
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });
@@ -301,12 +313,17 @@ module.exports = {
 
                 case 'emoji': {
                     const rawEmoji = interaction.options.getString('emoji');
-                    const emojiId = utils.parseEmojiId(rawEmoji);
+                    const emojiId = utils.parser.emojiId(rawEmoji);
 
-                    if (!emojiId) return await utils.reply.error(interaction, 'INVALID_EMOJI');
+                    if (!emojiId) {
+                        return await utils.interface.sendError(interaction, 'INVALID_EMOJI');
+                    }
 
                     const emoji = interaction.guild.emojis.cache.get(emojiId);
-                    if (!emoji) return await utils.reply.error(interaction, 'EMOJI_NOT_FOUND');
+
+                    if (!emoji) {
+                        return await utils.interface.sendError(interaction, 'EMOJI_NOT_FOUND');
+                    }
 
                     const createdAt = Math.floor(emoji.createdTimestamp / 1000);
                     const author = await emoji.fetchAuthor().catch(() => 'Brak uprawnień.');
@@ -325,7 +342,7 @@ module.exports = {
                         fields.push({ name: '`📦` Integracja', value: '**•** Tak (Zewnętrzna usługa)', inline: false });
                     }
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Podgląd emoji',
                         fields: fields,
                         thumbnail: emojiURL
@@ -336,11 +353,11 @@ module.exports = {
                 }
 
                 default:
-                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
+                    await utils.interface.sendError(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Info] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
-            await utils.reply.error(interaction, 'INFO_ERROR');
+            await utils.interface.sendError(interaction, 'INFO_ERROR');
         }
     },
 };

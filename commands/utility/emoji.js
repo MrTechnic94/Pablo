@@ -36,15 +36,17 @@ module.exports = {
                 case 'steal': {
                     const emojiInput = interaction.options.getString('emoji');
                     const name = interaction.options.getString('nazwa');
-                    const url = utils.parseEmojiUrl(emojiInput);
+                    const url = utils.parser.emojiUrl(emojiInput);
 
-                    if (!url) return await utils.reply.error(interaction, 'INVALID_FILE');
+                    if (!url) {
+                        return await utils.interface.sendError(interaction, 'INVALID_FILE');
+                    }
 
                     const createdEmoji = await interaction.guild.emojis.create({ attachment: url, name: name });
                     const createdAt = Math.floor(createdEmoji.createdTimestamp / 1000);
                     const emojiURL = createdEmoji.imageURL({ animated: createdEmoji.animated });
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Dodano emoji',
                         fields: [
                             { name: '`🔎` Nazwa', value: `**•** ${createdEmoji.name}`, inline: false },
@@ -62,19 +64,20 @@ module.exports = {
                 }
 
                 default:
-                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
+                    await utils.interface.sendError(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Emoji] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
 
             if (err.code === RESTJSONErrorCodes.MaximumNumberOfEmojisReached || err.code === RESTJSONErrorCodes.MaximumNumberOfAnimatedEmojisReached) {
-                return await utils.reply.error(interaction, 'EMOJI_FULL_SLOT');
+                return await utils.interface.sendError(interaction, 'EMOJI_FULL_SLOT');
             }
 
             if (err.code === RESTJSONErrorCodes.InvalidFormBodyOrContentType || err.code === RESTJSONErrorCodes.InvalidFileUploaded) {
-                return await utils.reply.error(interaction, 'INVALID_FILE');
+                return await utils.interface.sendError(interaction, 'INVALID_FILE');
             }
-            await utils.reply.error(interaction, 'STEAL_EMOJI_ERROR');
+
+            await utils.interface.sendError(interaction, 'STEAL_EMOJI_ERROR');
         }
     },
 };

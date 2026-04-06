@@ -67,22 +67,22 @@ module.exports = {
                     const deleteMessageDuration = interaction.options.getInteger('usuń_wiadomości') || 0;
 
                     if (targetUser.id === interaction.user.id) {
-                        return await utils.reply.error(interaction, 'CANT_BAN_SELF');
+                        return await utils.interface.sendError(interaction, 'CANT_BAN_SELF');
                     }
 
                     const targetMember = await interaction.guild.members.fetch(targetUser.id).catch(() => null);
 
                     if (targetMember) {
                         if (interaction.member.roles.highest.position <= targetMember.roles.highest.position) {
-                            return await utils.reply.error(interaction, 'ROLE_TOO_HIGH');
+                            return await utils.interface.sendError(interaction, 'ROLE_TOO_HIGH');
                         }
 
                         if (!targetMember.bannable) {
-                            return await utils.reply.error(interaction, 'USER_NOT_PUNISHABLE');
+                            return await utils.interface.sendError(interaction, 'USER_NOT_PUNISHABLE');
                         }
                     }
 
-                    const successEmbedDM = utils.createEmbed({
+                    const successEmbedDM = utils.interface.createEmbed({
                         title: 'Zostałeś zbanowany',
                         description: `\`🔍\` **Serwer:** ${interaction.guild.name}\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
                     });
@@ -91,9 +91,9 @@ module.exports = {
 
                     await interaction.guild.bans.create(targetUser.id, { reason: reason, deleteMessageSeconds: deleteMessageDuration });
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Użytkownik zbanowany',
-                        description: `\`👤\` **Zbanowano:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}\n\`🗑️\` **Usunięcie wiadomości:** ${deleteMessageDuration ? utils.formatDuration(deleteMessageDuration * 1000, { fullWords: true }) : 'Nie usuwaj.'}`
+                        description: `\`👤\` **Zbanowano:** <@${targetUser.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}\n\`🗑️\` **Usunięcie wiadomości:** ${deleteMessageDuration ? utils.parser.formatDuration(deleteMessageDuration * 1000, { fullWords: true }) : 'Nie usuwaj.'}`
                     });
 
                     await interaction.reply({ embeds: [successEmbed] });
@@ -105,12 +105,12 @@ module.exports = {
                     const userInfo = await interaction.guild.bans.fetch(userId).catch(() => null);
 
                     if (!userInfo) {
-                        return await utils.reply.error(interaction, 'USER_NOT_BANNED');
+                        return await utils.interface.sendError(interaction, 'USER_NOT_BANNED');
                     }
 
                     await interaction.guild.bans.remove(userId, { reason: reason });
 
-                    const successEmbed = utils.createEmbed({
+                    const successEmbed = utils.interface.createEmbed({
                         title: 'Użytkownik odbanowany',
                         description: `\`👤\` **Odbanowano:** <@${userInfo.user.id}>\n\`🔨\` **Moderator:** <@${interaction.user.id}>\n\`💬\` **Powód:** ${reason}`
                     });
@@ -120,14 +120,14 @@ module.exports = {
                 }
 
                 default:
-                    await utils.reply.error(interaction, 'PARAMETER_NOT_FOUND');
+                    await utils.interface.sendError(interaction, 'PARAMETER_NOT_FOUND');
             }
         } catch (err) {
             logger.error(`[Slash ▸ Ban] An error occurred in subcommand '${subcommand}' for '${interaction.guild.id}':\n${err}`);
 
             const errorKey = subcommand === 'add' ? 'BAN_ERROR' : 'UNBAN_ERROR';
 
-            await utils.reply.error(interaction, errorKey);
+            await utils.interface.sendError(interaction, errorKey);
         }
     },
 };
