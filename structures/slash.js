@@ -13,7 +13,7 @@ module.exports = async (client, logger) => {
     loadInteractions(client, join(__dirname, '../commands'), 'Slash', logger, publicCommands, ownerCommands);
     loadInteractions(client, join(__dirname, '../contexts'), 'Context', logger, publicCommands, ownerCommands);
 
-    // Buttony
+    // Przyciski
     loadComponents(join(__dirname, '../interactions/buttons'), client.buttons, 'Button', logger);
 
     const rest = new REST().setToken(isDev() ? process.env.DEV_BOT_TOKEN : process.env.BOT_TOKEN);
