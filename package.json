@@ -21,11 +21,11 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@redis/client": "^5.11.0",
+    "@redis/client": "^6.2.1",
     "croner": "^10.0.1",
-    "discord.js": "^14.26.2",
+    "discord.js": "^14.27.0",
     "pino": "^10.3.1",
-    "undici": "^8.0.2"
+    "undici": "^8.10.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.1.0",
@@ -33,7 +33,7 @@
     "zlib-sync": "^0.1.10"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.10",
+    "@biomejs/biome": "^2.5.10",
     "blocked-at": "^1.2.0"
   },
   "repository": {

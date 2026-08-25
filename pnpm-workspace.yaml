@@ -1,3 +1,6 @@
+allowBuilds:
+  bufferutil: set this to true or false
+  zlib-sync: set this to true or false
 onlyBuiltDependencies:
   - bufferutil
   - zlib-sync
