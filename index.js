@@ -4,7 +4,7 @@
  * Strona bota: 'https://top.gg/bot/1333036494881034311'.
  *
  * Znajdziesz mnie i moje projekty tutaj: 'https://github.com/MrTechnic94/'.
- * Jezeli potrzebujesz pomocy, napisz tutaj: 'https://discord.com/users/586543379295240192'.
+ * Jezeli potrzebujesz pomocy, dane kontaktowe znajdziesz tutaj: 'https://github.com/MrTechnic94/'.
  *
  * [i] Aby zaczac uzyj polecenia 'pnpm build'.
  * [i] Edytuj nazwe pliku 'default.example.json' -> 'default.json'.
